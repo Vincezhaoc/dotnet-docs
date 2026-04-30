@@ -23,9 +23,9 @@ The following table shows the literal types in F#. Characters that represent dig
 |unativeint|native pointer as an unsigned natural number|un|`0x00002D3Fun`|
 |int64|signed 64-bit integer|L|`86L`|
 |uint64|unsigned 64-bit natural number|UL|`86UL`|
-|single, float32|32-bit floating point number|F or f|`4.14F` or `4.14f` or `infinityf` or `-infinityf`|
+|single, float32|32-bit floating point number|F or f|`4.14F` or `4.14f` or `2.3e+32f` or `2.3e-32f` or `infinityf` or `-infinityf`|
 |||lf|`0x00000000lf`|
-|float; double|64-bit floating point number|none|`4.14` or `2.3E+32` or `2.3e+32` or `infinity` or `-infinity`|
+|float; double|64-bit floating point number|none|`4.14` or `2.3E+32` or `2.3e+32` or `2.3e-32` or `infinity` or `-infinity`|
 |||LF|`0x0000000000000000LF`|
 |bigint|integer not limited to 64-bit representation|I|`9999999999999999999999999999I`|
 |decimal|fractional number represented as a fixed point or rational number|M or m|`0.7833M` or `0.7833m`|
@@ -39,16 +39,30 @@ The following table shows the literal types in F#. Characters that represent dig
 
 Values that are intended to be constants can be marked with the [Literal](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-literalattribute.html) attribute.
 
-This attribute has the effect of causing a value to be compiled as a constant. In the following example, both `x` and `y` below are immutable values, but `x` is evaluated at run-time, whereas `y` is a compile-time constant.
+This attribute has the effect of causing a value to be compiled as a constant. In the following example, both `x` and `y` below are immutable values, but `x` is evaluated at runtime, whereas `y` is a compile-time constant.
 
 ```fsharp
-let x = "a" + "b" // evaluated at run-time
+let x = "a" + "b" // evaluated at runtime
 
 [<Literal>]
 let y = "a" + "b" // evaluated at compile-time
 ```
 
-For example, this distinction matters when calling an [external function](functions/external-functions.md), because `DllImport` is an attribute that needs to know the value of `myDLL` during compilation. Without the `[<Literal>]` declaration, this code would fail to compile:
+> [!NOTE]
+> Functions cannot be used to compute `[<Literal>]` values because literals must be determined at compile-time and cannot depend on runtime evaluation.
+
+### Why functions cannot compute literals
+
+The `[<Literal>]` attribute requires values to be known at compile-time. Functions, even if they seem to produce constant outputs, are evaluated at runtime, making them unsuitable for `[<Literal>]`. This restriction ensures that literals can be safely used in scenarios like pattern matching, attribute arguments, and interop with external functions.
+
+For instance, attempting to assign the result of a function to a literal will fail:
+
+```fsharp
+[<Literal>]
+let yFunc() = "a" + "b" // error FS0267: this is not a valid constant expression
+```
+
+This distinction also matters when calling an [external function](functions/external-functions.md). For example, `DllImport` is an attribute that needs to know the value of `myDLL` during compilation. Without the `[<Literal>]` declaration, this code would fail to compile:
 
 ```fsharp
 [<Literal>]
@@ -75,6 +89,20 @@ let Literal2 = 1 ||| 64
 
 [<Literal>]
 let Literal3 = System.IO.FileAccess.Read ||| System.IO.FileAccess.Write
+```
+
+### Example of concise pattern matching using Named literals
+
+Named literals can make pattern matching more concise by avoiding the need for `when` clauses or additional logic. For example:
+
+```fsharp
+[<Literal>]
+let ErrorCode = 404
+
+let handleResponse code =
+    match code with
+    | ErrorCode -> "Not Found"
+    | _ -> "Other Response"
 ```
 
 ## Remarks

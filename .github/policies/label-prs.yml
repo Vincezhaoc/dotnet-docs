@@ -56,6 +56,8 @@ configuration:
           - payloadType: Pull_Request
           - isActivitySender:
               user: azure-sdk
+          - filesMatchPattern:
+              pattern: docs/azure/includes/*
         then:
           - addLabel:
               label: ":octocat: auto-merge"
@@ -64,10 +66,10 @@ configuration:
         if:
           - payloadType: Pull_Request
           - or:
-            - isActivitySender:
-                user: dependabot
-            - isActivitySender:
-                user: dependabot[bot]
+              - isActivitySender:
+                  user: dependabot
+              - isActivitySender:
+                  user: dependabot[bot]
         then:
           - addLabel:
               label: ":octocat: auto-merge"

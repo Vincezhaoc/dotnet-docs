@@ -1,9 +1,7 @@
 ---
 title: Rate limiting an HTTP handler in .NET
 description: Learn how to create a client-side HTTP handler that limits the number of requests, with the inbuilt rate limiter API from .NET.
-author: IEvangelist
-ms.author: dapine
-ms.date: 03/13/2023
+ms.date: 12/16/2024
 ---
 
 # Rate limit an HTTP handler in .NET
@@ -46,10 +44,10 @@ In the preceding console app:
 
 - The `TokenBucketRateLimiterOptions` are configured with a token limit of `8`, and queue processing order of `OldestFirst`, a queue limit of `3`, and replenishment period of `1` millisecond, a tokens per period value of `2`, and an auto-replenish value of `true`.
 - An `HttpClient` is created with the `ClientSideRateLimitedHandler` that is configured with the `TokenBucketRateLimiter`.
-- To emulate 100 requests, <xref:System.Linq.Enumerable.Range%2A?displayProperty=nameWithType> creates 100 URLs, each with a unique query string parameter.
-- Two <xref:System.Threading.Tasks.Task> objects are assigned from the <xref:System.Threading.Tasks.Parallel.ForEachAsync%2A?displayProperty=nameWithType> method, splitting the URLs into two groups.
+- To emulate 100 requests, <xref:System.Linq.Enumerable.Range*?displayProperty=nameWithType> creates 100 URLs, each with a unique query string parameter.
+- Two <xref:System.Threading.Tasks.Task> objects are assigned from the <xref:System.Threading.Tasks.Parallel.ForEachAsync*?displayProperty=nameWithType> method, splitting the URLs into two groups.
 - The `HttpClient` is used to send a `GET` request to each URL, and the response is written to the console.
-- <xref:System.Threading.Tasks.Task.WhenAll%2A?displayProperty=nameWithType> waits for both tasks to complete.
+- <xref:System.Threading.Tasks.Task.WhenAll*?displayProperty=nameWithType> waits for both tasks to complete.
 
 Since the `HttpClient` is configured with the `ClientSideRateLimitedHandler`, not all requests will make it to the server resource. You can test this assertion by running the console app. You'll see that only a fraction of the total number of requests are sent to the server, and the rest are rejected with an HTTP status code of `429`. Try altering the `options` object used to create the `TokenBucketRateLimiter` to see how the number of requests that are sent to the server changes.
 
@@ -161,12 +159,12 @@ You'll notice that the first logged entries are always the immediately returned 
 
 Note also that each URL's query string is unique: examine the `iteration` parameter to see that it's incremented by one for each request. This parameter helps to illustrate that the 429 responses aren't from the first requests, but rather from the requests that are made after the rate limit is reached. The 200 responses arrive later but these requests were made earlier&mdash;before the limit was reached.
 
-To have a better understanding of the various rate-limiting algorithms, try rewriting this code to accept a different `RateLimiter` implementation. In addition to the `TokenBucketRateLimiter` you could try:
+To have a better understanding of the various rate-limiting algorithms, try rewriting this code to accept a different <xref:System.Threading.RateLimiting.RateLimiter> implementation. In addition to the <xref:System.Threading.RateLimiting.TokenBucketRateLimiter> you could try:
 
-- `ConcurrencyLimiter`
-- `FixedWindowRateLimiter`
-- `PartitionedRateLimiter`
-- `SlidingWindowRateLimiter`
+- <xref:System.Threading.RateLimiting.ConcurrencyLimiter>
+- <xref:System.Threading.RateLimiting.FixedWindowRateLimiter>
+- <xref:System.Threading.RateLimiting.PartitionedRateLimiter>
+- <xref:System.Threading.RateLimiting.SlidingWindowRateLimiter>
 
 ## Summary
 

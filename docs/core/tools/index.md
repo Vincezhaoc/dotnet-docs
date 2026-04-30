@@ -3,8 +3,7 @@ title: .NET CLI
 titleSuffix: ""
 description: An overview of the .NET CLI and its features.
 ms.topic: overview
-ms.date: 12/14/2022
-ms.custom: devdivchpfy22
+ms.date: 04/02/2025
 ---
 
 # .NET CLI overview
@@ -65,7 +64,6 @@ The following commands are installed by default:
 - [`test`](dotnet-test.md)
 - [`vstest`](dotnet-vstest.md)
 - [`pack`](dotnet-pack.md)
-- [`migrate`](dotnet-migrate.md)
 - [`clean`](dotnet-clean.md)
 - [`sln`](dotnet-sln.md)
 - [`help`](dotnet-help.md)
@@ -75,12 +73,16 @@ The following commands are installed by default:
 
 ### Project modification commands
 
-- [`add package`](dotnet-add-package.md)
-- [`add reference`](dotnet-add-reference.md)
-- [`remove package`](dotnet-remove-package.md)
-- [`remove reference`](dotnet-remove-reference.md)
-- [`list package`](dotnet-list-package.md)
-- [`list reference`](dotnet-list-reference.md)
+- [`package add`](dotnet-package-add.md)
+- [`package download`](dotnet-package-download.md)
+- [`package list`](dotnet-package-list.md)
+- [`package remove`](dotnet-package-remove.md)
+- [`package search`](dotnet-package-search.md)
+- [`package update`](dotnet-package-update.md)
+- [`project convert`](dotnet-project-convert.md) (Available since .NET 10 SDK)
+- [`reference add`](dotnet-reference-add.md)
+- [`reference list`](dotnet-reference-list.md)
+- [`reference remove`](dotnet-reference-remove.md)
 
 ### NuGet commands
 
@@ -96,14 +98,15 @@ The following commands are installed by default:
 - [`nuget verify`](dotnet-nuget-verify.md) (Available since .NET 5 SDK)
 - [`nuget trust`](dotnet-nuget-trust.md) (Available since .NET 5 SDK)
 - [`nuget sign`](dotnet-nuget-sign.md) (Available since .NET 6 SDK)
-- [`package search`](dotnet-package-search.md) (Available since .NET 8.0.2xx SDK)
 - [`nuget why`](dotnet-nuget-why.md) (Available since .NET 8.0.4xx SDK)
 
 ### Workload management commands
 
 - [`workload`](dotnet-workload.md) (Available since .NET 7 SDK)
+- [`workload clean`](dotnet-workload-clean.md) (Available since .NET 6 SDK)
 - [`workload config`](dotnet-workload-config.md) (Available since .NET 8.0.400 SDK)
 - [`workload install`](dotnet-workload-install.md) (Available since .NET 6 SDK)
+- [`workload history`](dotnet-workload-history.md) (Available since .NET 6 SDK)
 - [`workload list`](dotnet-workload-list.md) (Available since .NET 6 SDK)
 - [`workload update`](dotnet-workload-update.md) (Available since .NET 6 SDK)
 - [`workload restore`](dotnet-workload-restore.md) (Available since .NET 6 SDK)

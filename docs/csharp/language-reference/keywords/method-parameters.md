@@ -1,53 +1,49 @@
 ---
-title: "Method Parameters"
-description: "Method parameters are passed by value. Modifiers enable pass-by-reference semantics, including distinctions such as read-only, and `out` parameters. The params modifier allows a series of optional arguments."
-ms.date: 05/17/2024
-helpviewer_keywords: 
+title: "Method parameters and modifiers"
+description: "Parameter modifiers enable pass-by-reference semantics, with distinctions for read-only, and `out` parameters. The `params` modifier allows optional arguments."
+ms.date: 01/22/2026
+helpviewer_keywords:
   - "methods [C#], parameters"
   - "method parameters [C#]"
   - "parameters [C#]"
 ---
-# Method Parameters
+# Method parameters and modifiers
 
-By default, arguments in C# are passed to functions *by value*. That means a copy of the variable is passed to the method. For value (`struct`) types, a copy of the *value* is passed to the method. For reference (`class`) types, a copy of the *reference* is passed to the method. Parameter modifiers enable you to pass arguments *by reference*. The following concepts help you understand these distinctions and how to use the parameter modifiers:
+By default, C# passes arguments to functions *by value*. This approach passes a copy of the variable to the method. For value (`struct`) types, the method gets a copy of the *value*. For reference (`class`) types, the method gets a copy of the *reference*. You can use parameter modifiers to pass arguments *by reference*.
 
-- *Pass by value* means **passing a copy of the variable** to the method.
-- *Pass by reference* means **passing access to the variable** to the method.
-- A variable of a *reference type* contains a reference to its data.
-- A variable of a *value type* contains its data directly.
+Because a struct is a [value type](../builtin-types/value-types.md), passing a struct by value to a method sends a copy of the argument to the method. The method works with this copy. The method can't access the original struct in the calling method and can't change it. The method can change only the copy.
 
-Because a struct is a [value type](../builtin-types/value-types.md), the method receives and operates on a copy of the struct argument when you pass a struct by value to a method. The method has no access to the original struct in the calling method and therefore can't change it in any way. The method can change only the copy.
+A class instance is a [reference type](reference-types.md), not a value type. When you pass a reference type by value to a method, the method gets a copy of the reference to the instance. Both variables refer to the same object. The parameter is a copy of the reference. The called method can't reassign the instance in the calling method. However, the called method can use the copy of the reference to access the instance members. If the called method changes an instance member, the calling method also sees those changes since it references the same instance.
 
-A class instance is a [reference type](reference-types.md) not a value type. When a reference type is passed by value to a method, the method receives a copy of the reference to the class instance. Both variables refer to the same object. The parameter is a copy of the reference. The called method can't reassign the instance in the calling method. However, the called method can use the copy of the reference to access the instance members. If the called method changes an instance member, the calling method also sees those changes since it references the same instance.
+[!INCLUDE[csharp-version-note](../includes/initial-version.md)]
 
-The output of the following example illustrates the difference. The method `ClassTaker` changes the value of the `willIChange` field because the method uses the address in the parameter to find the specified field of the class instance. The `willIChange` field of the struct in the calling method doesn't change from calling `StructTaker` because the value of the argument is a copy of the struct itself, not a copy of its address. `StructTaker` changes the copy, and the copy is lost when the call to `StructTaker` is completed.
+## Pass by value and pass by reference
 
-:::code language="csharp" source="./snippets/PassParameters.cs" id="PassByValueOrReference":::
+All the examples in this section use the following two `record` types to illustrate the differences between `class` types and `struct` types:
 
-## Combinations of parameter type and argument mode
+:::code language="csharp" source="./snippets/PassParameters.cs" id="DataTypes":::
 
-How an argument is passed, and whether it's a reference type or value type controls what modifications made to the argument are visible from the caller:
+The output of the following example illustrates the difference between passing a struct type by value and passing a class type by value. Both `Mutate` methods change property values of their argument. When the parameter is a `struct` type, those changes affect a copy of the argument's data. When the parameter is a `class` type, those changes affect the instance referred to by the argument:
 
-- When you pass a *value* type *by value*:
-  - If the method assigns the parameter to refer to a different object, those changes **aren't** visible from the caller.
-  - If the method modifies the state of the object referred to by the parameter, those changes **aren't** visible from the caller.
-- When you pass a *reference* type *by value*:
-  - If the method assigns the parameter to refer to a different object, those changes **aren't** visible from the caller.
-  - If the method modifies the state of the object referred to by the parameter, those changes **are** visible from the caller.
-- When you pass a *value* type *by reference*:
-  - If the method assigns the parameter to refer to a different object, those changes **aren't** visible from the caller.
-  - If the method modifies the state of the object referred to by the parameter, those changes **are** visible from the caller.
-- When you pass a *reference* type *by reference*:
-  - If the method assigns the parameter to refer to a different object, those changes **are** visible from the caller.
-  - If the method modifies the state of the object referred to by the parameter, those changes **are** visible from the caller.
+:::code language="csharp" source="./snippets/PassParameters.cs" id="PassTypesByValue":::
 
-Passing a reference type by reference enables the called method to replace the object to which the reference parameter refers in the caller. The storage location of the object is passed to the method as the value of the reference parameter. If you change the value in the storage location of the parameter (to point to a new object), you also change the storage location to which the caller refers. The following example passes an instance of a reference type as a `ref` parameter.
+The `ref` modifier is one way to pass arguments *by reference* to methods. The following code replicates the preceding example, but passes parameters by reference. The modifications made to the `struct` type are visible in the calling method when the struct is passed by reference. There's no semantic change when a reference type is passed by reference:
 
-:::code language="csharp" source="snippets/RefParameterModifier.cs" id="Snippet3":::
+:::code language="csharp" source="./snippets/PassParameters.cs" id="PassTypesByReference":::
+
+The preceding examples modified properties of a parameter. A method can also reassign a parameter to a new value. Reassignment behaves differently for struct and class types when passed by value or by reference. The following example shows how struct types and class types behave when parameters that are passed by value are reassigned:
+
+:::code language="csharp" source="./snippets/PassParameters.cs" id="PassByValueReassignment":::
+
+The preceding sample shows that when you reassign a parameter to a new value, that change isn't visible from the calling method, regardless of whether the type is a value type or a reference type. The following example shows the behavior when you reassign a parameter that the method received by reference:
+
+:::code language="csharp" source="./snippets/PassParameters.cs" id="PassByReferenceReassignment":::
+
+The preceding example shows how reassigning the value of a parameter that is passed by reference is visible in the calling context.
 
 ## Safe context of references and values
 
-Methods can store the values of parameters in fields. When parameters are passed by value, that's usually safe. Values are copied, and reference types are reachable when stored in a field. Passing parameters by reference safely requires the compiler to define when it's safe to assign a reference to a new variable. For every expression, the compiler defines a *safe context* that bounds access to an expression or variable. The compiler uses two scopes: *safe-context* and *ref-safe-context*.
+Methods can store the values of parameters in fields. When you pass parameters by value, it's usually safe. The method copies values, and reference types are reachable when the method stores them in a field. Passing parameters by reference safely requires the compiler to define when it's safe to assign a reference to a new variable. For every expression, the compiler defines a *safe context* that bounds access to an expression or variable. The compiler uses two scopes: *safe-context* and *ref-safe-context*.
 
 - The *safe-context* defines the scope where any expression can be safely accessed.
 - The *ref-safe-context* defines the scope where a *reference* to any expression can be safely accessed or modified.
@@ -56,14 +52,16 @@ Informally, you can think of these scopes as the mechanism to ensure your code n
 
 ## Reference parameters
 
-You apply one of the following modifiers to a parameter declaration to pass arguments by reference instead of by value:
+To pass arguments by reference instead of by value, use one of the following modifiers in a parameter declaration:
 
-- [`ref`](#ref-readonly-modifier): The argument must be initialized before calling the method. The method can assign a new value to the parameter, but isn't required to do so.
-- [`out`](#out-parameter-modifier): The calling method isn't required to initialize the argument before calling the method. The method must assign a value to the parameter.
-- [`readonly ref`](#ref-parameter-modifier): The argument must be initialized before calling the method. The method can't assign a new value to the parameter.
-- [`in`](#in-parameter-modifier): The argument must be initialized before calling the method. The method can't assign a new value to the parameter. The compiler might create a temporary variable to hold a copy of the argument to `in` parameters.
+- [`ref`](#ref-parameter-modifier): Initialize the argument before calling the method. The method can assign a new value to the parameter, but it isn't required to.
+- [`out`](#out-parameter-modifier): The calling method doesn't need to initialize the argument before calling the method. The method must assign a value to the parameter.
+- [`ref readonly`](#ref-readonly-modifier): Initialize the argument before calling the method. The method can't assign a new value to the parameter.
+- [`in`](#in-parameter-modifier): Initialize the argument before calling the method. The method can't assign a new value to the parameter. The compiler might create a temporary variable to hold a copy of the argument to `in` parameters.
 
-Members of a class can't have signatures that differ only by `ref`, `ref readonly`, `in`, or `out`. A compiler error occurs if the only difference between two members of a type is that one of them has a `ref` parameter and the other has an `out`, `ref readonly`, or `in` parameter. However, methods can be overloaded when one method has a `ref`, `ref readonly`, `in`, or `out` parameter and the other has a parameter that is passed by value, as shown in the following example. In other situations that require signature matching, such as hiding or overriding, `in`, `ref`, `ref readonly`, and `out` are part of the signature and don't match each other.
+A parameter that's passed by reference is a *reference variable*. It doesn't have its own value. Instead, it refers to a different variable called its *referent*. You can [ref reassign](../operators/assignment-operator.md#ref-assignment) reference variables, which changes their referent.
+
+Members of a class can't have signatures that differ only by `ref`, `ref readonly`, `in`, or `out`. A compiler error occurs if the only difference between two members of a type is that one member has a `ref` parameter and the other member has an `out`, `ref readonly`, or `in` parameter. However, you can overload methods when one method has a `ref`, `ref readonly`, `in`, or `out` parameter and the other method has a parameter that's passed by value, as shown in the following example. In other situations that require signature matching, such as hiding or overriding, `in`, `ref`, `ref readonly`, and `out` are part of the signature and don't match each other.
 
 When a parameter has one of the preceding modifiers, the corresponding argument can have a compatible modifier:
 
@@ -77,21 +75,21 @@ When you use these modifiers, they describe how the argument is used:
 - `ref` means the method can read or write the value of the argument.
 - `out` means the method sets the value of the argument.
 - `ref readonly` means the method reads, but can't write the value of the argument. The argument *should* be passed by reference.
-- `in` means the method reads, but can't write the value of the argument. The argument will be passed by reference or through a temporary variable.
+- `in` means the method reads, but can't write the value of the argument. The argument is passed by reference or through a temporary variable.
 
 You can't use the previous parameter modifiers in the following kinds of methods:
 
 - Async methods, which you define by using the [async](async.md) modifier.
 - Iterator methods, which include a [yield return](../statements/yield.md) or `yield break` statement.
 
-[Extension methods](../../programming-guide/classes-and-structs/extension-methods.md) also have restrictions on the use of these argument keywords:
+[Extension members](../../programming-guide/classes-and-structs/extension-methods.md) also have restrictions on the use of these argument keywords:
 
 - The `out` keyword can't be used on the first argument of an extension method.
 - The `ref` keyword can't be used on the first argument of an extension method when the argument isn't a `struct`, or a generic type not constrained to be a struct.
 - The `ref readonly` and `in` keywords can't be used unless the first argument is a `struct`.
 - The `ref readonly` and `in` keywords can't be used on any generic type, even when constrained to be a struct.
 
-Properties aren't variables. They're methods. Properties can't be arguments for `ref` parameters.
+Properties aren't variables. They're methods. You can't use properties as arguments for `ref` parameters.
 
 ### `ref` parameter modifier
 
@@ -99,7 +97,7 @@ To use a `ref` parameter, both the method definition and the calling method must
 
 :::code language="csharp" source="snippets/RefParameterModifier.cs" id="Snippet1":::
 
-An argument that is passed to a `ref` parameter must be initialized before it's passed.
+You must initialize an argument before you pass it to a `ref` parameter.
 
 ### `out` parameter modifier
 
@@ -107,7 +105,7 @@ To use an `out` parameter, both the method definition and the calling method mus
 
 :::code language="csharp" source="snippets/RefParameterModifier.cs" id="OutVariableExample":::
 
-Variables passed as `out` arguments don't have to be initialized before being passed in a method call. However, the called method is required to assign a value before the method returns.
+You don't need to initialize variables passed as `out` arguments before the method call. However, the called method must assign a value before it returns.
 
 [Deconstruct methods](../../fundamentals/functional/deconstruct.md) declare their parameters with the `out` modifier to return multiple values. Other methods can return [value tuples](../builtin-types/value-tuples.md) for multiple return values.
 
@@ -119,11 +117,11 @@ You can also declare an implicitly typed local variable.
 
 ### `ref readonly` modifier
 
-The `ref readonly` modifier must be present in the method declaration. A modifier at the call site is optional. Either the `in` or `ref` modifier can be used. The `ref readonly` modifier isn't valid at the call site. Which modifier you use at the call site can help describe characteristics of the argument. You can only use `ref` if the argument is a variable, and is writable. You can only use `in` when the argument is a variable. It might be writable, or readonly. You can't add either modifier if the argument isn't a variable, but is an expression. The following examples show these conditions. The following method uses the `ref readonly` modifier to indicate that a large struct should be passed by reference for performance reasons:
+The method declaration requires the `ref readonly` modifier. A modifier at the call site is optional. You can use either the `in` or `ref` modifier. The `ref readonly` modifier isn't valid at the call site. The modifier you use at the call site can help describe characteristics of the argument. You can use `ref` only if the argument is a variable and is writable. You can use `in` only when the argument is a variable. The variable might be writable or readonly. You can't add either modifier if the argument isn't a variable but is an expression. The following examples show these conditions. The following method uses the `ref readonly` modifier to indicate that a large struct should be passed by reference for performance reasons:
 
 :::code language="csharp" source="snippets/RefParameterModifier.cs" id="ByReadonlyRefExample":::
 
-You can call the method using the `ref` or `in` modifier. If you omit the modifier, the compiler issues a warning. When the argument is an expression, not a variable, you can't add the `in` or `ref` modifiers, so you should suppress the warning:
+You can call the method by using the `ref` or `in` modifier. If you omit the modifier, the compiler issues a warning. When the argument is an expression, not a variable, you can't add the `in` or `ref` modifiers, so you should suppress the warning:
 
 :::code language="csharp" source="snippets/RefParameterModifier.cs" id="ByReadonlyRefExampleCall":::
 
@@ -137,9 +135,9 @@ The `in` modifier is required in the method declaration but unnecessary at the c
 
 :::code language="csharp" source="snippets/RefParameterModifier.cs" id="InParameterModifier":::
 
-The `in` modifier allows the compiler to create a temporary variable for the argument and pass a readonly reference to that argument. The compiler always creates a temporary variable when the argument must be converted, when there's an [implicit conversion](~/_csharpstandard/standard/conversions.md#102-implicit-conversions) from the argument type, or when the argument is a value that isn't a variable. For example, when the argument is a literal value, or the value returned from a property accessor. When your API requires that the argument be passed by reference, choose the `ref readonly` modifier instead of the `in` modifier.
+The `in` modifier enables the compiler to create a temporary variable for the argument and pass a readonly reference to that argument. The compiler always creates a temporary variable when the argument must be converted, when there's an [implicit conversion](~/_csharpstandard/standard/conversions.md#102-implicit-conversions) from the argument type, or when the argument is a value that isn't a variable. For example, when the argument is a literal value, or the value returned from a property accessor. When your API requires that the argument be passed by reference, choose the `ref readonly` modifier instead of the `in` modifier.
 
-Methods that are defined using `in` parameters potentially gain performance optimization. Some `struct` type arguments might be large in size, and when methods are called in tight loops or critical code paths, the cost of copying those structures is substantial. Methods declare `in` parameters to specify that arguments can be passed by reference safely because the called method doesn't modify the state of that argument. Passing those arguments by reference avoids the (potentially) expensive copy. You explicitly add the `in` modifier at the call site to ensure the argument is passed by reference, not by value. Explicitly using `in` has the following two effects:
+You can gain performance optimization by defining methods with `in` parameters. Some `struct` type arguments might be large in size, and when you call methods in tight loops or critical code paths, the cost of copying those structures is substantial. Declare `in` parameters to specify that you can safely pass arguments by reference because the called method doesn't modify the state of that argument. Passing those arguments by reference avoids the (potentially) expensive copy. You explicitly add the `in` modifier at the call site to ensure the argument is passed by reference, not by value. Explicitly using `in` has the following two effects:
 
 - Specifying `in` at the call site forces the compiler to select a method defined with a matching `in` parameter. Otherwise, when two methods differ only in the presence of `in`, the by value overload is a better match.
 - By specifying `in`, you declare your intent to pass an argument by reference. The argument used with `in` must represent a location that can be directly referred to. The same general rules for `out` and `ref` arguments apply: You can't use constants, ordinary properties, or other expressions that produce values. Otherwise, omitting `in` at the call site informs the compiler that it's fine to create a temporary variable to pass by read-only reference to the method. The compiler creates a temporary variable to overcome several restrictions with `in` arguments:
@@ -193,36 +191,36 @@ Method(in i); // passed by readonly reference, explicitly using `in`
 The only method call where the argument is passed by reference is the final one.
 
 > [!NOTE]
-> The preceding code uses `int` as the argument type for simplicity. Because `int` is no larger than a reference in most modern machines, there is no benefit to passing a single `int` as a readonly reference.
+> The preceding code uses `int` as the argument type for simplicity. Because `int` is no larger than a reference in most modern machines, there's no benefit to passing a single `int` as a readonly reference.
 
 ## `params` modifier
 
-No other parameters are permitted after the `params` keyword in a method declaration, and only one `params` keyword is permitted in a method declaration.
+The parameter with the `params` keyword must be the last parameter in the method declaration. You can only use one `params` keyword in a method declaration.
 
-The declared type of the `params` parameter must be a collection type. Recognized collection types are:
+You must declare the `params` parameter as a collection type. Recognized collection types include:
 
-- A single dimensional *array type* `T[]`, in which case the *element type* is `T`.
+- A single-dimensional *array type* `T[]`, where the *element type* is `T`.
 - A *span type*:
   - `System.Span<T>`
-  - `System.ReadOnlySpan<T>`  
-  Here, the *element type* is `T`.
-- A *type* with an accessible *create method* with a corresponding *element type*. The [*create method*](../operators/collection-expressions.md#collection-builder) is identified using the same attribute used for [collection expressions](../operators/collection-expressions.md).
-- A *struct* or *class type* that implements <xref:System.Collections.Generic.IEnumerable%601?displayProperty=fullName> where:
-  - The *type* has a constructor that can be invoked with no arguments, and the constructor is at least as accessible as the declaring member.
+  - `System.ReadOnlySpan<T>`
+  In these types, the *element type* is `T`.
+- A *type* with an accessible *create method* that has a corresponding *element type*. The [*create method*](../operators/collection-expressions.md#collection-builder) uses the same attribute as [collection expressions](../operators/collection-expressions.md).
+- A *struct* or *class type* that implements <xref:System.Collections.Generic.IEnumerable`1?displayProperty=fullName> where:
+  - The *type* has a constructor that you can invoke without arguments, and the constructor is at least as accessible as the declaring member.
   - The *type* has an instance (not an extension) method `Add` where:
     - The method can be invoked with a single value argument.
     - If the method is generic, the type arguments can be inferred from the argument.
     - The method is at least as accessible as the declaring member.
-  Here, the *element type* is the *iteration type* of the *type*.
+  In this case, the *element type* is the *iteration type* of the *type*.
 - An *interface type*:
-  - <xref:System.Collections.Generic.IEnumerable%601?displayProperty=fullName>
-  - <xref:System.Collections.Generic.IReadOnlyCollection%601?displayProperty=fullName>
-  - <xref:System.Collections.Generic.IReadOnlyList%601?displayProperty=fullName>
-  - <xref:System.Collections.Generic.ICollection%601?displayProperty=fullName>
-  - <xref:System.Collections.Generic.IList%601?displayProperty=fullName>
-  Here, the *element type* is `T`.
+  - <xref:System.Collections.Generic.IEnumerable`1?displayProperty=fullName>
+  - <xref:System.Collections.Generic.IReadOnlyCollection`1?displayProperty=fullName>
+  - <xref:System.Collections.Generic.IReadOnlyList`1?displayProperty=fullName>
+  - <xref:System.Collections.Generic.ICollection`1?displayProperty=fullName>
+  - <xref:System.Collections.Generic.IList`1?displayProperty=fullName>
+  In these types, the *element type* is `T`.
 
-Before C# 13, the parameter must be a single dimensional array.
+Before C# 13, you must use a single-dimensional array for the parameter.
 
 When you call a method with a `params` parameter, you can pass in:
 
@@ -230,8 +228,10 @@ When you call a method with a `params` parameter, you can pass in:
 - A collection of arguments of the specified type.
 - No arguments. If you send no arguments, the length of the `params` list is zero.
 
-The following example demonstrates various ways in which arguments can be sent to a `params` parameter.
+The following example demonstrates various ways to send arguments to a `params` parameter.
 
 :::code language="csharp" source="snippets/ParameterModifiers.cs" id="ParamsModifierExamples":::
 
-- [Argument lists](~/_csharpstandard/standard/expressions.md#1262-argument-lists) in the [C# Language Specification](~/_csharpstandard/standard/README.md). The language specification is the definitive source for C# syntax and usage.
+Overload resolution can cause ambiguity when the argument for a `params` parameter is a collection type. The collection type of the argument must be convertible to the collection type of the parameter. When different overloads provide better conversions for that parameter, that method might be better. However, if the argument to the `params` parameter is either discrete elements or missing, all overloads with different `params` parameter types are equal for that parameter.
+
+For more information, see the section on [Argument lists](~/_csharpstandard/standard/expressions.md#1262-argument-lists) in the [C# Language Specification](~/_csharpstandard/standard/README.md). The language specification is the definitive source for C# syntax and usage.

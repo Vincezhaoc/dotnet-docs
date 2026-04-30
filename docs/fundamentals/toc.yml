@@ -13,6 +13,7 @@ items:
         items:
           - name: Overview
             href: ../core/install/index.yml
+            displayName: install
           - name: Install on Windows
             href: ../core/install/windows.md
           - name: Install on macOS
@@ -21,29 +22,40 @@ items:
             items:
               - name: Overview
                 href: ../core/install/linux.md
+                displayName: linux
               - name: Ubuntu
+                expanded: true
                 items:
-                  - name: Overview
-                    href: ../core/install/linux-ubuntu.md
                   - name: Install
                     href: ../core/install/linux-ubuntu-install.md
+                    displayName: ubuntu
+                  - name: Decision guide
+                    href: ../core/install/linux-ubuntu-decision.md
+                    displayName: ubuntu
               - name: Alpine
                 href: ../core/install/linux-alpine.md
+                displayName: linux
               - name: CentOS Stream
                 href: ../core/install/linux-rhel.md#supported-distributions
+                displayName: linux
               - name: Debian
                 href: ../core/install/linux-debian.md
+                displayName: linux
               - name: Fedora
                 href: ../core/install/linux-fedora.md
+                displayName: linux
               - name: OpenSUSE
                 href: ../core/install/linux-opensuse.md
+                displayName: linux
               - name: Red Hat Enterprise Linux
                 href: ../core/install/linux-rhel.md
               - name: SLES
                 href: ../core/install/linux-sles.md
+                displayName: linux
               - name: Installation script & binaries
                 href: ../core/install/linux-scripted-manual.md
               - name: Install with Snap
+                expanded: true
                 items:
                   - name: Runtime
                     href: ../core/install/linux-snap-runtime.md
@@ -61,8 +73,6 @@ items:
             href: ../core/install/linux-package-mixup.md
           - name: How to check .NET versions
             href: ../core/install/how-to-detect-installed-versions.md
-          - name: Install localized IntelliSense
-            href: ../core/install/localized-intellisense.md
   - name: Overview
     items:
       - name: Introduction to .NET
@@ -85,78 +95,63 @@ items:
         href: ../standard/glossary.md
       - name: Tutorials
         items:
+          - name: Create a console app
+            href: ../core/tutorials/create-console-app.md
+            displayName: tutorials, visual studio, vs, visual studio code, vs code
+          - name: Debug an app
+            href: ../core/tutorials/debug-console-app.md
+            displayName: tutorials, visual studio, vs, visual studio code, vs code
+          - name: Publish an app
+            href: ../core/tutorials/publish-console-app.md
+            displayName: tutorials, visual studio, vs, visual studio code, vs code
+          - name: Create a library
+            href: ../core/tutorials/create-class-library.md
+            displayName: tutorials, visual studio, vs, visual studio code, vs code
+          - name: Unit test a library
+            href: ../core/tutorials/test-class-library.md
+            displayName: tutorials, visual studio, vs, visual studio code, vs code
+          - name: Install and use a package
+            href: /nuget/quickstart/install-and-use-a-package-using-the-dotnet-cli?toc=/dotnet/fundamentals/toc.json&bc=/dotnet/breadcrumb/toc.json
+            displayName: tutorials, cli
+          - name: Create and publish a package
+            href: /nuget/quickstart/create-and-publish-a-package-using-the-dotnet-cli?toc=/dotnet/fundamentals/toc.json&bc=/dotnet/breadcrumb/toc.json
+            displayName: tutorials, cli
           - name: .NET 6 template changes
             href: ../core/tutorials/top-level-templates.md
-          - name: Use Visual Studio
-            items:
-              - name: Create a console app
-                href: ../core/tutorials/with-visual-studio.md
-                displayName: tutorials, visual studio, vs
-              - name: Debug an app
-                href: ../core/tutorials/debugging-with-visual-studio.md
-                displayName: tutorials, visual studio, vs
-              - name: Publish an app
-                href: ../core/tutorials/publishing-with-visual-studio.md
-                displayName: tutorials, visual studio, vs
-              - name: Create a library
-                href: ../core/tutorials/library-with-visual-studio.md
-                displayName: tutorials, visual studio, vs
-              - name: Unit test a library
-                href: ../core/tutorials/testing-library-with-visual-studio.md
-                displayName: tutorials, visual studio, vs
-              - name: Install and use a package
-                href: /nuget/quickstart/install-and-use-a-package-in-visual-studio?toc=/dotnet/fundamentals/toc.json&bc=/dotnet/breadcrumb/toc.json
-                displayName: tutorials, visual studio, vs
-              - name: Create and publish a package
-                href: /nuget/quickstart/create-and-publish-a-package-using-visual-studio?toc=/dotnet/fundamentals/toc.json&bc=/dotnet/breadcrumb/toc.json
-                displayName: tutorials, visual studio, vs
-          - name: Use Visual Studio Code
-            items:
-              - name: Create a console app
-                href: ../core/tutorials/with-visual-studio-code.md
-                displayName: tutorials, visual studio code, vs code, cli
-              - name: Debug an app
-                href: ../core/tutorials/debugging-with-visual-studio-code.md
-                displayName: tutorials, visual studio code, vs code
-              - name: Publish an app
-                href: ../core/tutorials/publishing-with-visual-studio-code.md
-                displayName: tutorials, visual studio code, vs code
-              - name: Create a library
-                href: ../core/tutorials/library-with-visual-studio-code.md
-                displayName: tutorials, visual studio code, vs code
-              - name: Unit test a library
-                href: ../core/tutorials/testing-library-with-visual-studio-code.md
-                displayName: tutorials, visual studio code, vs code
-              - name: Install and use a package
-                href: /nuget/quickstart/install-and-use-a-package-using-the-dotnet-cli?toc=/dotnet/fundamentals/toc.json&bc=/dotnet/breadcrumb/toc.json
-                displayName: tutorials, cli
-              - name: Create and publish a package
-                href: /nuget/quickstart/create-and-publish-a-package-using-the-dotnet-cli?toc=/dotnet/fundamentals/toc.json&bc=/dotnet/breadcrumb/toc.json
-                displayName: tutorials
-          - name: Use Visual Studio for Mac
-            items:
-              - name: Create a console app
-                href: ../core/tutorials/with-visual-studio-mac.md
-                displayName: tutorials, visual studio for mac, vs for mac, cli
-              - name: Debug an app
-                href: ../core/tutorials/debugging-with-visual-studio-mac.md
-                displayName: tutorials, visual studio for mac, vs for mac
-              - name: Publish an app
-                href: ../core/tutorials/publishing-with-visual-studio-mac.md
-                displayName: tutorials, visual studio for mac, vs for mac
-              - name: Create a library
-                href: ../core/tutorials/library-with-visual-studio-mac.md
-                displayName: tutorials, visual studio for mac, vs for mac
-              - name: Unit test a library
-                href: ../core/tutorials/testing-library-with-visual-studio-mac.md
-                displayName: tutorials, visual studio for mac, vs for mac
-              - name: Install and use a package
-                href: /nuget/quickstart/install-and-use-a-package-in-visual-studio-mac?toc=/dotnet/fundamentals/toc.json&bc=/dotnet/breadcrumb/toc.json
-                displayName: tutorials, visual studio for mac, vs for mac
           - name: More tutorials
             href: ../core/tutorials/index.md
   - name: What's new in .NET
     items:
+      - name: .NET 11
+        items:
+          - name: What's new
+            items:
+              - name: Overview
+                href: ../core/whats-new/dotnet-11/overview.md
+                displayName: whats new, what's new
+              - name: Runtime
+                href: ../core/whats-new/dotnet-11/runtime.md
+              - name: Libraries
+                href: ../core/whats-new/dotnet-11/libraries.md
+              - name: SDK
+                href: ../core/whats-new/dotnet-11/sdk.md
+          - name: Breaking changes
+            href: ../core/compatibility/11.md?toc=/dotnet/fundamentals/toc.json&bc=/dotnet/breadcrumb/toc.json
+      - name: .NET 10
+        items:
+          - name: What's new
+            items:
+              - name: Overview
+                href: ../core/whats-new/dotnet-10/overview.md
+                displayName: whats new, what's new
+              - name: Runtime
+                href: ../core/whats-new/dotnet-10/runtime.md
+              - name: Libraries
+                href: ../core/whats-new/dotnet-10/libraries.md
+              - name: SDK
+                href: ../core/whats-new/dotnet-10/sdk.md
+          - name: Breaking changes
+            href: ../core/compatibility/10.md?toc=/dotnet/fundamentals/toc.json&bc=/dotnet/breadcrumb/toc.json
       - name: .NET 9
         items:
           - name: What's new
@@ -250,7 +245,7 @@ items:
                     href: runtime-libraries/system-convert.md
           - name: Choose between anonymous and tuple types
             href: ../standard/base-types/choosing-between-anonymous-and-tuple.md
-          - name: Class library overview
+          - name: Core .NET libraries overview
             href: ../standard/class-library-overview.md
           - name: Supplemental API remarks
             items:
@@ -346,8 +341,8 @@ items:
             displayName: events
           - name: Raise and consume events
             href: ../standard/events/how-to-raise-and-consume-events.md
-          - name: Handle multiple events using event properties
-            href: ../standard/events/how-to-handle-multiple-events-using-event-properties.md
+          - name: Declare multiple events using event properties
+            href: ../standard/events/how-to-declare-multiple-events-using-event-properties.md
           - name: Observer design pattern
             items:
               - name: Overview
@@ -465,6 +460,8 @@ items:
             href: ../standard/datetime/how-to-use-dateonly-timeonly.md
           - name: Perform arithmetic operations
             href: ../standard/datetime/performing-arithmetic-operations.md
+          - name: Use TimeProvider to write predictable code
+            href: ../standard/datetime/timeprovider-overview.md
           - name: "DateTime and DateTimeOffset support in System.Text.Json"
             href: ../standard/datetime/system-text-json-support.md
           - name: Time zones
@@ -558,6 +555,8 @@ items:
     items:
       - name: Overview
         href: ../standard/runtime-libraries-overview.md
+      - name: Preview APIs
+        href: runtime-libraries/preview-apis.md
       - name: Format numbers, dates, other types
         items:
           - name: Overview
@@ -604,14 +603,11 @@ items:
                 href: ../standard/base-types/best-practices-strings.md
               - name: Displaying and persisting formatted data
                 href: ../standard/base-types/best-practices-display-data.md
-          - name: Behavior changes in .NET 5+ (Windows)
-            href: ../standard/base-types/string-comparison-net-5-plus.md
+
           - name: Basic string operations
             items:
-              - name: Overview
-                href: ../standard/base-types/basic-string-operations.md
-                displayName: string operations
               - name: Create new strings
+                displayName: string operations
                 href: ../standard/base-types/creating-new.md
               - name: Trim and remove characters
                 href: ../standard/base-types/trimming.md
@@ -674,6 +670,14 @@ items:
                 href: runtime-libraries/system-text-rune.md
               - name: StringBuilder class
                 href: runtime-libraries/system-text-stringbuilder.md
+      - name: Compliance
+        items:
+          - name: Overview
+            href: ../core/extensions/compliance.md
+          - name: Data classification
+            href: ../core/extensions/data-classification.md
+          - name: Data redaction
+            href: ../core/extensions/data-redaction.md
       - name: Regular expressions
         items:
           - name: Overview
@@ -757,9 +761,11 @@ items:
                         href: ../standard/serialization/system-text-json/deserialization.md
                       - name: Require JSON properties
                         href: ../standard/serialization/system-text-json/required-properties.md
+                      - name: Respect nullable annotations
+                        href: ../standard/serialization/system-text-json/nullable-annotations.md
                       - name: Allow invalid JSON
                         href: ../standard/serialization/system-text-json/invalid-json.md
-                      - name: Handle missing members
+                      - name: Handle unmapped members
                         href: ../standard/serialization/system-text-json/missing-members.md
                       - name: Handle overflow JSON, use JsonElement or JsonNode
                         href: ../standard/serialization/system-text-json/handle-overflow.md
@@ -777,6 +783,8 @@ items:
                     href: ../standard/serialization/system-text-json/preserve-references.md
                   - name: Serialize polymorphic types
                     href: ../standard/serialization/system-text-json/polymorphism.md
+                  - name: Use extension methods on HttpClient
+                    href: ../standard/serialization/system-text-json/httpclient-extensions.md
                   - name: Read/write JSON without using JsonSerializer
                     items:
                       - name: Use DOM
@@ -787,8 +795,8 @@ items:
                         href: ../standard/serialization/system-text-json/use-utf8jsonreader.md
               - name: Visual Basic support
                 href: ../standard/serialization/system-text-json/visual-basic-support.md
-              - name: Supported collection types
-                href: ../standard/serialization/system-text-json/supported-collection-types.md
+              - name: Supported types
+                href: ../standard/serialization/system-text-json/supported-types.md
               - name: Advanced
                 items:
                   - name: Source generation
@@ -805,6 +813,8 @@ items:
                     href: ../standard/serialization/system-text-json/converters-how-to.md
                   - name: Customize contracts
                     href: ../standard/serialization/system-text-json/custom-contracts.md
+                  - name: Extract JSON schema
+                    href: ../standard/serialization/system-text-json/extract-schema.md
           - name: XML and SOAP serialization
             items:
               - name: Overview
@@ -909,22 +919,25 @@ items:
             href: ../standard/commandline/index.md
           - name: Get started tutorial
             href: ../standard/commandline/get-started-tutorial.md
-          - name: Command-line syntax
+          - name: Command-line syntax overview
             href: ../standard/commandline/syntax.md
-          - name: Define commands
-            href: ../standard/commandline/define-commands.md
-          - name: Model binding
-            href: ../standard/commandline/model-binding.md
-          - name: Tab completion
-            href: ../standard/commandline/tab-completion.md
-          - name: Dependency injection
-            href: ../standard/commandline/dependency-injection.md
-          - name: Customize help
-            href: ../standard/commandline/customize-help.md
-          - name: Handle termination
-            href: ../standard/commandline/handle-termination.md
-          - name: Use middleware
-            href: ../standard/commandline/use-middleware.md
+          - name: How to
+            expanded: true
+            items:
+            - name: Parse and invoke the result
+              href: ../standard/commandline/how-to-parse-and-invoke.md
+            - name: Customize parsing and validation
+              href: ../standard/commandline/how-to-customize-parsing-and-validation.md
+            - name: Configure the parser
+              href: ../standard/commandline/how-to-configure-the-parser.md
+            - name: Enable and customize tab completion
+              href: ../standard/commandline/how-to-enable-tab-completion.md
+            - name: Customize help
+              href: ../standard/commandline/how-to-customize-help.md
+          - name: Design guidance
+            href: ../standard/commandline/design-guidance.md
+          - name: Migration guide to 2.0.0-beta5
+            href: ../standard/commandline/migration-guide-2.0.0-beta5.md
       - name: File and stream I/O
         items:
           - name: Overview
@@ -1012,20 +1025,27 @@ items:
             href: runtime-libraries/system-console.md
       - name: The System.Random class
         href: runtime-libraries/system-random.md
+      - name: Artificial intelligence (AI)
+        displayName: ai,microsoft.extensions.ai,ollama,openai,azure inference,ichatclient
+        href: ../ai/microsoft-extensions-ai.md?toc=/dotnet/fundamentals/toc.json&bc=/dotnet/breadcrumb/toc.json
       - name: Dependency injection
         items:
           - name: Overview
-            href: ../core/extensions/dependency-injection.md
+            href: ../core/extensions/dependency-injection/overview.md
             displayName: dependency injection,di,ioc,ioc container,dependency container,inversion of control
-          - name: Dependency injection basics
-            href: ../core/extensions/dependency-injection-basics.md
-            displayName: dependency injection basics,di basics,ioc basics,ioc container basics,dependency container basics,inversion of control basics
-          - name: Use dependency injection
-            href: ../core/extensions/dependency-injection-usage.md
-            displayName: use dependency injection,di,di examples,ioc,ioc container,dependency container,inversion of control
-          - name: Dependency injection guidelines
-            href: ../core/extensions/dependency-injection-guidelines.md
-            displayName: dependency injection best practices,guidelines,di,ioc,ioc container,dependency container,inversion of control
+          - name: Service registration
+            href: ../core/extensions/dependency-injection/service-registration.md
+          - name: Service lifetimes
+            href: ../core/extensions/dependency-injection/service-lifetimes.md
+          - name: "Quickstart: Dependency injection basics"
+            href: ../core/extensions/dependency-injection/basics.md
+          - name: "Tutorial: Use dependency injection"
+            href: ../core/extensions/dependency-injection/usage.md
+          - name: Guidelines
+            href: ../core/extensions/dependency-injection/guidelines.md
+          - name: Auto-activation
+            href: ../core/extensions/dependency-injection/auto-activation.md
+            displayName: auto-activation,singleton activation,startup activation,di auto-activation
       - name: Configuration
         items:
           - name: Overview
@@ -1034,6 +1054,8 @@ items:
           - name: Configuration providers
             href: ../core/extensions/configuration-providers.md
             displayName: configuration providers,config providers
+          - name: Configuration source generation
+            href: ../core/extensions/configuration-generator.md
           - name: Implement a custom configuration provider
             href: ../core/extensions/custom-configuration-provider.md
             displayName: custom configuration,custom config,custom configuration provider,custom config provider
@@ -1049,28 +1071,41 @@ items:
       - name: Logging
         items:
           - name: Overview
-            href: ../core/extensions/logging.md
+            href: ../core/extensions/logging/overview.md
             displayName: logging,logger,log,loggers
           - name: Logging providers
-            href: ../core/extensions/logging-providers.md
+            href: ../core/extensions/logging/providers.md
             displayName: logging providers,log providers
           - name: Compile-time logging source generation
-            href: ../core/extensions/logger-message-generator.md
+            href: ../core/extensions/logging/source-generation.md
             displayName: LoggerMessage,LoggerMessageAttribute,source generator,compile-time generation
           - name: Logging guidance for library authors
-            href: ../core/extensions/logging-library-authors.md
+            href: ../core/extensions/logging/library-guidance.md
             displayName: logging guidance,logger guidance,log guidance
           - name: Implement a custom logging provider
-            href: ../core/extensions/custom-logging-provider.md
+            href: ../core/extensions/logging/custom-provider.md
             displayName: custom logging,custom log,custom logging provider,custom log provider
           - name: High-performance logging
-            href: ../core/extensions/high-performance-logging.md
+            href: ../core/extensions/logging/high-performance-logging.md
             displayName: high-performance logging,high-performance log,high-performance logging provider,high-performance log provider
+          - name: Log Sampling
+            href: ../core/extensions/logging/log-sampling.md
+          - name: Log Buffering
+            href: ../core/extensions/logging/log-buffering.md
           - name: Console log formatting
-            href: ../core/extensions/console-log-formatter.md
+            href: ../core/extensions/logging/console-log-formatter.md
             displayName: console log formatting,console log formatter,console log formatting provider,console log formatter provider
       - name: HostBuilder (generic host)
         href: ../core/extensions/generic-host.md
+      - name: Asynchronous state management
+        href: ../core/extensions/async-state.md
+        displayName: async state,asynclocal,ambient data,async context,asynchronous context
+      - name: Testing with FakeTimeProvider
+        href: ../core/extensions/timeprovider-testing.md
+        displayName: fake time provider,time testing,testing time,test timers,mock time
+      - name: Audit reports for privacy and compliance
+        href: ../core/extensions/audit-reports.md
+        displayName: audit reports,compliance reports,privacy audit,data classification,telemetry audit
       - name: Resilience
         href: ../core/resilience/index.md
         displayName: resilience,transient fault handling,recovery,polly
@@ -1104,9 +1139,15 @@ items:
               - name: HTTP client factory
                 href: ../core/extensions/httpclient-factory.md
                 displayName: networking,httpclient,http,dependency injection,client,factory,named client,named httpclient,typed client,typed httpclient
+              - name: Monitor and analyze HTTP client performance
+                href: ../core/extensions/httpclient-latency-extensions.md
+                displayName: httpclient,http,client,factory,dependency injection,keyed,keyed di,keyed services
               - name: HTTP client factory troubleshooting
                 href: ../core/extensions/httpclient-factory-troubleshooting.md
                 displayName: httpclient,http,client,factory,named client,named httpclient,typed client,typed httpclient
+              - name: Keyed DI support in HTTP client factory
+                href: ../core/extensions/httpclient-factory-keyed-di.md
+                displayName: httpclient,http,client,factory,dependency injection,keyed,keyed di,keyed services
               - name: Build resilient HTTP apps
                 href: ../core/resilience/http-resilience.md
                 displayName: resilience,transient fault handling,http,httpclient,recovery,polly
@@ -1161,6 +1202,8 @@ items:
             items:
               - name: QUIC support
                 href: networking/quic/quic-overview.md
+              - name: QUIC configuration options
+                href: networking/quic/quic-options.md
               - name: QUIC troubleshooting
                 href: networking/quic/quic-troubleshooting.md
           - name: Telemetry
@@ -1171,6 +1214,12 @@ items:
               - name: Metrics
                 href: networking/telemetry/metrics.md
                 displayName: networking metrics
+              - name: Distributed tracing
+                href: networking/telemetry/tracing.md
+                displayName: networking distributed tracing
+              - name: HTTP client logging
+                href: ../core/extensions/httpclient-logging.md
+                displayName: http client logging
               - name: Events
                 href: networking/telemetry/events.md
                 displayName: networking events
@@ -1287,12 +1336,12 @@ items:
                 href: runtime-libraries/system-resources-resourcereader.md
               - name: SatelliteContractVersionAttribute class
                 href: runtime-libraries/system-resources-satellitecontractversionattribute.md
-      - name: Worker Services
+      - name: Worker services
         items:
           - name: Overview
             displayName: workers,worker service,BackgroundService,IHostedService,queue service,timer service
             href: ../core/extensions/workers.md
-          - name: Create a Queue Service
+          - name: Create a queue service
             href: ../core/extensions/queue-service.md
           - name: Use scoped services with a BackgroundService
             href: ../core/extensions/scoped-service.md
@@ -1303,7 +1352,7 @@ items:
             displayName: msi,windows service installer,setup.exe
           - name: Implement the IHostedService interface
             href: ../core/extensions/timer-service.md
-          - name: Deploy a Worker Service to Azure
+          - name: Deploy a worker service to Azure
             href: ../core/extensions/cloud-service.md
       - name: Caching
         href: ../core/extensions/caching.md
@@ -1334,6 +1383,8 @@ items:
                     href: runtime-libraries/system-type-gettype.md
                   - name: MakeGenericType method
                     href: runtime-libraries/system-type-makegenerictype.md
+              - name: The CustomReflectionContext class
+                href: runtime-libraries/system-reflection-context-customreflectioncontext.md
       - name: Graphics
         items:
           - name: Supplemental API remarks
@@ -1449,7 +1500,7 @@ items:
       - name: Reflection
         items:
           - name: Overview
-            href: reflection/reflection.md
+            href: reflection/overview.md
           - name: View type information
             href: reflection/viewing-type-information.md
           - name: Reflection and generic types
@@ -1488,7 +1539,22 @@ items:
                   - name: The AssemblyBuilder class
                     href: runtime-libraries/system-reflection-emit-assemblybuilder.md
                   - name: The DynamicMethod class
-                    href: runtime-libraries/system-reflection-emit-dynamicmethod.md
+                    items:
+                      - name: Type remarks
+                        href: runtime-libraries/system-reflection-emit-dynamicmethod.md
+                        displayName: dynamicmethod
+                      - name: CreateDelegate method
+                        href: runtime-libraries/system-reflection-emit-dynamicmethod-createdelegate.md
+                      - name: Constructors
+                        href: runtime-libraries/system-reflection-emit-dynamicmethod-ctor.md
+                      - name: GetILGenerator methods
+                        href: runtime-libraries/system-reflection-emit-dynamicmethod-getilgenerator.md
+                      - name: Invoke method
+                        href: runtime-libraries/system-reflection-emit-dynamicmethod-invoke.md
+                      - name: IsSecurity* properties
+                        href: runtime-libraries/system-reflection-emit-dynamicmethod-issecuritycritical.md
+                  - name: The DynamicILInfo class
+                    href: runtime-libraries/system-reflection-emit-dynamicilinfo.md
                   - name: The MethodBuilder class
                     href: runtime-libraries/system-reflection-emit-methodbuilder.md
                   - name: The PersistedAssemblyBuilder class
@@ -1526,6 +1592,12 @@ items:
                 href: ../core/tutorials/creating-app-with-plugin-support.md
               - name: How to use and debug assembly unloadability
                 href: ../standard/assembly/unloadability.md
+      - name: Managed Extensibility Framework (MEF)
+        items:
+          - name: Overview
+            href: ../standard/mef/index.md
+          - name: Attributed programming model overview
+            href: ../standard/mef/attributed-programming-model-overview-mef.md
       - name: Versioning
         items:
           - name: Overview

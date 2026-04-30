@@ -10,7 +10,7 @@ dev_langs:
 
 [!INCLUDE [context](includes/context.md)]
 
-The <xref:System.Diagnostics.Tracing.EventSource> class is intended to be inherited by a user class that provides specific events to be used for event tracing. The <xref:System.Diagnostics.Tracing.EventSource.WriteEvent%2A?displayProperty=nameWithType> methods are called to log the events.
+The <xref:System.Diagnostics.Tracing.EventSource> class is intended to be inherited by a user class that provides specific events to be used for event tracing. The <xref:System.Diagnostics.Tracing.EventSource.WriteEvent*?displayProperty=nameWithType> methods are called to log the events.
 
 The basic functionality of <xref:System.Diagnostics.Tracing.EventSource> is sufficient for most applications. If you want more control over the event metadata that's created, you can apply the <xref:System.Diagnostics.Tracing.EventAttribute> attribute to the methods. For advanced event source applications, it is possible to intercept the commands being sent to the derived event source and change the filtering, or to cause actions (such as dumping a data structure) to be performed by the inheritor. An event source can be activated in-process using <xref:System.Diagnostics.Tracing.EventListener> and out-of-process using EventPipe-based tools such as `dotnet-trace` or Event Tracing for Windows (ETW) based tools like `PerfView` or `Logman`. It is also possible to programmatically control and intercept the data dispatcher. The <xref:System.Diagnostics.Tracing.EventListener> class provides additional functionality.
 
@@ -35,7 +35,7 @@ Historically, these two formats are derived from two formats that Event Tracing 
 
 The default event format is <xref:System.Diagnostics.Tracing.EventSourceSettings.EtwManifestEventFormat>, which is set if not specified on <xref:System.Diagnostics.Tracing.EventSourceSettings>. Manifest-based <xref:System.Diagnostics.Tracing.EventSource> objects generate an XML document representing the events defined on the class upon initialization. This requires the <xref:System.Diagnostics.Tracing.EventSource> to reflect over itself to generate the provider and event metadata.
 
-To use self-describing (tracelogging) event format, construct your <xref:System.Diagnostics.Tracing.EventSource> using the <xref:System.Diagnostics.Tracing.EventSource.%23ctor(System.String)> constructor, the <xref:System.Diagnostics.Tracing.EventSource.%23ctor(System.String,System.Diagnostics.Tracing.EventSourceSettings)> constructor, or by setting the `EtwSelfDescribingEventFormat` flag on <xref:System.Diagnostics.Tracing.EventSourceSettings>. Self-describing sources generate minimal provider metadata on initialization and only generate event metadata when <xref:System.Diagnostics.Tracing.EventSource.Write(System.String)> is called.
+To use self-describing (tracelogging) event format, construct your <xref:System.Diagnostics.Tracing.EventSource> using the <xref:System.Diagnostics.Tracing.EventSource.%23ctor(System.String)> constructor, the <xref:System.Diagnostics.Tracing.EventSource.%23ctor(System.String,System.Diagnostics.Tracing.EventSourceSettings)> constructor, or by setting the `EtwSelfDescribingEventFormat` flag on <xref:System.Diagnostics.Tracing.EventSourceSettings>. Self-describing sources generate minimal provider metadata on initialization and only generate event metadata when <xref:System.Diagnostics.Tracing.EventSource.Write(System.String)> is called. Unlike the manifest-based format, when listening via ETW only the Level, Keyword, and Opcode metadata are included from the <xref:System.Diagnostics.Tracing.EventAttribute> attribute. Other properties such as EventId or Message are not included.
 
 In practice, these event format settings only affect usage with readers based on Event Tracing for Windows (ETW). They can, however, have a small effect on initialization time and per-event write times due to the time required for reflection and generating the metadata.
 
@@ -59,7 +59,7 @@ Traditionally, user-defined <xref:System.Diagnostics.Tracing.EventSource> object
 > Abstract <xref:System.Diagnostics.Tracing.EventSource> objects cannot define keywords, tasks, opcodes, channels, or events.
 
 > [!IMPORTANT]
-> To avoid name collisions at run time when generating event metadata, don't explicitly implement interface methods when using interfaces with <xref:System.Diagnostics.Tracing.EventSource>.
+> To avoid name collisions at runtime when generating event metadata, don't explicitly implement interface methods when using interfaces with <xref:System.Diagnostics.Tracing.EventSource>.
 
 The following example shows an implementation of <xref:System.Diagnostics.Tracing.EventSource> that uses an interface.
 

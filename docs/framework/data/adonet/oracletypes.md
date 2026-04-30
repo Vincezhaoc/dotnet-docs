@@ -2,6 +2,7 @@
 description: "Learn more about the structures you can use to work with Oracle data types, including OracleNumber and OracleString."
 title: "OracleTypes"
 ms.date: "03/30/2017"
+ms.custom: sfi-ropc-nochange
 ---
 # OracleTypes
 
@@ -43,7 +44,7 @@ public void Setup(string connectionString)
 
 ## Retrieve data from the Oracle table
 
- This example uses an **OracleDataReader** to access the data, and uses several **OracleType** structures to display the data.
+ This example uses an `OracleDataReader` to access the data, and uses several `OracleType` structures to display the data.
 
 ```csharp
 public void ReadOracleTypesExample(string connectionString)

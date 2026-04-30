@@ -1,7 +1,7 @@
 ---
 title: "Static Classes and Static Class Members"
 description: Static classes can't be instantiated in C#. You access the members of a static class by using the class name itself.
-ms.date: 03/15/2024
+ms.date: 10/13/2025
 helpviewer_keywords:
   - "C# language, static members"
   - "static members [C#]"
@@ -18,7 +18,7 @@ A [static](../../language-reference/keywords/static.md) class is basically the s
 UtilityClass.MethodA();
 ```
 
- A static class can be used as a convenient container for sets of methods that just operate on input parameters and don't have to get or set any internal instance fields. For example, in the .NET Class Library, the static <xref:System.Math?displayProperty=nameWithType> class contains methods that perform mathematical operations, without any requirement to store or retrieve data that is unique to a particular instance of the <xref:System.Math> class. That is, you apply the members of the class by specifying the class name and the method name, as shown in the following example.
+ A static class can be used as a convenient container for sets of methods that just operate on input parameters and don't have to get or set any internal instance fields. For example, in the .NET Class Library, the static <xref:System.Math?displayProperty=nameWithType> class contains methods that perform mathematical operations, without any requirement to store or retrieve data that's unique to a particular instance of the <xref:System.Math> class. That is, you apply the members of the class by specifying the class name and the method name, as shown in the following example.
 
 ```csharp
 double dub = -3.14;
@@ -59,7 +59,7 @@ Console.WriteLine(Math.Round(Math.Abs(dub)));
 
 ## Static Members
 
- A non-static class can contain static methods, fields, properties, or events. The static member is callable on a class even when no instance of the class exists. The static member is always accessed by the class name, not the instance name. Only one copy of a static member exists, regardless of how many instances of the class are created. Static methods and properties can't access non-static fields and events in their containing type, and they can't access an instance variable of any object unless it's explicitly passed in a method parameter.
+ A non-static class can contain static methods, fields, properties, or events. The static member is callable on a class even when no instance of the class exists. The static member is always accessed by the class name, not the instance name. Only one copy of a static member exists, regardless of how many instances of the class are created. For generic types, each closed generic type has its own copy of static members. Static fields marked with <xref:System.ThreadStaticAttribute> have one copy per thread. Static methods and properties can't access non-static fields and events in their containing type, and they can't access an instance variable of any object unless it's explicitly passed in a method parameter.
 
  It's more typical to declare a non-static class with some static members, than to declare an entire class as static. Two common uses of static fields are to keep a count of the number of objects that are instantiated, or to store a value that must be shared among all instances.
 

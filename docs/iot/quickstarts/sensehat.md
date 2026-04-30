@@ -2,8 +2,7 @@
 title: Quickstart - Use .NET to drive a Raspberry Pi Sense HAT
 description: Get started with .NET IoT Libraries in 5 minutes using a Sense HAT, an add-on board for Raspberry Pi.
 author: camsoper
-ms.author: casoper
-ms.date: 07/31/2024
+ms.date: 03/07/2026
 ms.topic: quickstart
 ---
 

@@ -1,7 +1,7 @@
 ---
 description: "C# Keywords: Find the reference material for the predefined keywords and contextual keywords defined in the C# language."
 title: "C# Keywords and contextual keywords"
-ms.date: 08/14/2024
+ms.date: 01/21/2026
 f1_keywords: 
   - "cs.keywords"
 helpviewer_keywords:
@@ -11,16 +11,18 @@ helpviewer_keywords:
   - "@ keyword"
 ms.custom: "updateeachrelease"
 ---
-# C# Keywords
+# C# keywords
 
-Keywords are predefined, reserved identifiers that have special meanings to the compiler. They can't be used as identifiers in your program unless they include `@` as a prefix. For example, `@if` is a valid identifier, but `if` isn't because `if` is a keyword.
+Keywords are predefined, reserved identifiers that have special meanings to the compiler. You can't use them as identifiers in your program unless you prefix them with `@`. For example, `@if` is a valid identifier, but `if` isn't because `if` is a keyword.
 
-The first table in this article lists keywords that are reserved identifiers in any part of a C# program. The second table in this article lists the contextual keywords in C#. Contextual keywords have special meaning only in a limited program context and can be used as identifiers outside that context. Generally, as new keywords are added to the C# language, they're added as contextual keywords in order to avoid breaking programs written in earlier versions.
+[!INCLUDE[csharp-version-note](../includes/initial-version.md)]
+
+The first table in this article lists keywords that are reserved identifiers in any part of a C# program. The second table lists the contextual keywords in C#. Contextual keywords have special meaning only in a limited program context and can be used as identifiers outside that context. Generally, as new keywords are added to the C# language, they're added as contextual keywords to avoid breaking programs written in earlier versions.
 
 :::row:::
     :::column:::
         [`abstract`](abstract.md)  
-        [`as`](../operators/type-testing-and-cast.md#as-operator)  
+        [`as`](../operators/type-testing-and-cast.md#the-as-operator)  
         [`base`](base.md)  
         [`bool`](../builtin-types/bool.md)  
         [`break`](../statements/jump-statements.md#the-break-statement)  
@@ -91,7 +93,7 @@ The first table in this article lists keywords that are reserved identifiers in 
         [`throw`](../statements/exception-handling-statements.md#the-throw-statement)  
         [`true`](../builtin-types/bool.md)  
         [`try`](../statements/exception-handling-statements.md#the-try-statement)  
-        [`typeof`](../operators/type-testing-and-cast.md#typeof-operator)  
+        [`typeof`](../operators/type-testing-and-cast.md#the-typeof-operator)  
         [`uint`](../builtin-types/integral-numeric-types.md)  
         [`ulong`](../builtin-types/integral-numeric-types.md)  
         [`unchecked`](../statements/checked-and-unchecked.md)  
@@ -107,7 +109,7 @@ The first table in this article lists keywords that are reserved identifiers in 
 
 ## Contextual keywords
 
-A contextual keyword is used to provide a specific meaning in the code, but it isn't a reserved word in C#. Some contextual keywords, such as `partial` and `where`, have special meanings in two or more contexts.
+A contextual keyword provides a specific meaning in the code, but it isn't a reserved word in C#. Some contextual keywords, such as `partial` and `where`, have special meanings in two or more contexts.
 
 :::row:::
     :::column:::
@@ -123,8 +125,10 @@ A contextual keyword is used to provide a specific meaning in the code, but it i
         [`descending`](descending.md)  
         [`dynamic`](../builtin-types/reference-types.md)  
         [`equals`](equals.md)  
+        [`extension`](extension.md)  
     :::column-end:::
     :::column:::
+        [`field`](field.md)  
         [`file`](file.md)  
         [`from`](from-clause.md)  
         [`get`](get.md)  
@@ -136,9 +140,9 @@ A contextual keyword is used to provide a specific meaning in the code, but it i
         [`let`](let-clause.md)  
         [`managed` (function pointer calling convention)](../unsafe-code.md#function-pointers)  
         [`nameof`](../operators/nameof.md)  
-        [`nint`](../builtin-types/integral-numeric-types.md)  
     :::column-end:::
     :::column:::
+        [`nint`](../builtin-types/integral-numeric-types.md)  
         [`not`](../operators/patterns.md#logical-patterns)  
         [`notnull`](../../programming-guide/generics/constraints-on-type-parameters.md#notnull-constraint)  
         [`nuint`](../builtin-types/integral-numeric-types.md)  
@@ -150,9 +154,9 @@ A contextual keyword is used to provide a specific meaning in the code, but it i
         [`record`](../../fundamentals/types/records.md)  
         [`remove`](remove.md)  
         [`required`](required.md)  
-        [`scoped`](../statements/declarations.md#scoped-ref)  
     :::column-end:::
     :::column:::
+        [`scoped`](../statements/declarations.md#scoped-ref)  
         [`select`](select-clause.md)  
         [`set`](set.md)  
         [`unmanaged` (function pointer calling convention)](../unsafe-code.md#function-pointers)  
@@ -162,7 +166,7 @@ A contextual keyword is used to provide a specific meaning in the code, but it i
         [`when` (filter condition)](when.md)  
         [`where` (generic type constraint)](where-generic-type-constraint.md)  
         [`where` (query clause)](where-clause.md)  
-        [`with`](../operators/with-expression.md)  
+        [`with`](with.md)  
         [`yield`](../statements/yield.md)  
     :::column-end:::
 :::row-end:::

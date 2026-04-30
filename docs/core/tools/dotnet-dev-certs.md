@@ -1,11 +1,12 @@
 ---
 title: dotnet dev-certs command
 description: The dotnet dev-certs command generates a self-signed certificate to enable HTTPS use in development.
-ms.date: 07/14/2022
+ms.date: 03/29/2026
+ai-usage: ai-assisted
 ---
 # dotnet dev-certs
 
-**This article applies to:** ✔️ .NET Core 3.1 SDK and later versions
+**This article applies to:** ✔️ .NET 6 SDK and later versions
 
 ## Name
 
@@ -15,7 +16,8 @@ ms.date: 07/14/2022
 
 ```dotnetcli
 dotnet dev-certs https 
-  [-c|--check] [--clean] [-ep|--export-path <PATH>]
+  [-c|--check] [--check-trust-machine-readable] 
+  [--clean] [-ep|--export-path <PATH>]
   [--format] [-i|--import] [-np|--no-password]
   [-p|--password] [-q|--quiet] [-t|--trust]
   [-v|--verbose] [--version]
@@ -53,6 +55,20 @@ The `dotnet dev-certs` command manages a self-signed certificate to enable HTTPS
 
   By default, the newly created certificate is not trusted. To trust the certificate, use the `--trust` option.
 
+  In .NET 10 and later, the generated ASP.NET Core development certificate includes these subject alternative names (SANs).
+
+  The `*.dev.localhost` and `*.dev.internal` SANs lets you use the certificate with `*.dev.localhost` and `*.dev.internal` hostnames for local development. The `host.docker.internal` and `host.containers.internal` SANs let you use the certificate in container-based local development scenarios:
+
+  | Type | Value |
+  | --- | --- |
+  | DNS name | `localhost` |
+  | DNS name | `*.dev.localhost` |
+  | DNS name | `*.dev.internal` |
+  | DNS name | `host.docker.internal` |
+  | DNS name | `host.containers.internal` |
+  | IP address | `127.0.0.1` |
+  | IP address | `0000:0000:0000:0000:0000:0000:0000:0001` |
+
   To create a file that you can use with other tools, use the `--export-path` option.
 
 ## Options
@@ -60,6 +76,10 @@ The `dotnet dev-certs` command manages a self-signed certificate to enable HTTPS
 - **`-c|--check`**
 
   Checks for the existence of the development certificate but doesn't perform any action. Use this option with the `--trust` option to check if the certificate is not only valid but also trusted.
+
+- **`--check-trust-machine-readable`**
+
+  Same as running `--check --trust`, but outputs the results in JSON.
 
 - **`--clean`**
 
@@ -81,7 +101,7 @@ The `dotnet dev-certs` command manages a self-signed certificate to enable HTTPS
 
 - **`-ep|--export-path <PATH>`**
 
-  Exports the certificate to a file so that it can be used by other tools. Specify the full path to the exported certificate file, including the file name. The type of certificate files that are created depends on which options are used with `--export-path`:
+  Exports the certificate to a file so that it can be used by other tools. Specify the full path to the exported certificate file, including the file name. The containing directories must already exist and access to them should be restricted. The type of certificate files that are created depends on which options are used with `--export-path`:
 
   | Options | What is exported |
   |---------|---------|
@@ -131,6 +151,8 @@ The `dotnet dev-certs` command manages a self-signed certificate to enable HTTPS
 - **`-t|--trust`**
 
   Trusts the certificate on the local machine.
+
+  In .NET 10 and later, if you run this option inside a Windows Subsystem for Linux (WSL) instance, the command also trusts the certificate on the Windows host.
 
   If this option isn't specified, the certificate is added to the certificate store but not to a trusted list.
 
@@ -188,8 +210,8 @@ The `dotnet dev-certs` command manages a self-signed certificate to enable HTTPS
 
 ## See also
 
-* [Generate self-signed certificates with the .NET CLI](../additional-tools/self-signed-certificates-guide.md)
-* [Enforce HTTPS in ASP.NET Core](/aspnet/core/security/enforcing-ssl)
-* [Troubleshoot certificate problems such as certificate not trusted](/aspnet/core/security/enforcing-ssl#troubleshoot-certificate-problems-such-as-certificate-not-trusted)
-* [Hosting ASP.NET Core images with Docker over HTTPS](/aspnet/core/security/docker-https)
-* [Hosting ASP.NET Core images with Docker Compose over HTTPS](/aspnet/core/security/docker-compose-https)
+- [Generate self-signed certificates with the .NET CLI](../additional-tools/self-signed-certificates-guide.md)
+- [Enforce HTTPS in ASP.NET Core](/aspnet/core/security/enforcing-ssl)
+- [Troubleshoot certificate problems such as certificate not trusted](/aspnet/core/security/enforcing-ssl#troubleshoot-certificate-problems-such-as-certificate-not-trusted)
+- [Hosting ASP.NET Core images with Docker over HTTPS](/aspnet/core/security/docker-https)
+- [Hosting ASP.NET Core images with Docker Compose over HTTPS](/aspnet/core/security/docker-compose-https)

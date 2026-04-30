@@ -3,6 +3,7 @@ title: Securing .NET Microservices and Web Applications
 description: Security in .NET Microservices and Web Applications - Get to know the authentication options in ASP.NET Core web applications.
 author: mjrousos
 ms.date: 01/13/2021
+ms.custom: sfi-ropc-nochange
 ---
 # Make secure .NET Microservices and Web Applications
 
@@ -216,7 +217,7 @@ If you prefer to issue security tokens for local ASP.NET Core Identity users rat
 
    - The storage mechanism for user information, such as [ASP.NET Core Identity](https://identityserver4.readthedocs.io/en/latest/quickstarts/0_overview.html) or an alternative.
 
-When you specify clients and resources for IdentityServer4 to use, you can pass an <xref:System.Collections.Generic.IEnumerable%601> collection of the appropriate type to methods that take in-memory client or resource stores. Or for more complex scenarios, you can provide client or resource provider types via Dependency Injection.
+When you specify clients and resources for IdentityServer4 to use, you can pass an <xref:System.Collections.Generic.IEnumerable`1> collection of the appropriate type to methods that take in-memory client or resource stores. Or for more complex scenarios, you can provide client or resource provider types via Dependency Injection.
 
 A sample configuration for IdentityServer4 to use in-memory resources and clients provided by a custom IClientStore type might look like the following example:
 
@@ -286,7 +287,7 @@ The JWT bearer authentication middleware can also support more advanced scenario
 - **Introduction to Identity** \
   [https://learn.microsoft.com/aspnet/core/security/authentication/identity](/aspnet/core/security/authentication/identity)
 
-- **Rick Anderson. Two-factor authentication with SMS** \
+- **Two-factor authentication with SMS** \
   [https://learn.microsoft.com/aspnet/core/security/authentication/2fa](/aspnet/core/security/authentication/2fa)
 
 - **Enabling authentication using Facebook, Google and other external providers** \

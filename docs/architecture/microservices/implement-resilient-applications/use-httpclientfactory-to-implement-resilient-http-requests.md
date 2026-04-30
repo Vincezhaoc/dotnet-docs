@@ -1,6 +1,6 @@
 ---
 title: Use IHttpClientFactory to implement resilient HTTP requests
-description: Learn how to use IHttpClientFactory, available since .NET Core 2.1, for creating `HttpClient` instances, making it easy for you to use it in your applications. 
+description: Learn how to use IHttpClientFactory, available since .NET Core 2.1, for creating `HttpClient` instances, making it easy for you to use it in your applications.
 ms.date: 01/13/2021
 ---
 # Use IHttpClientFactory to implement resilient HTTP requests
@@ -25,7 +25,7 @@ To address the issues mentioned above and to make `HttpClient` instances managea
 
 The alternative is to use `SocketsHttpHandler` with configured `PooledConnectionLifetime`. This approach is applied to long-lived, `static` or singleton `HttpClient` instances. To learn more about different strategies, see [HttpClient guidelines for .NET](../../../fundamentals/networking/http/httpclient-guidelines.md).
 
-[Polly](https://thepollyproject.azurewebsites.net/) is a transient-fault-handling library that helps developers add resiliency to their applications, by using some pre-defined policies in a fluent and thread-safe manner.
+[Polly](https://www.pollydocs.org/) is a transient-fault-handling library that helps developers add resiliency to their applications, by using some pre-defined policies in a fluent and thread-safe manner.
 
 ## Benefits of using IHttpClientFactory
 
@@ -54,7 +54,7 @@ There are several ways that you can use `IHttpClientFactory` in your application
 For the sake of brevity, this guidance shows the most structured way to use `IHttpClientFactory`, which is to use Typed Clients (Service Agent pattern). However, all options are documented and are currently listed in this [article covering the `IHttpClientFactory` usage](/aspnet/core/fundamentals/http-requests#consumption-patterns).
 
 > [!NOTE]
-> If your app requires cookies, it might be better to avoid using <xref:System.Net.Http.IHttpClientFactory> in your app. For alternative ways of managing clients, see [Guidelines for using HTTP clients](../../../fundamentals/networking/http/httpclient-guidelines.md)
+> If your app requires cookies, it might be better to avoid using <xref:System.Net.Http.IHttpClientFactory> in your app. For alternative ways of managing clients, see [Guidelines for using HTTP clients](../../../fundamentals/networking/http/httpclient-guidelines.md).
 
 ## How to use Typed Clients with IHttpClientFactory
 
@@ -66,9 +66,9 @@ The following diagram shows how Typed Clients are used with `IHttpClientFactory`
 
 **Figure 8-4**. Using `IHttpClientFactory` with Typed Client classes.
 
-In the above image, a `ClientService` (used by a controller or client code) uses an `HttpClient` created by the registered `IHttpClientFactory`. This factory assigns an `HttpMessageHandler` from a pool to the `HttpClient`. The `HttpClient` can be configured with Polly's policies when registering the `IHttpClientFactory` in the DI container with the extension method <xref:Microsoft.Extensions.DependencyInjection.HttpClientFactoryServiceCollectionExtensions.AddHttpClient%2A>.
+In the above image, a `ClientService` (used by a controller or client code) uses an `HttpClient` created by the registered `IHttpClientFactory`. This factory assigns an `HttpMessageHandler` from a pool to the `HttpClient`. The `HttpClient` can be configured with Polly's policies when registering the `IHttpClientFactory` in the DI container with the extension method <xref:Microsoft.Extensions.DependencyInjection.HttpClientFactoryServiceCollectionExtensions.AddHttpClient*>.
 
-To configure the above structure, add <xref:System.Net.Http.IHttpClientFactory> in your application by installing the `Microsoft.Extensions.Http` NuGet package that includes the <xref:Microsoft.Extensions.DependencyInjection.HttpClientFactoryServiceCollectionExtensions.AddHttpClient%2A> extension method for <xref:Microsoft.Extensions.DependencyInjection.IServiceCollection>. This extension method registers the internal `DefaultHttpClientFactory` class to be used as a singleton for the interface `IHttpClientFactory`. It defines a transient configuration for the <xref:Microsoft.Extensions.Http.HttpMessageHandlerBuilder>. This message handler (<xref:System.Net.Http.HttpMessageHandler> object), taken from a pool, is used by the `HttpClient` returned from the factory.
+To configure the above structure, add <xref:System.Net.Http.IHttpClientFactory> in your application by installing the `Microsoft.Extensions.Http` NuGet package that includes the <xref:Microsoft.Extensions.DependencyInjection.HttpClientFactoryServiceCollectionExtensions.AddHttpClient*> extension method for <xref:Microsoft.Extensions.DependencyInjection.IServiceCollection>. This extension method registers the internal `DefaultHttpClientFactory` class to be used as a singleton for the interface `IHttpClientFactory`. It defines a transient configuration for the <xref:Microsoft.Extensions.Http.HttpMessageHandlerBuilder>. This message handler (<xref:System.Net.Http.HttpMessageHandler> object), taken from a pool, is used by the `HttpClient` returned from the factory.
 
 In the next snippet, you can see how `AddHttpClient()` can be used to register Typed Clients (Service Agents) that need to use `HttpClient`.
 
@@ -191,20 +191,20 @@ Up to this point, the above code snippet only shows the example of performing re
 
 ## Additional resources
 
-- **HttpClient guidelines for .NET**  
+- **HttpClient guidelines for .NET**
   [https://learn.microsoft.com/en-us/dotnet/fundamentals/networking/http/httpclient-guidelines](../../../fundamentals/networking/http/httpclient-guidelines.md)
 
-- **Using HttpClientFactory in .NET**  
+- **Using HttpClientFactory in .NET**
   [https://learn.microsoft.com/en-us/dotnet/core/extensions/httpclient-factory](../../../core/extensions/httpclient-factory.md)
 
-- **Using HttpClientFactory in ASP.NET Core**  
+- **Using HttpClientFactory in ASP.NET Core**
   [https://learn.microsoft.com/aspnet/core/fundamentals/http-requests](/aspnet/core/fundamentals/http-requests)
 
-- **HttpClientFactory source code in the `dotnet/runtime` GitHub repository**  
+- **HttpClientFactory source code in the `dotnet/runtime` GitHub repository**
   <https://github.com/dotnet/runtime/tree/release/7.0/src/libraries/Microsoft.Extensions.Http/>
 
-- **Polly (.NET resilience and transient-fault-handling library)**  
-  <https://thepollyproject.azurewebsites.net/>
+- **Polly (.NET resilience and transient-fault-handling library)**
+  <https://www.pollydocs.org/>
 
 >[!div class="step-by-step"]
 >[Previous](implement-resilient-entity-framework-core-sql-connections.md)

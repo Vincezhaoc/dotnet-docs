@@ -14,8 +14,13 @@ The compiler-generated XML file can be distributed alongside your .NET assembly 
 show quick information about types or members. Additionally, the XML file can be run through tools
 like [fsdocs](http://fsprojects.github.io/FSharp.Formatting/) to generate API reference websites.
 
-XML documentation comments, like all other comments, are ignored by the compiler, unless the options described below are enabled to check the validity and
-completeness of comments at compile time.
+By default, XML documentation comments are ignored by the compiler. To change this, set `--warnon:3390`. The compiler will then verify the syntax of the XML and the parameters referred to in `<param>` and `<paramref>` tags.
+
+You can enable this warning in your project file by adding a `<WarnOn>` element to a `<PropertyGroup>` section:
+
+```xml
+<WarnOn>3390</WarnOn>
+```
 
 You can generate the XML file at compile time by doing one of the following:
 
@@ -40,6 +45,9 @@ that immediately follows. Use this method when you want to write only a brief su
 The comment is encoded to XML during documentation preparation, so characters such as `<`, `>`, and `&` need not be escaped. If you don't specify a summary tag
 explicitly, you should not specify other tags, such as **param** or **returns** tags.
 
+> [!NOTE]
+> When you use comments without XML tags, any markup you include (such as HTML tags or XML-like syntax) will not be parsed or checked by the compiler or F# tooling. Some external tools like GitHub might attempt to parse the markup, but they can fail if the syntax contains errors. If you need to use XML tags in your documentation, wrap your comments with proper XML tags like `<summary>` to ensure they're validated by the compiler when `--warnon:3390` is enabled.
+
 The following example shows the alternative method, without XML tags. In this example, the entire text in the comment is considered a summary.
 
 [!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-2/snippet7102.fs)]
@@ -47,7 +55,7 @@ The following example shows the alternative method, without XML tags. In this ex
 ## Comments with XML tags
 
 If a comment body begins with `<` (normally `<summary>`), then it is treated as an XML formatted comment
-body using XML tags. This second way enables you to specify separate notes
+body using XML tags. This second approach enables you to specify separate notes
 for a short summary, additional remarks, documentation for each parameter and type parameter and exceptions thrown, and a description of the return value.
 
 The following is a typical XML documentation comment in a signature file:
@@ -82,7 +90,7 @@ The following table describes the tags for use inside description sections:
 ### User-defined tags
 
 The previous tags represent those that are recognized by the F# compiler and typical F# editor tooling. However, a user is free to define their own tags.
-Tools like fsdocs bring support for extra tags like [\<namespacedoc>](https://github.com/fsharp/fslang-design/blob/main/tooling/FST-1031-xmldoc-extensions.md).
+Tools like fsdocs bring support for extra tags like [`<namespacedoc>`](https://github.com/fsharp/fslang-design/blob/main/tooling/FST-1031-xmldoc-extensions.md).
 Custom or in-house documentation generation tools can also be used with the standard tags and multiple output formats from HTML to PDF can be supported.
 
 ## Compile-time checking

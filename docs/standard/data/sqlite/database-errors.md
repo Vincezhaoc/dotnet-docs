@@ -12,24 +12,28 @@ Errors may be encountered any time the Microsoft.Data.Sqlite interacts with the 
 * Opening a connection.
 * Beginning a transaction.
 * Executing a command.
-* Calling <xref:Microsoft.Data.Sqlite.SqliteDataReader.NextResult%2A>.
+* Calling <xref:Microsoft.Data.Sqlite.SqliteDataReader.NextResult*>.
 
 Consider carefully how your app will handle these errors.
 
 ## Locking, retries, and timeouts
 
+> [!WARNING]
+> Although SQLite supports concurrent access to the same database from multiple threads, the .NET APIs objects are not thread-safe. This means that `SqliteConnection`, `SqliteCommand` and `SqliteDataReader` cannot be shared and used concurrently from multiple threads.
+> When using Microsoft.Data.Sqlite from a concurrent application, simply create and open a new instance of `SqliteConnection` whenever you need to access the database (pooling ensures that this is a fast operation).
+
 SQLite is aggressive when it comes to locking tables and database files. If your app enables any concurrent database access, you'll likely encounter busy and locked errors. You can mitigate many errors by using [write-ahead logging](async.md).
 
 Whenever Microsoft.Data.Sqlite encounters a busy or locked error, it will automatically retry until it succeeds or the command timeout is reached.
 
-You can increase the timeout of a command by setting <xref:Microsoft.Data.Sqlite.SqliteCommand.CommandTimeout%2A>. The default timeout is 30 seconds. A value of `0` means no timeout.
+You can increase the timeout of a command by setting <xref:Microsoft.Data.Sqlite.SqliteCommand.CommandTimeout*>. The default timeout is 30 seconds. A value of `0` means no timeout.
 
 ```csharp
 // Retry for 60 seconds while locked
 command.CommandTimeout = 60;
 ```
 
-Microsoft.Data.Sqlite sometimes needs to create an implicit command object. For example, during BeginTransaction. To set the timeout for these commands, use <xref:Microsoft.Data.Sqlite.SqliteConnection.DefaultTimeout%2A>.
+Microsoft.Data.Sqlite sometimes needs to create an implicit command object. For example, during BeginTransaction. To set the timeout for these commands, use <xref:Microsoft.Data.Sqlite.SqliteConnection.DefaultTimeout*>.
 
 ```csharp
 // Set the default timeout of all commands on this connection

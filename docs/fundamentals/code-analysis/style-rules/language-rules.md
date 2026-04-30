@@ -1,7 +1,7 @@
 ---
 title: Code-style language and unnecessary code rules
 description: Learn about the different code-style rules for using C# and Visual Basic language constructs and for finding unnecessary code.
-ms.date: 02/15/2024
+ms.date: 11/07/2025
 helpviewer_keywords:
 - language code style rules [EditorConfig]
 - language rules
@@ -11,7 +11,7 @@ helpviewer_keywords:
 
 Code-style language rules affect how various constructs of .NET programming languages, for example, modifiers, and parentheses, are used.
 
-This category also includes rules that identify parts of the code base that are unnecessary and can be refactored or removed. The presence of unnecessary code indicates one of more of the following problems:
+This category also includes rules that identify parts of the code base that are unnecessary and can be refactored or removed. The presence of unnecessary code indicates one or more of the following problems:
 
 - Readability: Code that unnecessarily degrades readability.
 - Maintainability: Code that's no longer used after refactoring and is maintained unnecessarily.
@@ -46,7 +46,7 @@ or
 
   If you're using the .NET 8 SDK or an earlier version and you want the severity to be respected at build time, you can do so in one of two ways:
 
-  - Set the [\<AnalysisLevel>](../../../core/project-sdk/msbuild-props.md#analysislevel) or `<AnalysisLevelStyle>` property to `9.0` or higher, or to `preview`.
+  - Set the [`<AnalysisLevel>`](../../../core/project-sdk/msbuild-props.md#analysislevel) or `<AnalysisLevelStyle>` property to `9.0` or higher, or to `preview`.
   - Set the severity by using the rule ID-based severity configuration syntax for analyzers instead. The syntax takes the form `dotnet_diagnostic.<rule ID>.severity = <severity>`, for example, `dotnet_diagnostic.IDE0040.severity = warning`. For more information, see [severity level](../configuration-options.md#severity-level).
 
 > [!TIP]
@@ -95,6 +95,7 @@ C# style rules:
 - [Convert to top-level statements (IDE0210)](ide0210.md)
 - [Convert to 'Program.Main' style program (IDE0211)](ide0211.md)
 - [Use primary constructor (IDE0290)](ide0290.md)
+- [Prefer 'System.Threading.Lock' (IDE0330)](ide0330.md)
 
 ### Expression-bodied members
 
@@ -140,6 +141,7 @@ C# style rules:
 - [Convert `typeof` to `nameof` (IDE0082)](ide0082.md)
 - [Remove unnecessary equality operator (IDE0100)](ide0100.md)
 - [Simplify LINQ expression (IDE0120)](ide0120.md)
+- [Simplify LINQ type check and cast (IDE0121)](ide0121.md)
 - [Namespace does not match folder structure (IDE0130)](ide0130.md)
 
 C# style rules:
@@ -158,6 +160,7 @@ C# style rules:
 - [Prefer 'null' check over type check (IDE0150)](ide0150.md)
 - [Use tuple to swap values (IDE0180)](ide0180.md)
 - [Add explicit cast in foreach loop (IDE0220)](ide0220.md)
+- [Add explicit cast (IDE0221)](ide0221.md)
 - [Use UTF-8 string literal (IDE0230)](ide0230.md)
 - [Nullable directive is redundant (IDE0240)](ide0240.md)
 - [Nullable directive is unnecessary (IDE0241)](ide0241.md)
@@ -165,8 +168,12 @@ C# style rules:
 - [Use collection expression for empty (IDE0301)](ide0301.md)
 - [Use collection expression for stack alloc (IDE0302)](ide0302.md)
 - [Use collection expression for `Create()` (IDE0303)](ide0303.md)
-- [Use collection expression for builder (IDE0304](ide0304.md)
+- [Use collection expression for builder (IDE0304)](ide0304.md)
 - [Use collection expression for fluent (IDE0305)](ide0305.md)
+- [Use collection expression for new (IDE0306)](ide0306.md)
+- [Use unbound generic type (IDE0340)](ide0340.md)
+- [Use implicitly typed lambda (IDE0350)](ide0350.md)
+- [Simplify property accessor (IDE0360)](ide0360.md)
 
 Visual Basic style rules:
 
@@ -199,16 +206,25 @@ C# style rules:
 - [Make struct fields writable (IDE0064)](ide0064.md)
 - [Struct can be made 'readonly' (IDE0250)](ide0250.md)
 - [Member can be made 'readonly' (IDE0251)](ide0251.md)
+- [Make anonymous function static (IDE0320)](ide0320.md)
+- [Remove unnecessary `unsafe` modifier (IDE0380)](ide0380.md)
 
 ### New-line preferences
 
-- Allow multiple blank lines (IDE2000)
-- Allow embedded statements on same line (IDE2001)
-- Allow blank lines between consecutive braces (IDE2002)
-- Allow statement immediately after block (IDE2003)
-- Allow blank line after colon in constructor initializer (IDE2004)
-- Allow blank line after token in conditional expression (IDE2005)
-- Allow blank line after token in arrow expression (IDE2006)
+.NET style rules (C# and Visual Basic):
+
+- [Avoid multiple blank lines (IDE2000)](ide2000.md)†
+- [Blank line required between block and subsequent statement (IDE2003)](ide2003.md)†
+
+C# style rules:
+
+- [Embedded statements must be on their own line (IDE2001)](ide2001.md)†
+- [Consecutive braces must not have blank line between them (IDE2002)](ide2002.md)†
+- [Blank line not allowed after constructor initializer colon (IDE2004)](ide2004.md)†
+- [Blank line not allowed after conditional expression token (IDE2005)](ide2005.md)†
+- [Blank line not allowed after arrow expression clause token (IDE2006)](ide2006.md)†
+
+†These rules are experimental and subject to change or removal.
 
 ### Null-checking preferences
 
@@ -246,11 +262,15 @@ C# style rules:
 
 - [Remove unnecessary suppression (IDE0079)](ide0079.md)
 
+C# style rules:
+
+- [Remove unnecessary suppression (null-forgiving operator) (IDE0370)](ide0370.md)
+
 ### `This.` and `me.` preferences
 
 .NET style rules (C# and Visual Basic):
 
-- [this and Me preferences (IDE0003, IDE0009)](ide0003-ide0009.md)
+- [Member-access qualification preferences (IDE0003 and IDE0009)](ide0003-ide0009.md)
 
 ### `var` preferences
 

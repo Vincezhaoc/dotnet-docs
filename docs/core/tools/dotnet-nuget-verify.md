@@ -2,11 +2,11 @@
 title: dotnet nuget verify command
 description: The dotnet nuget verify command verifies a signed package.
 author: kartheekp-ms
-ms.date: 10/08/2020
+ms.date: 10/28/2025
 ---
 # dotnet nuget verify
 
-**This article applies to:** ✔️ .NET 5.0.100-rc.2.x SDK and later versions
+**This article applies to:** ✔️ .NET 6 SDK and later versions
 
 ## Name
 
@@ -27,6 +27,7 @@ dotnet nuget verify -h|--help
 ## Description
 
 The `dotnet nuget verify` command verifies a signed NuGet package.
+In .NET 10 and later versions, the command also outputs the package's content hash, which might be useful to investigate lock file validation errors.
 
   > [!NOTE]
   > This command requires a certificate root store that is valid for both code signing and timestamping. Also, this command may not be supported on some combinations of operating system and .NET SDK. For more information, see [NuGet signed package verification](nuget-signed-package-verification.md).
@@ -77,9 +78,9 @@ The `dotnet nuget verify` command verifies a signed NuGet package.
 
   ❌ indicates details that are **not** displayed. ✔️ indicates details that are displayed.
 
-[!INCLUDE [configfile](../../../includes/cli-configfile.md)]
+- [!INCLUDE [configfile](includes/cli-configfile.md)]
 
-[!INCLUDE [help](../../../includes/cli-help.md)]
+- [!INCLUDE [help](includes/cli-help.md)]
 
 ## Examples
 

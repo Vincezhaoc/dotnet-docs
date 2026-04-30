@@ -7,7 +7,7 @@ metadata:
   title: Install .NET on Windows, Linux, and macOS
   description: Learn where to download and install .NET on Windows, Linux, and macOS. Discover the dependencies required to develop, deploy, and run .NET apps.
   ms.topic: landing-page
-  ms.date: 01/26/2023
+  ms.date: 11/08/2025
 
 # linkListType: architecture | concept | deploy | download | get-started | how-to-guide | learn | overview | quickstart | reference | sample | tutorial | video | whats-new
 
@@ -34,9 +34,9 @@ landingContent:
           - text: Install on macOS
             url: macos.md
           - text: Supported macOS releases
-            url: macos.md#supported-releases
+            url: macos.md#supported-versions
           - text: Install alongside Visual Studio Code
-            url: macos.md#install-alongside-visual-studio-code
+            url: macos.md#install-net-for-visual-studio-code
 
   # Card
   - title: Linux
@@ -60,7 +60,7 @@ landingContent:
           - text: SUSE Linux Enterprise Server
             url: linux-sles.md
           - text: Ubuntu
-            url: linux-ubuntu.md
+            url: linux-ubuntu-decision.md
 
   # Card
   - title: "Q&A"

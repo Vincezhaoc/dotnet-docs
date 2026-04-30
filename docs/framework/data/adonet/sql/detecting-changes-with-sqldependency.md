@@ -5,6 +5,7 @@ ms.date: "03/30/2017"
 dev_langs:
   - "csharp"
   - "vb"
+ms.custom: sfi-ropc-nochange
 ---
 
 # Detect changes with SqlDependency
@@ -13,7 +14,7 @@ A <xref:System.Data.SqlClient.SqlDependency> object can be associated with a <xr
 
 ## Security Considerations
 
-The dependency infrastructure relies on a <xref:System.Data.SqlClient.SqlConnection> that is opened when <xref:System.Data.SqlClient.SqlDependency.Start%2A> is called in order to receive notifications that the underlying data has changed for a given command. The ability for a client to initiate the call to `SqlDependency.Start` is controlled through the use of <xref:System.Data.SqlClient.SqlClientPermission> and code access security attributes. For more information, see [Enabling Query Notifications](enabling-query-notifications.md) and [Code Access Security and ADO.NET](../code-access-security.md).
+The dependency infrastructure relies on a <xref:System.Data.SqlClient.SqlConnection> that is opened when <xref:System.Data.SqlClient.SqlDependency.Start*> is called in order to receive notifications that the underlying data has changed for a given command. The ability for a client to initiate the call to `SqlDependency.Start` is controlled through the use of <xref:System.Data.SqlClient.SqlClientPermission> and code access security attributes. For more information, see [Enabling Query Notifications](enabling-query-notifications.md) and [Code Access Security and ADO.NET](../code-access-security.md).
 
 ### Example
 

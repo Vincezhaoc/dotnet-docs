@@ -77,7 +77,7 @@ When field name inference fails, Visual Basic does not generate a compiler error
 
 ## Tuples versus structures
 
-A Visual Basic tuple is a value type that is an instance of one of the **System.ValueTuple** generic types. For example, the `holiday` tuple defined in the previous example is an instance of the <xref:System.ValueTuple%603> structure. It is designed to be a lightweight container for data. Since the tuple aims to make it easy to create an object with multiple data items, it lacks some of the features that a custom structure might have. These include:
+A Visual Basic tuple is a value type that is an instance of one of the **System.ValueTuple** generic types. For example, the `holiday` tuple defined in the previous example is an instance of the <xref:System.ValueTuple`3> structure. It is designed to be a lightweight container for data. Since the tuple aims to make it easy to create an object with multiple data items, it lacks some of the features that a custom structure might have. These include:
 
 - Custom members. You cannot define your own properties, methods, or events for a tuple.
 
@@ -146,11 +146,11 @@ A method can return only a single value. Frequently, though, you'd like a method
 
 - You can use a tuple, which provides a lightweight solution to retrieving multiple return values.
 
-For example, the **TryParse** methods in .NET return a `Boolean` value that indicates whether the parsing operation succeeded. The result of the parsing operation is returned in a variable passed by reference to the method. Normally, a call to a parsing method such as <xref:System.Int32.TryParse%2A?displayProperty=nameWithType> looks like the following:
+For example, the **TryParse** methods in .NET return a `Boolean` value that indicates whether the parsing operation succeeded. The result of the parsing operation is returned in a variable passed by reference to the method. Normally, a call to a parsing method such as [Integer.TryParse](xref:System.Int32.TryParse%2A) looks like the following:
 
 :::code language="vb" source="../../../../../samples/snippets/visualbasic/programming-guide/language-features/data-types/tuples/tuple-returns.vb" id="StandardMethodCall":::
 
-We can return a tuple from the parsing operation if we wrap the call to the <xref:System.Int32.TryParse%2A?displayProperty=nameWithType> method in our own method. In the following example, `NumericLibrary.ParseInteger` calls the <xref:System.Int32.TryParse%2A?displayProperty=nameWithType> method and returns a named tuple with two elements.
+We can return a tuple from the parsing operation if we wrap the call to the [Integer.TryParse](xref:System.Int32.TryParse%2A) method in our own method. In the following example, `NumericLibrary.ParseInteger` calls the [Integer.TryParse](xref:System.Int32.TryParse%2A) method and returns a named tuple with two elements.
 
 :::code language="vb" source="../../../../../samples/snippets/visualbasic/programming-guide/language-features/data-types/tuples/tuple-returns.vb" id="ParseIntegerReturnsTuple":::
 

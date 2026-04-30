@@ -10,7 +10,7 @@ ms.assetid: 115f7a2f-d422-4605-ab36-13a8dd28142a
 ---
 # Interop Marshaling
 
-Interop marshalling governs how data is passed in method arguments and return values between managed and unmanaged memory during calls. Interop marshalling is a run-time activity performed by the common language runtime's marshalling service.
+Interop marshalling governs how data is passed in method arguments and return values between managed and unmanaged memory during calls. Interop marshalling is a runtime activity performed by the common language runtime's marshalling service.
 
 Most data types have common representations in both managed and unmanaged memory. The interop marshaller handles these types for you. Other types can be ambiguous or not represented at all in managed memory.
 
@@ -52,7 +52,7 @@ If you plan to export a managed server, be aware that the COM client determines 
 
 ### Managed Clients and COM Servers
 
-The default setting for managed client apartments is MTA; however, the application type of the .NET client can change the default setting. For example, a Visual Basic client apartment setting is STA. You can use the <xref:System.STAThreadAttribute?displayProperty=nameWithType>, the <xref:System.MTAThreadAttribute?displayProperty=nameWithType>, the <xref:System.Threading.Thread.ApartmentState%2A?displayProperty=nameWithType> property, or the <xref:System.Web.UI.Page.AspCompatMode%2A?displayProperty=nameWithType> property to examine and change the apartment setting of a managed client.
+The default setting for managed client apartments is MTA; however, the application type of the .NET client can change the default setting. For example, a Visual Basic client apartment setting is STA. You can use the <xref:System.STAThreadAttribute?displayProperty=nameWithType>, the <xref:System.MTAThreadAttribute?displayProperty=nameWithType>, the <xref:System.Threading.Thread.ApartmentState?displayProperty=nameWithType> property, or the <xref:System.Web.UI.Page.AspCompatMode?displayProperty=nameWithType> property to examine and change the apartment setting of a managed client.
 
 The author of the component sets the thread affinity of a COM server. The following table shows the combinations of apartment settings for .NET clients and COM servers. It also shows the resulting marshalling requirements for the combinations.
 

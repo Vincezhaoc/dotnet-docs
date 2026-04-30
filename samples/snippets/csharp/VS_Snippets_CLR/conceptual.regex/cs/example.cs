@@ -1,4 +1,4 @@
-﻿// <Snippet1>
+// <Snippet1>
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,8 +17,9 @@ public class Example
                      "Ink jet printer                        $69.95\n\n" +
                      "Total Expenses                        $ 81.58\n";
 
-      // Get current culture's NumberFormatInfo object.
-      NumberFormatInfo nfi = CultureInfo.CurrentCulture.NumberFormat;
+      // Get the en-US culture and its NumberFormatInfo object.
+      CultureInfo enUsCulture = CultureInfo.CreateSpecificCulture("en-US");
+      NumberFormatInfo nfi = enUsCulture.NumberFormat;
       // Assign needed property values to variables.
       string currencySymbol = nfi.CurrencySymbol;
       bool symbolPrecedesIfPositive = nfi.CurrencyPositivePattern % 2 == 0;
@@ -36,13 +37,13 @@ public class Example
       // Get text that matches regular expression pattern.
       MatchCollection matches = Regex.Matches(input, pattern,
                                               RegexOptions.IgnorePatternWhitespace);
-      Console.WriteLine("Found {0} matches.", matches.Count);
+      Console.WriteLine($"Found {matches.Count} matches.");
 
       // Get numeric string, convert it to a value, and add it to List object.
       List<decimal> expenses = new List<Decimal>();
 
       foreach (Match match in matches)
-         expenses.Add(Decimal.Parse(match.Groups[1].Value));
+         expenses.Add(Decimal.Parse(match.Groups[1].Value, NumberStyles.Number, nfi));
 
       // Determine whether total is present and if present, whether it is correct.
       decimal total = 0;
@@ -50,9 +51,9 @@ public class Example
          total += value;
 
       if (total / 2 == expenses[expenses.Count - 1])
-         Console.WriteLine("The expenses total {0:C2}.", expenses[expenses.Count - 1]);
+         Console.WriteLine(string.Format(enUsCulture, "The expenses total {0:C2}.", expenses[expenses.Count - 1]));
       else
-         Console.WriteLine("The expenses total {0:C2}.", total);
+         Console.WriteLine(string.Format(enUsCulture, "The expenses total {0:C2}.", total));
    }
 }
 // The example displays the following output:

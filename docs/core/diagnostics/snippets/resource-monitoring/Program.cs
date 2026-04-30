@@ -1,20 +1,29 @@
 ﻿// <setup>
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.ResourceMonitoring;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Spectre.Console;
 
-var services = new ServiceCollection()
-    .AddLogging(static builder => builder.AddConsole())
-    .AddResourceMonitoring();
+var app = Host.CreateDefaultBuilder()
+    .ConfigureServices(services =>
+    {
+        services.AddLogging(static builder => builder.AddConsole())
+                .AddResourceMonitoring();
+    })
+    .Build();
 
-var provider = services.BuildServiceProvider();
-
-var monitor = provider.GetRequiredService<IResourceMonitor>();
+var monitor = app.Services.GetRequiredService<IResourceMonitor>();
+await app.StartAsync();
 // </setup>
 
 using var cancellationTokenSource = new CancellationTokenSource();
 var token = cancellationTokenSource.Token;
+Console.CancelKeyPress += (_, e) =>
+{
+    e.Cancel = true;
+    cancellationTokenSource.Cancel();
+};
 
 // <monitor>
 await StartMonitoringAsync(monitor, token);
@@ -22,7 +31,6 @@ await StartMonitoringAsync(monitor, token);
 async Task StartMonitoringAsync(IResourceMonitor monitor, CancellationToken cancellationToken)
 {
     var table = new Table()
-        .Centered()
         .Title("Resource Monitoring", new Style(foreground: Color.Purple, decoration: Decoration.Bold))
         .Caption("Updates every three seconds. *GTD: Guaranteed ", new Style(decoration: Decoration.Dim))
         .RoundedBorder()
@@ -60,11 +68,5 @@ async Task StartMonitoringAsync(IResourceMonitor monitor, CancellationToken canc
                 await Task.Delay(window);
             }
         });
-
-    Console.CancelKeyPress += (_, e) =>
-    {
-        e.Cancel = true;
-        cancellationTokenSource.Cancel();
-    };
 }
 // </monitor>

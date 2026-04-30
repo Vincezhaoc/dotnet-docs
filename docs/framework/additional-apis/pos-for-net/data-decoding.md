@@ -3,14 +3,14 @@ title: Data Decoding
 description: Data Decoding (POS for .NET v1.14 SDK Documentation)
 ms.date: 03/03/2014
 ms.topic: how-to
-ms.custom: "pos-restored-from-archive,UpdateFrequency5"
+ms.custom: "pos-restored-from-archive"
 ---
 
 # Data Decoding (POS for .NET v1.14 SDK Documentation)
 
 The <xref:Microsoft.PointOfService.BaseServiceObjects.ScannerBase> class provides two methods, **DecodeDataLabel** and **DecodeScanDataType** for decoding incoming date. These methods are called when the properties **ScanDataLabel** and **ScanDataType**, respectively, are accessed. The **ScannerBase** class defers data decoding until the application accesses the data properties and the decoded data will be cached for future reads.
 
-The **ScannerBase** class implements the **ScannerBase.DecodeData** attribute as required by the Unified Point Of Service (UnifiedPOS) specification. If **DecodeData** is not set to **true** when the application reads the **ScanDataLabel** property, an empty byte array will be returned. Similarly, **ScanDataType** returns **BarCodeSymbology.Unknown**. This functionality is implemented in the **ScannerBase** class and is transparent to both the application and the Service Object.
+The **ScannerBase** class implements the `ScannerBase.DecodeData` attribute as required by the Unified Point Of Service (UnifiedPOS) specification. If **DecodeData** is not set to **true** when the application reads the **ScanDataLabel** property, an empty byte array will be returned. Similarly, **ScanDataType** returns **BarCodeSymbology.Unknown**. This functionality is implemented in the **ScannerBase** class and is transparent to both the application and the Service Object.
 
 ## To implement DecodeScanDataLabel
 

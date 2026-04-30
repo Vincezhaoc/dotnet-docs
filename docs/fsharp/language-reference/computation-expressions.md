@@ -80,7 +80,7 @@ If you bind the call to a computation expression with `let`, you will not get th
 
 ### `and!`
 
-The `and!` keyword allows you to bind the results of multiple computation expression calls in a performant manner.
+The `and!` keyword allows you to bind the results of multiple computation expression calls more efficiently. This keyword enables *applicative computation expressions*, which provide a different computational model from the standard monadic approach.
 
 ```fsharp
 let doThingsAsync url =
@@ -92,11 +92,19 @@ let doThingsAsync url =
     }
 ```
 
-Using a series of `let! ... let! ...` forces re-execution of expensive binds, so using `let! ... and! ...` should be used when binding the results of numerous computation expressions.
+Using a series of `let! ... let! ...` executes the computations sequentially, even if they are independent. In contrast, `let! ... and! ...` indicates that the computations are independent, allowing applicative combination. This independence allows computation expression authors to:
+
+- Execute computations more efficiently.
+- Can run computations in parallel.
+- Accumulate results without unnecessary sequential dependencies.
+
+The restriction is that computations combined with `and!` cannot depend on the results of previously bound values within the same `let!`/`and!` chain. This trade-off enables the performance benefits.
 
 `and!` is defined primarily by the `MergeSources(x1, x2)` member on the builder type.
 
 Optionally, `MergeSourcesN(x1, x2 ..., xN)` can be defined to reduce the number of tupling nodes, and `BindN(x1, x2 ..., xN, f)`, or `BindNReturn(x1, x2, ..., xN, f)` can be defined to bind computation expression results efficiently without tupling nodes.
+
+For more information on applicative computation expressions, see [Applicative Computation Expressions in F# 5](../whats-new/fsharp-50.md#applicative-computation-expressions) and [F# RFC FS-1063](https://github.com/fsharp/fslang-design/blob/main/FSharp-5.0/FS-1063-support-letbang-andbang-for-applicative-functors.md).
 
 ### `do!`
 
@@ -116,7 +124,7 @@ For the [async workflow](async-expressions.md), this type is `Async<unit>`. For 
 
 ### `yield`
 
-The `yield` keyword is for returning a value from the computation expression so that it can be consumed as an <xref:System.Collections.Generic.IEnumerable%601>:
+The `yield` keyword is for returning a value from the computation expression so that it can be consumed as an <xref:System.Collections.Generic.IEnumerable`1>:
 
 ```fsharp
 let squares =
@@ -249,17 +257,18 @@ You can define the characteristics of your own computation expressions by creati
 
 The following table describes methods that can be used in a workflow builder class.
 
-|**Method**|**Typical signature(s)**|**Description**|
-|----|----|----|
-|`Bind`|`M<'T> * ('T -> M<'U>) -> M<'U>`|Called for `let!` and `do!` in computation expressions.|
-|`BindN`|`(M<'T1> * M<'T2> * ... * M<'TN> * ('T1 * 'T2 ... * 'TN -> M<'U>)) -> M<'U>`|Called for efficient `let!` and `and!` in computation expressions without merging inputs.<br /><br />e.g. `Bind3`, `Bind4`.|
+| **Method** | **Typical signature(s)**         | **Description**                                         |
+|------------|----------------------------------|---------------------------------------------------------|
+| `Bind`     | `M<'T> * ('T -> M<'U>) -> M<'U>` | Called for `let!` and `do!` in computation expressions. |
+|`BindN`|`(M<'T1> * M<'T2> * ... * M<'TN> * ('T1 * 'T2 ... * 'TN -> M<'U>)) -> M<'U>`|Called for efficient `let!` and `and!` in computation expressions without merging inputs.<br /><br />for example, `Bind3`, `Bind4`.|
 |`Delay`|`(unit -> M<'T>) -> Delayed<'T>`|Wraps a computation expression as a function. `Delayed<'T>` can be any type, commonly `M<'T>` or `unit -> M<'T>` are used. The default implementation returns a `M<'T>`.|
 |`Return`|`'T -> M<'T>`|Called for `return` in computation expressions.|
 |`ReturnFrom`|`M<'T> -> M<'T>`|Called for `return!` in computation expressions.|
+|`ReturnFromFinal`|`M<'T> -> M<'T>`|If present, called for `return!` and `do!` when in tail-call position.|
 |`BindReturn`|`(M<'T1> * ('T1 -> 'T2)) -> M<'T2>`|Called for an efficient `let! ... return` in computation expressions.|
-|`BindNReturn`|`(M<'T1> * M<'T2> * ... * M<'TN> * ('T1 * 'T2 ... * 'TN -> M<'U>)) -> M<'U>`|Called for efficient `let! ... and! ... return` in computation expressions without merging inputs.<br /><br />e.g. `Bind3Return`, `Bind4Return`.|
+|`BindNReturn`|`(M<'T1> * M<'T2> * ... * M<'TN> * ('T1 * 'T2 ... * 'TN -> M<'U>)) -> M<'U>`|Called for efficient `let! ... and! ... return` in computation expressions without merging inputs.<br /><br />for example, `Bind3Return`, `Bind4Return`.|
 |`MergeSources`|`(M<'T1> * M<'T2>) -> M<'T1 * 'T2>`|Called for `and!` in computation expressions.|
-|`MergeSourcesN`|`(M<'T1> * M<'T2> * ... * M<'TN>) -> M<'T1 * 'T2 * ... * 'TN>`|Called for `and!` in computation expressions, but improves efficiency by reducing the number of tupling nodes.<br /><br />e.g. `MergeSources3`, `MergeSources4`.|
+|`MergeSourcesN`|`(M<'T1> * M<'T2> * ... * M<'TN>) -> M<'T1 * 'T2 * ... * 'TN>`|Called for `and!` in computation expressions, but improves efficiency by reducing the number of tupling nodes.<br /><br />for example, `MergeSources3`, `MergeSources4`.|
 |`Run`|`Delayed<'T> -> M<'T>` or<br /><br />`M<'T> -> 'T`|Executes a computation expression.|
 |`Combine`|`M<'T> * Delayed<'T> -> M<'T>` or<br /><br />`M<unit> * M<'T> -> M<'T>`|Called for sequencing in computation expressions.|
 |`For`|`seq<'T> * ('T -> M<'U>) -> M<'U>` or<br /><br />`seq<'T> * ('T -> M<'U>) -> seq<M<'U>>`|Called for `for...do` expressions in computation expressions.|
@@ -269,12 +278,13 @@ The following table describes methods that can be used in a workflow builder cla
 |`While`|`(unit -> bool) * Delayed<'T> -> M<'T>`or<br /><br />`(unit -> bool) * Delayed<unit> -> M<unit>`|Called for `while...do` expressions in computation expressions.|
 |`Yield`|`'T -> M<'T>`|Called for `yield` expressions in computation expressions.|
 |`YieldFrom`|`M<'T> -> M<'T>`|Called for `yield!` expressions in computation expressions.|
+|`YieldFromFinal`|`M<'T> -> M<'T>`|If present, called for `yield!` when in tail-call position and in case of `do!` in tail-call position as a fallback for `ReturnFromFinal`|
 |`Zero`|`unit -> M<'T>`|Called for empty `else` branches of `if...then` expressions in computation expressions.|
 |`Quote`|`Quotations.Expr<'T> -> Quotations.Expr<'T>`|Indicates that the computation expression is passed to the `Run` member as a quotation. It translates all instances of a computation into a quotation.|
 
 Many of the methods in a builder class use and return an `M<'T>` construct, which is typically a separately defined type that characterizes the kind of computations being combined, for example, `Async<'T>` for async expressions and `Seq<'T>` for sequence workflows. The signatures of these methods enable them to be combined and nested with each other, so that the workflow object returned from one construct can be passed to the next.
 
-Many functions use the result of `Delay` as an argument: `Run`, `While`, `TryWith`, `TryFinally`, and `Combine`. The `Delayed<'T>` type is the return type of `Delay` and consequently the parameter to these functions. `Delayed<'T>` can be an arbitrary type that does not need to be related to `M<'T>`; commonly `M<'T>` or `(unit -> M<'T>)` are used. The default implementation is `M<'T>`. See [here](https://fsharpforfunandprofit.com/posts/computation-expressions-builder-part3/#understanding-the-type-constraints) for a more in-depth look.
+Many functions use the result of `Delay` as an argument: `Run`, `While`, `TryWith`, `TryFinally`, and `Combine`. The `Delayed<'T>` type is the return type of `Delay` and consequently the parameter to these functions. `Delayed<'T>` can be an arbitrary type that does not need to be related to `M<'T>`; commonly `M<'T>` or `(unit -> M<'T>)` are used. The default implementation is `M<'T>`. For a more in-depth look, see [Understanding the type constraints](https://fsharpforfunandprofit.com/posts/computation-expressions-builder-part3/#understanding-the-type-constraints).
 
 The compiler, when it parses a computation expression, translates the expression into a series of nested function calls by using the methods in the preceding table and the code in the computation expression. The nested expression is of the following form:
 
@@ -430,7 +440,7 @@ comp |> step |> step
 comp |> step |> step |> step |> step
 ```
 
-A computation expression has an underlying type, which the expression returns. The underlying type may represent a computed result or a delayed computation that can be performed, or it may provide a way to iterate through some type of collection. In the previous example, the underlying type was `Eventually<_>`. For a sequence expression, the underlying type is <xref:System.Collections.Generic.IEnumerable%601?displayProperty=nameWithType>. For a query expression, the underlying type is <xref:System.Linq.IQueryable?displayProperty=nameWithType>. For an async expression, the underlying type is [`Async`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-fsharpasync-1.html). The `Async` object represents the work to be performed to compute the result. For example, you call [`Async.RunSynchronously`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-fsharpasync.html#RunSynchronously) to execute a computation and return the result.
+A computation expression has an underlying type, which the expression returns. The underlying type may represent a computed result or a delayed computation that can be performed, or it may provide a way to iterate through some type of collection. In the previous example, the underlying type was `Eventually<_>`. For a sequence expression, the underlying type is <xref:System.Collections.Generic.IEnumerable`1?displayProperty=nameWithType>. For a query expression, the underlying type is <xref:System.Linq.IQueryable?displayProperty=nameWithType>. For an async expression, the underlying type is [`Async`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-fsharpasync-1.html). The `Async` object represents the work to be performed to compute the result. For example, you call [`Async.RunSynchronously`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-fsharpasync.html#RunSynchronously) to execute a computation and return the result.
 
 ## Custom Operations
 
@@ -440,7 +450,7 @@ You can define a custom operation on a computation expression and use a custom o
 
 If you already have a builder class, its custom operations can be extended from outside of this builder class. Extensions must be declared in modules. Namespaces cannot contain extension members except in the same file and the same namespace declaration group where the type is defined.
 
-The following example shows the extension of the existing `FSharp.Linq.QueryBuilder` class.
+The following example shows the extensions of the existing `FSharp.Linq.QueryBuilder` class.
 
 ```fsharp
 open System
@@ -448,9 +458,13 @@ open FSharp.Linq
 
 type QueryBuilder with
 
-    [<CustomOperation("existsNot")>]
-    member _.ExistsNot (source: QuerySource<'T, 'Q>, predicate) =
-        System.Linq.Enumerable.Any (source.Source, Func<_,_>(predicate)) |> not
+    [<CustomOperation>]
+    member _.any (source: QuerySource<'T, 'Q>, predicate) =
+        System.Linq.Enumerable.Any (source.Source, Func<_,_>(predicate))
+
+    [<CustomOperation("singleSafe")>] // you can specify your own operation name in the constructor
+    member _.singleOrDefault (source: QuerySource<'T, 'Q>, predicate) =
+        System.Linq.Enumerable.SingleOrDefault (source.Source, Func<_,_>(predicate))
 ```
 
 Custom operations can be overloaded. For more information, see [F# RFC FS-1056 - Allow overloads of custom keywords in computation expressions](https://github.com/fsharp/fslang-design/blob/main/FSharp-6.0/FS-1056-allow-custom-operation-overloads.md).

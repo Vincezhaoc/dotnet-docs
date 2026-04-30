@@ -1,30 +1,28 @@
 ---
 title: dotnet build command
 description: The dotnet build command builds a project and all of its dependencies.
-ms.date: 11/27/2023
+ms.date: 09/24/2025
 ---
 # dotnet build
 
-**This article applies to:** ✔️ .NET Core 3.1 SDK and later versions
+**This article applies to:** ✔️ .NET 6 SDK and later versions
 
 ## Name
 
-`dotnet build` - Builds a project and all of its dependencies.
+`dotnet build` - Builds a project, solution, or file-based app and all of its dependencies.
 
 ## Synopsis
 
 ```dotnetcli
-dotnet build [<PROJECT>|<SOLUTION>] [-a|--arch <ARCHITECTURE>]
-    [--artifacts-path <ARTIFACTS_DIR>]
-    [-c|--configuration <CONFIGURATION>] [-f|--framework <FRAMEWORK>]
-    [--disable-build-servers]
-    [--force] [--interactive] [--no-dependencies] [--no-incremental]
-    [--no-restore] [--nologo] [--no-self-contained] [--os <OS>]
-    [-o|--output <OUTPUT_DIRECTORY>]
-    [-p|--property:<PROPERTYNAME>=<VALUE>]
-    [-r|--runtime <RUNTIME_IDENTIFIER>]
-    [--self-contained [true|false]] [--source <SOURCE>]
-    [--tl:[auto|on|off]] [--use-current-runtime, --ucr [true|false]]
+dotnet build [<PROJECT>|<SOLUTION>|<FILE>] [-a|--arch <ARCHITECTURE>]
+    [--artifacts-path <ARTIFACTS_DIR>]  [-bl|--binaryLogger:<FILE>]
+    [-c|--configuration <CONFIGURATION>] [--disable-build-servers]
+    [-f|--framework <FRAMEWORK>] [--force] [--interactive]
+    [--no-dependencies] [--no-incremental] [--no-restore] [--nologo]
+    [--no-self-contained] [-o|--output <OUTPUT_DIRECTORY>] [--os <OS>]
+    [-p|--property:<PROPERTYNAME>=<VALUE>] [-r|--runtime <RUNTIME_IDENTIFIER>]
+    [--sc|--self-contained] [--source <SOURCE>]
+    [--tl:[auto|on|off]] [ --ucr|--use-current-runtime]
     [-v|--verbosity <LEVEL>] [--version-suffix <VERSION_SUFFIX>]
 
 dotnet build -h|--help
@@ -32,15 +30,13 @@ dotnet build -h|--help
 
 ## Description
 
-The `dotnet build` command builds the project and its dependencies into a set of binaries. The binaries include the project's code in Intermediate Language (IL) files with a *.dll* extension.  Depending on the project type and settings, other files may be included, such as:
+The `dotnet build` command builds the project, solution, or file-based app and its dependencies into a set of binaries. The binaries include the project's code in Intermediate Language (IL) files with a *.dll* extension. Depending on the project type and settings, other files may be included, such as:
 
-- An executable that can be used to run the application, if the project type is an executable targeting .NET Core 3.0 or later.
+- An executable that can be used to run the application.
 - Symbol files used for debugging with a *.pdb* extension.
 - A *.deps.json* file, which lists the dependencies of the application or library.
 - A *.runtimeconfig.json* file, which specifies the shared runtime and its version for an application.
 - Other libraries that the project depends on (via project references or NuGet package references).
-
-For executable projects targeting versions earlier than .NET Core 3.0, library dependencies from NuGet are typically NOT copied to the output folder.  They're resolved from the NuGet global packages folder at run time. With that in mind, the product of `dotnet build` isn't ready to be transferred to another machine to run. To create a version of the application that can be deployed, you need to publish it (for example, with the [dotnet publish](dotnet-publish.md) command). For more information, see [.NET Application Deployment](../deploying/index.md).
 
 For executable projects targeting .NET Core 3.0 and later, library dependencies are copied to the output folder. This means that if there isn't any other publish-specific logic (such as Web projects have), the build output should be deployable.
 
@@ -48,7 +44,7 @@ For executable projects targeting .NET Core 3.0 and later, library dependencies 
 
 Building requires the *project.assets.json* file, which lists the dependencies of your application. The file is created when [`dotnet restore`](dotnet-restore.md) is executed. Without the assets file in place, the tooling can't resolve reference assemblies, which results in errors.
 
-[!INCLUDE[dotnet restore note + options](~/includes/dotnet-restore-note-options.md)]
+[!INCLUDE[dotnet restore note + options](includes/dotnet-restore-note-options.md)]
 
 ### Executable or library output
 
@@ -64,7 +60,7 @@ To produce a library, omit the `<OutputType>` property or change its value to `L
 
 ### MSBuild
 
-`dotnet build` uses MSBuild to build the project, so it supports both parallel and incremental builds. For more information, see [Incremental Builds](/visualstudio/msbuild/incremental-builds).
+`dotnet build` uses MSBuild to build the project, solution, or file-based app. It supports both parallel and incremental builds. For more information, see [Incremental Builds](/visualstudio/msbuild/incremental-builds).
 
 In addition to its options, the `dotnet build` command accepts MSBuild options, such as `-p` for setting properties or `-l` to define a logger. For more information about these options, see the [MSBuild Command-Line Reference](/visualstudio/msbuild/msbuild-command-line-reference). Or you can also use the [dotnet msbuild](dotnet-msbuild.md) command.
 
@@ -73,23 +69,34 @@ In addition to its options, the `dotnet build` command accepts MSBuild options, 
 
 Running `dotnet build` is equivalent to running `dotnet msbuild -restore`; however, the default verbosity of the output is different.
 
-[!INCLUDE [cli-advertising-manifests](../../../includes/cli-advertising-manifests.md)]
+[!INCLUDE [cli-advertising-manifests](includes/cli-advertising-manifests.md)]
 
 ## Arguments
 
-`PROJECT | SOLUTION`
-
-The project or solution file to build. If a project or solution file isn't specified, MSBuild searches the current working directory for a file that has a file extension that ends in either *proj* or *sln* and uses that file.
+[!INCLUDE [arguments-project-solution-file](includes/cli-arguments-project-solution-file.md)]
 
 ## Options
 
-[!INCLUDE [arch](../../../includes/cli-arch.md)]
+- [!INCLUDE [arch](includes/cli-arch.md)]
 
-[!INCLUDE [artifacts-path](../../../includes/cli-artifacts-path.md)]
+- [!INCLUDE [artifacts-path](includes/cli-artifacts-path.md)]
 
-[!INCLUDE [configuration](../../../includes/cli-configuration.md)]
+- **`-bl|--binaryLogger:<FILE>`**
 
-[!INCLUDE [disable-build-servers](../../../includes/cli-disable-build-servers.md)]
+  Enables the binary logger and optionally specifies the output file name.  
+  If no file name is provided, the default is `msbuild.binlog` in the current directory.
+
+  The binary log contains detailed build information and can be opened with the
+  [MSBuild Structured Log Viewer](https://msbuildlog.com).
+
+  ```dotnetcli
+  dotnet build -bl
+  dotnet build -bl:build-log.binlog
+  ```
+
+- [!INCLUDE [configuration](includes/cli-configuration.md)]
+
+- [!INCLUDE [disable-build-servers](includes/cli-disable-build-servers.md)]
 
 - **`-f|--framework <FRAMEWORK>`**
 
@@ -99,9 +106,7 @@ The project or solution file to build. If a project or solution file isn't speci
 
   Forces all dependencies to be resolved even if the last restore was successful. Specifying this flag is the same as deleting the *project.assets.json* file.
 
-[!INCLUDE [help](../../../includes/cli-help.md)]
-
-[!INCLUDE [interactive](../../../includes/cli-interactive-3-0.md)]
+- [!INCLUDE [interactive](includes/cli-interactive.md)]
 
 - **`--no-dependencies`**
 
@@ -119,9 +124,7 @@ The project or solution file to build. If a project or solution file isn't speci
 
   Doesn't display the startup banner or the copyright message.
 
-- **`--no-self-contained`**
-
-  Publishes the application as a framework dependent application. A compatible .NET runtime must be installed on the target machine to run the application. Available since .NET 6 SDK.
+- [!INCLUDE [no-self-contained](includes/cli-no-self-contained.md)]
 
 - **`-o|--output <OUTPUT_DIRECTORY>`**
 
@@ -131,7 +134,7 @@ The project or solution file to build. If a project or solution file isn't speci
 
     If you specify the `--output` option when running this command on a solution, the CLI will emit a warning (an error in 7.0.200) due to the unclear semantics of the output path. The `--output` option is disallowed because all outputs of all built projects would be copied into the specified directory, which isn't compatible with multi-targeted projects, as well as projects that have different versions of direct and transitive dependencies. For more information, see [Solution-level `--output` option no longer valid for build-related commands](../compatibility/sdk/7.0/solution-level-output-no-longer-valid.md).
 
-[!INCLUDE [os](../../../includes/cli-os.md)]
+- [!INCLUDE [os](includes/cli-os.md)]
 
 - **`-p|--property:<PROPERTYNAME>=<VALUE>`**
 
@@ -146,27 +149,23 @@ The project or solution file to build. If a project or solution file isn't speci
 
   Specifies the target runtime. For a list of Runtime Identifiers (RIDs), see the [RID catalog](../rid-catalog.md). If you use this option with .NET 6 SDK, use `--self-contained` or `--no-self-contained` also. If not specified, the default is to build for the current OS and architecture.
 
-- **`--self-contained [true|false]`**
-
-  Publishes the .NET runtime with the application so the runtime doesn't need to be installed on the target machine. The default is `true` if a runtime identifier is specified. Available since .NET 6.
+- [!INCLUDE [self-contained](includes/cli-self-contained.md)]
 
 - **`--source <SOURCE>`**
 
   The URI of the NuGet package source to use during the restore operation.
 
-[!INCLUDE [tl](../../../includes/cli-tl.md)]
+- [!INCLUDE [tl](includes/cli-tl.md)]
 
-- **`-v|--verbosity <LEVEL>`**
+- [!INCLUDE [use-current-runtime](includes/cli-use-current-runtime.md)]
 
-  Sets the verbosity level of the command. Allowed values are `q[uiet]`, `m[inimal]`, `n[ormal]`, `d[etailed]`, and `diag[nostic]`. The default is `minimal`. By default, MSBuild displays warnings and errors at all verbosity levels. To exclude warnings, use `/property:WarningLevel=0`. For more information, see <xref:Microsoft.Build.Framework.LoggerVerbosity> and [WarningLevel](../../csharp/language-reference/compiler-options/errors-warnings.md#warninglevel).
-
-- **`--use-current-runtime, --ucr [true|false]`**
-
-  Sets the `RuntimeIdentifier` to a platform portable `RuntimeIdentifier` based on the one of your machine. This happens implicitly with properties that require a `RuntimeIdentifier`, such as `SelfContained`, `PublishAot`, `PublishSelfContained`, `PublishSingleFile`, and `PublishReadyToRun`. If the property is set to false, that implicit resolution will no longer occur.
+- [!INCLUDE [verbosity](includes/cli-verbosity.md)]
 
 - **`--version-suffix <VERSION_SUFFIX>`**
 
   Sets the value of the `$(VersionSuffix)` property to use when building the project. This only works if the `$(Version)` property isn't set. Then, `$(Version)` is set to the `$(VersionPrefix)` combined with the `$(VersionSuffix)`, separated by a dash.
+
+- [!INCLUDE [help](includes/cli-help.md)]
 
 ## Examples
 
@@ -175,6 +174,14 @@ The project or solution file to build. If a project or solution file isn't speci
   ```dotnetcli
   dotnet build
   ```
+
+- Build a file-based app:
+
+  ```dotnetcli
+  dotnet build MyProject.cs
+  ```
+
+  File-based app support was added in .NET SDK 10.0.100.
 
 - Build a project and its dependencies using Release configuration:
 

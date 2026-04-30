@@ -1,7 +1,8 @@
 ---
 title: "Copying and Pinning"
 description: Review how the interop marshaller can copy or pin data that's being marshalled. Copying data places a copy of data from one memory location into another location.
-ms.date: 05/12/2022
+ms.date: 03/20/2026
+ai-usage: ai-assisted
 helpviewer_keywords:
   - "pinning, interop marshalling"
   - "copying, interop marshalling"
@@ -19,7 +20,7 @@ Method arguments passed by value are marshalled to unmanaged code as values on t
 
 ![Diagram showing reference types passed by value and by reference.](./media/copying-and-pinning/interop-marshal-reference-pin.gif)
 
-Pinning temporarily locks the data in its current memory location, thus keeping it from being relocated by the common language runtime's garbage collector. The marshaller pins data to reduce the overhead of copying and enhance performance. The type of the data determines whether it is copied or pinned during the marshalling process. Pinning is automatically performed during marshalling for objects such as <xref:System.String>, however you can also manually pin memory using the <xref:System.Runtime.InteropServices.GCHandle> class.
+Pinning temporarily locks the data in its current memory location, thus keeping it from being relocated by the common language runtime's garbage collector. The marshaller pins data to reduce the overhead of copying and enhance performance. The type of the data determines whether it is copied or pinned during the marshalling process. Pinning is automatically performed during marshalling for objects such as <xref:System.String>. However you can also manually pin memory using the <xref:System.Runtime.InteropServices.GCHandle> class. For examples of manual pinning with `GCHandle`, see [Keeping managed objects alive](../../standard/native-interop/best-practices.md#keeping-managed-objects-alive) in the native interoperability best practices article.
 
 ## Formatted Blittable Classes
 
@@ -40,7 +41,7 @@ Formatted [non-blittable](blittable-and-non-blittable-types.md) classes have fix
 
 - If the <xref:System.Runtime.InteropServices.OutAttribute> attribute is set, the state is always copied back to the instance on return, marshalling as necessary.
 
-- If both **InAttribute** and **OutAttribute** are set, both copies are required. If either attribute is omitted, the marshaller can optimize by eliminating either copy.
+- If both `InAttribute` and `OutAttribute` are set, both copies are required. If either attribute is omitted, the marshaller can optimize by eliminating either copy.
 
 ## Reference Types
 
@@ -54,15 +55,15 @@ Reference types have the following conditional behavior:
 
   - On return from the call.
 
-  To avoid unnecessarily copying and conversion, these types are marshalled as In parameters. You must explicitly apply the **InAttribute** and **OutAttribute** attributes to an argument for the caller to see changes made by the callee.
+  To avoid unnecessarily copying and conversion, these types are marshalled as In parameters. You must explicitly apply the `InAttribute` and `OutAttribute` attributes to an argument for the caller to see changes made by the callee.
 
-- If a reference type is passed by value and it has only members of blittable types, it can be pinned during marshalling and any changes made to the members of the type by the callee are seen by the caller. Apply **InAttribute** and **OutAttribute** explicitly if you want this behavior. Without these directional attributes, the interop marshaller does not export directional information to the type library (it exports as In, which is the default) and this can cause problems with COM cross-apartment marshalling.
+- If a reference type is passed by value and it has only members of blittable types, it can be pinned during marshalling and any changes made to the members of the type by the callee are seen by the caller. Apply `InAttribute` and `OutAttribute` explicitly if you want this behavior. Without these directional attributes, the interop marshaller does not export directional information to the type library (it exports as In, which is the default) and this can cause problems with COM cross-apartment marshalling.
 
 - If a reference type is passed by reference, it will be marshalled as In/Out by default.
 
 ## System.String and System.Text.StringBuilder
 
-When data is marshalled to unmanaged code by value or by reference, the marshaller typically copies the data to a secondary buffer (possibly converting character sets during the copy) and passes a reference to the buffer to the callee. Unless the reference is a **BSTR** allocated with **SysAllocString**, the reference is always allocated with **CoTaskMemAlloc**.
+When data is marshalled to unmanaged code by value or by reference, the marshaller typically copies the data to a secondary buffer (possibly converting character sets during the copy) and passes a reference to the buffer to the callee. Unless the reference is a `BSTR` allocated with **SysAllocString**, the reference is always allocated with **CoTaskMemAlloc**.
 
 As an optimization when either <xref:System.String> or <xref:System.Text.StringBuilder> is marshalled by value (such as a Unicode character string), the marshaller passes the callee a direct pointer to managed strings in the internal Unicode buffer instead of copying it to a new buffer.
 
@@ -71,10 +72,12 @@ As an optimization when either <xref:System.String> or <xref:System.Text.StringB
 
 When a <xref:System.String?displayProperty=nameWithType> is passed by reference, the marshaller copies the contents of the string to a secondary buffer before making the call. It then copies the contents of the buffer into a new string on return from the call. This technique ensures that the immutable managed string remains unaltered.
 
-When a <xref:System.Text.StringBuilder?displayProperty=nameWithType> is passed by value, the marshaller passes a reference to a temporary copy of the internal buffer of the **StringBuilder** to the caller. The caller and callee must agree on the size of the buffer. The caller is responsible for creating a **StringBuilder** of adequate length. The callee must take the necessary precautions to ensure that the buffer is not overrun. **StringBuilder** is an exception to the rule that reference types passed by value are passed as `In` parameters by default. `StringBuilder` is always passed as `In`/`Out`.
+When a <xref:System.Text.StringBuilder?displayProperty=nameWithType> is passed by value, the marshaller passes a reference to a temporary copy of the internal buffer of the `StringBuilder` to the caller. The caller and callee must agree on the size of the buffer. The caller is responsible for creating a `StringBuilder` of adequate length. The callee must take the necessary precautions to ensure that the buffer is not overrun. `StringBuilder` is an exception to the rule that reference types passed by value are passed as `In` parameters by default. `StringBuilder` is always passed as `In`/`Out`.
 
 ## See also
 
 - [Default Marshalling Behavior](default-marshalling-behavior.md)
 - [Directional Attributes](/previous-versions/dotnet/netframework-4.0/77e6taeh(v=vs.100))
 - [Interop Marshaling](interop-marshalling.md)
+- [Native interoperability best practices](../../standard/native-interop/best-practices.md)
+- [`fixed` statement (C# reference)](../../csharp/language-reference/statements/fixed.md)

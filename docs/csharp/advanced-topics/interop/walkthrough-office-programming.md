@@ -49,7 +49,7 @@ In **Solution Explorer**, right-click the **ThisAddIn.cs** file and then select 
 
 ## Create a list of bank accounts
 
-In **Solution Explorer**, right-click your project's name, select **Add**, and then select **Class**. Name the class Account.cs. Select **Add**. Replace the definition of the `Account` class with the following code. The class definitions use *auto-implemented properties*.
+In **Solution Explorer**, right-click your project's name, select **Add**, and then select **Class**. Name the class Account.cs. Select **Add**. Replace the definition of the `Account` class with the following code. The class definitions use *automatically implemented properties*.
 
 :::code language="csharp" source="./snippets/OfficeWalkthrough/account.cs" id="AccountClass":::
 
@@ -63,7 +63,7 @@ In the same file, add the following method to the `ThisAddIn` class. The method 
 
 :::code language="csharp" source="./snippets/OfficeWalkthrough/ThisAddIn.cs" id="Display":::
 
-- Method [Add](<xref:Microsoft.Office.Interop.Excel.Workbooks.Add%2A>) has an *optional parameter* for specifying a particular template. Optional parameters enable you to omit the argument for that parameter if you want to use the parameter's default value. Because the previous example has no arguments, `Add` uses the default template and creates a new workbook. The equivalent statement in earlier versions of C# requires a placeholder argument: `excelApp.Workbooks.Add(Type.Missing)`. For more information, see [Named and Optional Arguments](../../programming-guide/classes-and-structs/named-and-optional-arguments.md).
+- Method [Add](<xref:Microsoft.Office.Interop.Excel.Workbooks.Add*>) has an *optional parameter* for specifying a particular template. Optional parameters enable you to omit the argument for that parameter if you want to use the parameter's default value. Because the previous example has no arguments, `Add` uses the default template and creates a new workbook. The equivalent statement in earlier versions of C# requires a placeholder argument: `excelApp.Workbooks.Add(Type.Missing)`. For more information, see [Named and Optional Arguments](../../programming-guide/classes-and-structs/named-and-optional-arguments.md).
 - The `Range` and `Offset` properties of the [Range](<xref:Microsoft.Office.Interop.Excel.Range>) object use the *indexed properties* feature. This feature enables you to consume these properties from COM types by using the following typical C# syntax. Indexed properties also enable you to use the `Value` property of the `Range` object, eliminating the need to use the `Value2` property. The `Value` property is indexed, but the index is optional. Optional arguments and indexed properties work together in the following example.
 
 :::code language="csharp" source="./snippets/OfficeWalkthrough/ThisAddIn.cs" id="IndexedProperties":::
@@ -90,7 +90,7 @@ Add the following code at the end of the `ThisAddIn_StartUp` method to create a 
 
 :::code language="csharp" source="./snippets/OfficeWalkthrough/ThisAddIn.cs" id="PasteIntoWord":::
 
-This code demonstrates several of the features in C#: the ability to omit the `ref` keyword in COM programming, named arguments, and optional arguments.The [PasteSpecial](<xref:Microsoft.Office.Interop.Word.Selection.PasteSpecial%2A>) method has seven parameters, all of which are optional reference parameters. Named and optional arguments enable you to designate the parameters you want to access by name and to send arguments to only those parameters. In this example, arguments indicate creating a link to the workbook on the Clipboard (parameter `Link`) and displaying that the link in the Word document as an icon (parameter `DisplayAsIcon`). C# also enables you to omit the `ref` keyword for these arguments.
+This code demonstrates several of the features in C#: the ability to omit the `ref` keyword in COM programming, named arguments, and optional arguments.The [PasteSpecial](<xref:Microsoft.Office.Interop.Word.Selection.PasteSpecial*>) method has seven parameters, all of which are optional reference parameters. Named and optional arguments enable you to designate the parameters you want to access by name and to send arguments to only those parameters. In this example, arguments indicate creating a link to the workbook on the Clipboard (parameter `Link`) and displaying that the link in the Word document as an icon (parameter `DisplayAsIcon`). C# also enables you to omit the `ref` keyword for these arguments.
 
 ## Run the application
 
@@ -122,13 +122,13 @@ In Visual Studio, select **Clean Solution** on the **Build** menu. Otherwise, th
 
 ## See also
 
-- [Auto-Implemented Properties (C#)](../../programming-guide/classes-and-structs/auto-implemented-properties.md)
-- [Object and Collection Initializers](../../programming-guide/classes-and-structs/object-and-collection-initializers.md)
+- [Automatically implemented properties (C#)](../../programming-guide/classes-and-structs/auto-implemented-properties.md)
+- [Object and collection initializers](../../programming-guide/classes-and-structs/object-and-collection-initializers.md)
 - [Visual Studio Tools for Office (VSTO)](/visualstudio/vsto/visual-studio-tools-for-office-runtime-overview)
-- [Named and Optional Arguments](../../programming-guide/classes-and-structs/named-and-optional-arguments.md)
+- [Named and optional arguments](../../programming-guide/classes-and-structs/named-and-optional-arguments.md)
 - [dynamic](../../language-reference/builtin-types/reference-types.md)
-- [Using Type dynamic](using-type-dynamic.md)
-- [Lambda Expressions (C#)](../../language-reference/operators/lambda-expressions.md)
-- [Walkthrough: Embedding Type Information from Microsoft Office Assemblies in Visual Studio](/previous-versions/visualstudio/visual-studio-2013/ee317478(v=vs.120))
-- [Walkthrough: Embedding Types from Managed Assemblies](../../../standard/assembly/embed-types-visual-studio.md)
-- [Walkthrough: Creating Your First VSTO Add-in for Excel](/visualstudio/vsto/walkthrough-creating-your-first-vsto-add-in-for-excel)
+- [Using type dynamic](using-type-dynamic.md)
+- [Lambda expressions (C#)](../../language-reference/operators/lambda-expressions.md)
+- [Walkthrough: Embedding type information from Microsoft Office assemblies in Visual Studio](/previous-versions/visualstudio/visual-studio-2013/ee317478(v=vs.120))
+- [Walkthrough: Embedding types from managed assemblies](../../../standard/assembly/embed-types-visual-studio.md)
+- [Walkthrough: Creating your first VSTO add-in for Excel](/visualstudio/vsto/walkthrough-creating-your-first-vsto-add-in-for-excel)

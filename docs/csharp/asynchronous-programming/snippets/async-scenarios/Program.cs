@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+// <complete>
+using System.Text.RegularExpressions;
 using System.Windows;
 using Microsoft.AspNetCore.Mvc;
 
@@ -111,7 +112,7 @@ public class Program
 
     private static void DoSomethingWithData(object stringData)
     {
-        Console.WriteLine("Displaying data: ", stringData);
+        Console.WriteLine($"Displaying data: {stringData}");
     }
 
     // <GetUsersForDataset>
@@ -138,18 +139,34 @@ public class Program
     // </GetUsersForDataset>
 
     // <GetUsersForDatasetByLINQ>
-    private static async Task<User[]> GetUsersAsyncByLINQ(IEnumerable<int> userIds)
+    private static async Task<User[]> GetUsersByLINQAsync(IEnumerable<int> userIds)
     {
         var getUserTasks = userIds.Select(id => GetUserAsync(id)).ToArray();
         return await Task.WhenAll(getUserTasks);
     }
     // </GetUsersForDatasetByLINQ>
 
+    // <ProcessTasksAsTheyComplete>
+    private static async Task ProcessTasksAsTheyCompleteAsync(IEnumerable<int> userIds)
+    {
+        var getUserTasks = userIds.Select(id => GetUserAsync(id)).ToList();
+        
+        while (getUserTasks.Count > 0)
+        {
+            Task<User> completedTask = await Task.WhenAny(getUserTasks);
+            getUserTasks.Remove(completedTask);
+            
+            User user = await completedTask;
+            Console.WriteLine($"Processed user {user.id}");
+        }
+    }
+    // </ProcessTasksAsTheyComplete>
+
     // <ExtractDataFromNetwork>
     [HttpGet, Route("DotNetCount")]
-    static public async Task<int> GetDotNetCount(string URL)
+    static public async Task<int> GetDotNetCountAsync(string URL)
     {
-        // Suspends GetDotNetCount() to allow the caller (the web server)
+        // Suspends GetDotNetCountAsync() to allow the caller (the web server)
         // to accept another request, rather than blocking on this one.
         var html = await s_httpClient.GetStringAsync(URL);
         return Regex.Matches(html, @"\.NET").Count;
@@ -164,7 +181,7 @@ public class Program
         int total = 0;
         foreach (string url in s_urlList)
         {
-            var result = await GetDotNetCount(url);
+            var result = await GetDotNetCountAsync(url);
             Console.WriteLine($"{url}: {result}");
             total += result;
         }
@@ -177,6 +194,9 @@ public class Program
         {
             Console.WriteLine($"{user.id}: isEnabled={user.isEnabled}");
         }
+
+        Console.WriteLine("Processing tasks as they complete...");
+        await ProcessTasksAsTheyCompleteAsync(ids);
 
         Console.WriteLine("Application ending.");
     }
@@ -219,4 +239,5 @@ public class Program
 // 9: isEnabled= False
 // 0: isEnabled= False
 // Application ending.
+// </complete>
 

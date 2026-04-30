@@ -1,7 +1,7 @@
 ---
 title: Welcome to .NET
 description: Getting started with the .NET family of technologies.
-ms.date: 11/15/2023
+ms.date: 11/07/2025
 ms.custom: "updateeachrelease"
 ---
 # Welcome to .NET
@@ -15,22 +15,20 @@ You can build many types of apps with .NET, such as cloud, IoT, and games, using
 For news about .NET, check the following blogs:
 
 - [.NET Blog](https://devblogs.microsoft.com/dotnet/)
-- [ASP.NET Blog](https://devblogs.microsoft.com/aspnet/)
 - [The Visual Studio Blog](https://devblogs.microsoft.com/visualstudio/)
-- [The Visual Basic Team](https://devblogs.microsoft.com/vbteam/)
 
 Also follow the latest .NET events:
 
 - [.NET Conf](https://www.dotnetconf.net/)
-- [Microsoft Ignite](https://www.microsoft.com/ignite)
-- [Microsoft Build](https://www.microsoft.com/build)
+- [Microsoft Ignite](https://ignite.microsoft.com/)
+- [Microsoft Build](https://build.microsoft.com/)
 
 For information about the latest features added to the .NET implementations and supported languages, see the following articles:
 
-- [What's new in .NET 8](core/whats-new/dotnet-8/overview.md)
-- [What's new in .NET Framework](framework/whats-new/index.md)
-- [What's new in C# 12](./csharp/whats-new/csharp-12.md)
+- [What's new in .NET 10](core/whats-new/dotnet-10/overview.md)
+- [What's new in C# 14](./csharp/whats-new/csharp-14.md)
 - [What's new for Visual Basic](visual-basic/whats-new/index.md)
+- [What's new in .NET Framework](framework/whats-new/index.md)
 
 ## Documentation
 
@@ -59,11 +57,14 @@ This documentation is completely [open source](https://github.com/dotnet/docs). 
 - [.NET runtime](https://github.com/dotnet/runtime)
 - [.NET SDK](https://github.com/dotnet/sdk)
 - [.NET extensions](https://github.com/dotnet/extensions)
-- [.NET Aspire](https://github.com/dotnet/aspire)
+- [ASP.NET Core](https://github.com/dotnet/aspnetcore)
+- [Aspire](https://github.com/dotnet/aspire)
 - [Roslyn (C# and Visual Basic) Compiler Platform and IDE Tools](https://github.com/dotnet/roslyn)
 - [.NET code analyzers](https://github.com/dotnet/roslyn-analyzers)
 - [F# Compiler and IDE Tools](https://github.com/dotnet/fsharp)
 - [Windows Forms](https://github.com/dotnet/winforms)
 - [WPF](https://github.com/dotnet/wpf)
+- [WinUI](https://github.com/microsoft/microsoft-ui-xaml)
+- [WindowsAppSDK](https://github.com/microsoft/WindowsAppSDK)
 
 You can join other people who are already active in the [.NET community](https://dotnet.microsoft.com/platform/community) to find out what's new or ask for help.

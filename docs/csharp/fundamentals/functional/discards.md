@@ -1,7 +1,7 @@
 ---
 title: Discards - unassigned discardable variables
 description: Describes C#'s support for discards, which are unassigned, discardable variables, and the ways in which discards can be used.
-ms.date: 11/14/2023
+ms.date: 02/19/2025
 f1_keywords:
   - "discard_CSharpKeyword"
 ---
@@ -57,7 +57,7 @@ You can use a standalone discard to indicate any variable that you choose to ign
 
 :::code language="csharp" source="snippets/discards/standalone-discard1.cs" ID="ArgNullCheck" :::
 
-The following example uses a standalone discard to ignore the <xref:System.Threading.Tasks.Task> object returned by an asynchronous operation. Assigning the task has the effect of suppressing the exception that the operation throws as it is about to complete. It makes your intent clear: You want to discard the `Task`, and ignore any errors generated from that asynchronous operation.
+The following example uses a standalone discard to ignore the <xref:System.Threading.Tasks.Task> object returned by an asynchronous operation. Assigning the task has the effect of suppressing the compiler warning about unobserved exceptions. It makes your intent clear: You want to discard the `Task`, and propagate any errors generated from that asynchronous operation to callers.
 
 :::code language="csharp" source="snippets/discards/standalone-discard1.cs" ID="SnippetDiscardTask" :::
 
@@ -74,8 +74,6 @@ Without assigning the task to a discard, the following code generates a compiler
    :::code language="csharp" source="snippets/discards/standalone-discard2.cs" ID="VariableIdentifier" :::
 - A compiler error for violating type safety. For example:
    :::code language="csharp" source="snippets/discards/standalone-discard2.cs" ID="VariableTypeInference" :::
-- Compiler error CS0136, "A local or parameter named '\_' cannot be declared in this scope because that name is used in an enclosing local scope to define a local or parameter." For example:
-   :::code language="csharp" source="snippets/discards/standalone-discard2.cs" ID="CannotRedeclare" :::
 
 ## See also
 

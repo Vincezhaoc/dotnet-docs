@@ -1,42 +1,36 @@
 ---
-title: "base keyword"
+title: "The base keyword"
 description: Learn about the base keyword, which is used to access members of the base class from within a derived class in C#.
-ms.date: 07/20/2015
+ms.date: 01/21/2026
 f1_keywords: 
   - "base"
   - "BaseClass.BaseClass"
   - "base_CSharpKeyword"
 helpviewer_keywords: 
   - "base keyword [C#]"
-ms.assetid: 8b645dbe-1a33-49b8-8716-1c401f9a5ea5
 ---
-# base (C# Reference)
+# The base keyword
 
-The `base` keyword is used to access members of the base class from within a derived class. Use it if you want to:
+Use the `base` keyword to access members of the base class from within a derived class. Use it if you want to:
 
-- Call a method on the base class that has been overridden by another method.
+- Call a method on the base class that's overridden by another method.
+- Specify which base-class constructor to call when creating instances of the derived class.
 
-- Specify which base-class constructor should be called when creating instances of the derived class.
+You can access the base class only in a constructor, in an instance method, and in an instance property accessor. Using the `base` keyword from within a static method produces an error.
 
-The base class access is permitted only in a constructor, in an instance method, and in an instance property accessor.
+[!INCLUDE[csharp-version-note](../includes/initial-version.md)]
 
-Using the `base` keyword from within a static method will give an error.
+The base class you access is the base class you specify in the class declaration. For example, if you specify `class ClassB : ClassA`, you access the members of ClassA from ClassB, regardless of the base class of ClassA.
 
-The base class that is accessed is the base class specified in the class declaration. For example, if you specify `class ClassB : ClassA`, the members of ClassA are accessed from ClassB, regardless of the base class of ClassA.
+In this example, both the base class `Person` and the derived class `Employee` have a method named `GetInfo`. By using the `base` keyword, you can call the `GetInfo` method of the base class from within the derived class.
 
-## Example 1
+:::code language="csharp" source="./snippets/csrefKeywordsAccess.cs" id="snippet1":::
 
-In this example, both the base class `Person` and the derived class `Employee` have a method named `GetInfo`. By using the `base` keyword, it is possible to call the `GetInfo` method of the base class from within the derived class.
+This example shows how to specify the base-class constructor to call when creating instances of a derived class.
 
-[!code-csharp[csrefKeywordsAccess#1](~/samples/snippets/csharp/VS_Snippets_VBCSharp/csrefKeywordsAccess/CS/csrefKeywordsAccess.cs#1)]
+:::code language="csharp" source="./snippets/csrefKeywordsAccess.cs" id="snippet2":::
 
-For additional examples, see [new](new-modifier.md), [virtual](virtual.md), and [override](override.md).
-
-## Example 2
-
-This example shows how to specify the base-class constructor called when creating instances of a derived class.
-
-[!code-csharp[csrefKeywordsAccess#2](~/samples/snippets/csharp/VS_Snippets_VBCSharp/csrefKeywordsAccess/CS/csrefKeywordsAccess.cs#2)]
+For more examples, see [new](new-modifier.md), [virtual](virtual.md), and [override](override.md).
 
 ## C# language specification
 
@@ -45,4 +39,4 @@ This example shows how to specify the base-class constructor called when creatin
 ## See also
 
 - [C# Keywords](./index.md)
-- [this](./this.md)
+- [The `this` keyword](./this.md)

@@ -1,11 +1,14 @@
 ---
 title: "Identifier names - rules and conventions"
 description: "Learn the rules for valid identifier names in the C# programming language. In addition, learn the common naming conventions used by the .NET runtime team and the .NET docs team."
-ms.date: 11/27/2023
+ms.date: 10/10/2025
+ai-usage: ai-assisted
 ---
 # C# identifier naming rules and conventions
 
 An **identifier** is the name you assign to a type (class, interface, struct, delegate, or enum), member, variable, or namespace.
+
+This article covers the essential rules for valid C# identifiers and the naming conventions used to help you write consistent, professional code.
 
 ## Naming rules
 
@@ -19,7 +22,7 @@ You can declare identifiers that match C# keywords by using the `@` prefix on th
 For a complete definition of valid identifiers, see the [Identifiers article in the C# Language Specification](~/_csharpstandard/standard/lexical-structure.md#643-identifiers).
 
 > [!IMPORTANT]
-> [The C# language specification](~/_csharpstandard/standard/lexical-structure.md#643-identifiers) only allows letter (Lu, Ll, Lt, Lm, Lo or Nl), digit (Nd), connecting (Pc), combining (Mn or Mc), and formatting (Cf) categories. Anything outside that is automatically replaced using `_`. This might impact certain Unicode characters.
+> [The C# language specification](~/_csharpstandard/standard/lexical-structure.md#643-identifiers) only allows letter (Lu, Ll, Lt, Lm, or Nl), digit (Nd), connecting (Pc), combining (Mn or Mc), and formatting (Cf) categories. Anything outside that is automatically replaced using `_`. This might impact certain Unicode characters.
 
 ## Naming conventions
 
@@ -123,7 +126,7 @@ public record PhysicalAddress(
     string ZipCode);
 ```
 
-For more information on positional records, see [Positional syntax for property definition](../../language-reference/builtin-types/record.md#positional-syntax-for-property-definition).
+For more information on positional records, see [Positional syntax for property definition](../../language-reference/builtin-types/record.md#positional-syntax-for-property-and-field-definition).
 
 ### Camel case
 
@@ -159,6 +162,22 @@ public T SomeMethod<T>(int someNumber, bool isValid)
 }
 ```
 
+#### Primary constructor parameters
+
+How you name primary constructor parameters depends on the type being declared:
+
+- For `class` and `struct` types: Use camel casing, consistent with other method parameters.
+
+  :::code language="csharp" source="./snippets/identifier-names/PrimaryConstructorExamples.cs" id="ClassPrimaryConstructor":::
+
+  :::code language="csharp" source="./snippets/identifier-names/PrimaryConstructorExamples.cs" id="StructPrimaryConstructor":::
+
+- For `record` types: Use Pascal casing, as the parameters become public properties.
+
+  :::code language="csharp" source="./snippets/identifier-names/PrimaryConstructorExamples.cs" id="RecordPrimaryConstructor":::
+
+For more information on primary constructors, see [Primary constructors](../../programming-guide/classes-and-structs/instance-constructors.md#primary-constructors).
+
 For more information on C# naming conventions, see the [.NET Runtime team's coding style](https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/coding-style.md).
 
 ### Type parameter naming guidelines
@@ -167,15 +186,15 @@ The following guidelines apply to type parameters on generic type parameters. Ty
 
 - **Do** name generic type parameters with descriptive names, unless a single letter name is completely self explanatory and a descriptive name wouldn't add value.
 
-   :::code language="./snippets/coding-conventions" source="./snippets/coding-conventions/Program.cs" id="TypeParametersOne":::
+   :::code language="csharp" source="./snippets/coding-conventions/Program.cs" id="TypeParametersOne":::
 
 - **Consider** using `T` as the type parameter name for types with one single letter type parameter.
 
-   :::code language="./snippets/coding-conventions" source="./snippets/coding-conventions/Program.cs" id="TypeParametersTwo":::
+   :::code language="csharp" source="./snippets/coding-conventions/Program.cs" id="TypeParametersTwo":::
 
 - **Do** prefix descriptive type parameter names with "T".
 
-   :::code language="./snippets/coding-conventions" source="./snippets/coding-conventions/Program.cs" id="TypeParametersThree":::
+   :::code language="csharp" source="./snippets/coding-conventions/Program.cs" id="TypeParametersThree":::
 
 - **Consider** indicating constraints placed on a type parameter in the name of parameter. For example, a parameter constrained to `ISession` might be called `TSession`.
 

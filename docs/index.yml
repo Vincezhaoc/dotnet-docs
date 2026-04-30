@@ -12,7 +12,7 @@ metadata:
   ms.collection: collection
   author: BillWagner
   ms.author: wiwagn
-  ms.date: 11/13/2023
+  ms.date: 11/07/2025
 
 # highlightedContent section (optional)
 # Maximum of 8 items
@@ -24,33 +24,33 @@ highlightedContent:
       itemType: download
       url: https://dotnet.microsoft.com/download
     # Card
+    - title: "What's new in .NET"
+      itemType: whats-new
+      url: whats-new/index.yml
+    # Card
+    - title: "Build AI apps in .NET"
+      itemType: overview
+      url: ai/index.yml
+    # Card
+    - title: Aspire
+      itemType: overview
+      url: https://aspire.dev/
+    # Card
     - title: "Build .NET apps with C#"
       itemType: learn
       url: /training/paths/build-dotnet-applications-csharp
     # Card
-    - title: Create your first web app
-      itemType: learn
-      url: https://dotnet.microsoft.com/learn/aspnet/hello-world-tutorial/intro
-    # Card
     - title: "Interactive introduction to C#"
       itemType: get-started
-      url: csharp/tour-of-csharp/tutorials/hello-world.yml
-    # Card
-    - title: ".NET architecture docs"
-      itemType: architecture
-      url: architecture/index.yml
+      url: csharp/tour-of-csharp/tutorials/hello-world.md
     # Card
     - title: "Azure for .NET developers"
       itemType: overview
       url: azure/index.yml
     # Card
-    - title: .NET Aspire
-      itemType: overview
-      url: /dotnet/aspire
-    # Card
-    - title: "What's new in .NET"
-      itemType: whats-new
-      url: whats-new/index.yml
+    - title: ".NET architecture docs"
+      itemType: architecture
+      url: architecture/index.yml
 
 # conceptualContent section (optional)
 conceptualContent:
@@ -67,9 +67,9 @@ conceptualContent:
         - url: core/tutorials/index.md
           itemType: tutorial
           text: .NET tutorials
-        - url: core/whats-new/dotnet-8/overview.md
+        - url: core/whats-new/dotnet-10/overview.md
           itemType: whats-new
-          text: What's new in .NET 8
+          text: What's new in .NET 10
         - url: https://dotnetfoundation.org
           itemType: overview
           text: .NET Foundation
@@ -111,6 +111,9 @@ conceptualContent:
     # Card
     - title: Develop .NET apps
       links:
+        - url: ai/quickstarts/build-chat-app.md
+          itemType: quickstart
+          text: Build an Azure AI chat app with .NET
         - url: /dotnet/desktop/wpf/get-started/create-app-visual-studio
           itemType: tutorial
           text: Create .NET desktop apps for Windows
@@ -120,9 +123,9 @@ conceptualContent:
         - url: orleans/index.yml
           itemType: overview
           text: Build cloud-native .NET apps with Orleans
-        - url: /dotnet/aspire/get-started/quickstart-build-your-first-aspire-app
+        - url: https://aspire.dev/get-started/first-app/
           itemType: quickstart
-          text: Build cloud-native apps with .NET Aspire
+          text: Build cloud-native apps with Aspire
         - url: core/docker/build-container.md
           itemType: tutorial
           text: Containerize .NET apps with Docker
@@ -265,31 +268,17 @@ additionalContent:
           links:
             - url: /dotnet/maui
               text: .NET Multi-platform App UI (.NET MAUI)
-            - url: /xamarin/xamarin-forms
-              text: Xamarin.Forms
-            - url: /xamarin/ios
-              text: Xamarin.iOS
-            - url: /xamarin/android
-              text: Xamarin.Android
-            - url: /azure/developer/mobile-apps
-              text: Develop Xamarin apps with Azure
         # Card
         - title: Desktop
           links:
-            - url: /uwp
-              text: Universal Windows apps
+            - url: /windows/apps/winui
+              text: WinUI apps
             - url: /dotnet/desktop/wpf/
-              text: Windows Presentation Foundation (.NET 5+)
-            - url: /dotnet/desktop/wpf/?view=netframeworkdesktop-4.8&preserve-view=true
-              text: Windows Presentation Foundation (.NET Framework)
+              text: Windows Presentation Foundation
             - url: /dotnet/desktop/winforms/
-              text: Windows Forms (.NET 5+)
-            - url: /dotnet/desktop/winforms/?view=netframeworkdesktop-4.8&preserve-view=true
-              text: Windows Forms (.NET Framework)
+              text: Windows Forms
             - url: /dotnet/maui
               text: .NET Multi-platform App UI (.NET MAUI)
-            - url: /xamarin/mac
-              text: Xamarin for macOS
         # Card
         - title: Microservices
           links:
@@ -308,8 +297,8 @@ additionalContent:
           links:
             - url: azure/index.yml
               text: Azure for .NET developers
-            - url: /dotnet/aspire
-              text: .NET Aspire
+            - url: https://aspire.dev/
+              text: Aspire
             - url: ./azure/migration/app-service.md?preserve-view=true&view=azure-dotnet
               text: Migrate on-premises .NET web apps or services
             - url: ./azure/key-azure-services.md
@@ -323,7 +312,7 @@ additionalContent:
           links:
             - url: ai/index.yml
               text: AI for .NET developers
-            - url: ai/quickstarts/get-started-openai.md
+            - url: ai/quickstarts/build-chat-app.md
               text: Build a chat app
             - url: ai/conceptual/prompt-engineering-dotnet.md
               text: Understand prompt engineering
@@ -368,23 +357,11 @@ additionalContent:
         # Card
         - title: ".NET API reference"
           summary: API reference documentation for .NET
-          url: ../api/index.md?view=net-8.0
-        # Card
-        - title: ".NET Framework API reference"
-          summary: API reference documentation for .NET Framework
-          url: ../api/index.md?view=netframework-4.8&preserve-view=true
+          url: ../api/index.md?view=net-10.0
         # Card
         - title: "ASP.NET Core API reference"
           summary: API reference documentation for ASP.NET Core
-          url: ../api/index.md?view=view=aspnetcore-8.0&preserve-view=true
-        # Card
-        - title: "ML.NET API reference"
-          summary: API reference documentation for ML.NET
-          url: ../api/index.md?view=ml-dotnet&preserve-view=true
-        # Card
-        - title: ".NET Platform Extensions API reference"
-          summary: API reference documentation for .NET Platform Extensions
-          url: ../api/index.md?view=dotnet-plat-ext-8.0&preserve-view=true
+          url: ../api/index.md?view=aspnetcore-10.0&preserve-view=true
         # Card
         - title: "C# language reference"
           summary: C# language reference and specification
@@ -397,6 +374,10 @@ additionalContent:
         - title: "Visual Basic language reference"
           summary: Visual Basic language reference and specification
           url: visual-basic/language-reference/index.md
+        # Card
+        - title: ".NET Framework API reference"
+          summary: API reference documentation for .NET Framework
+          url: ../api/index.md?view=netframework-4.8&preserve-view=true
 
   # footer (optional)
   footer: "Are you interested in contributing to the .NET docs? For more information, see our [contributor guide](/contribute/dotnet/dotnet-contribute)."

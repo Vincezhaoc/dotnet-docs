@@ -10,7 +10,7 @@ helpviewer_keywords:
 ---
 # Walkthrough: Office Programming in Visual Basic
 
-Visual Studio offers features in Visual Basic that improve Microsoft Office programming. Features in Visual Basic include auto-implemented properties, statements in lambda expressions, and collection initializers. You can embed type information, which allows deployment of assemblies that interact with COM components without deploying primary interop assemblies (PIAs) to the user's computer. For more information, see [Walkthrough: Embedding Types from Managed Assemblies](../../../standard/assembly/embed-types-visual-studio.md).
+Visual Studio offers features in Visual Basic that improve Microsoft Office programming. Features in Visual Basic include automatically implemented properties, statements in lambda expressions, and collection initializers. You can embed type information, which allows deployment of assemblies that interact with COM components without deploying primary interop assemblies (PIAs) to the user's computer. For more information, see [Walkthrough: Embedding Types from Managed Assemblies](../../../standard/assembly/embed-types-visual-studio.md).
 
 This walkthrough demonstrates these features in the context of Office programming, but many of these features are also useful in general programming. In the walkthrough, you use an Excel Add-in application to create an Excel workbook. Next, you create a Word document that contains a link to the workbook. Finally, you see how to enable and disable the PIA dependency.
 
@@ -58,7 +58,7 @@ You must have Microsoft Office Excel and Microsoft Office Word installed on your
 
 1. In **Solution Explorer**, right-click your project's name, click **Add**, and then click **Class**. Name the class Account.vb. Click **Add**.
 
-2. Replace the definition of the `Account` class with the following code. The class definitions use *auto-implemented properties*. For more information, see [Auto-Implemented Properties](../../../visual-basic/programming-guide/language-features/procedures/auto-implemented-properties.md).
+2. Replace the definition of the `Account` class with the following code. The class definitions use *automatically implemented properties*. For more information, see [Automatically implemented properties](../../../visual-basic/programming-guide/language-features/procedures/auto-implemented-properties.md).
 
      [!code-vb[csOfficeWalkthrough#2](~/samples/snippets/visualbasic/VS_Snippets_VBCSharp/csofficewalkthrough/vb/account.vb#2)]
 
@@ -72,7 +72,7 @@ You must have Microsoft Office Excel and Microsoft Office Word installed on your
 
      [!code-vb[csOfficeWalkthrough#4](~/samples/snippets/visualbasic/VS_Snippets_VBCSharp/csofficewalkthrough/vb/thisaddin.vb#4)]
 
-    - Method [Add](<xref:Microsoft.Office.Interop.Excel.Workbooks.Add%2A>) has an *optional parameter* for specifying a particular template. Optional parameters enable you to omit the argument for that parameter if you want to use the parameter's default value. Because no argument is sent in the previous example, `Add` uses the default template and creates a new workbook.
+    - Method [Add](<xref:Microsoft.Office.Interop.Excel.Workbooks.Add*>) has an *optional parameter* for specifying a particular template. Optional parameters enable you to omit the argument for that parameter if you want to use the parameter's default value. Because no argument is sent in the previous example, `Add` uses the default template and creates a new workbook.
 
     - The `Range` and `Offset` properties of the [Range](<xref:Microsoft.Office.Interop.Excel.Range>) object use the *indexed properties* feature. Indexed properties also enable you to use the `Value` property of the `Range` object, eliminating the need to use the `Value2` property. The `Value` property is indexed, but the index is optional. Optional arguments and indexed properties work together in the following example.
 
@@ -96,7 +96,7 @@ You must have Microsoft Office Excel and Microsoft Office Word installed on your
 
      [!code-vb[csOfficeWalkthrough#10](~/samples/snippets/visualbasic/VS_Snippets_VBCSharp/csofficewalkthrough/vb/thisaddin.vb#10)]
 
-     The [PasteSpecial](<xref:Microsoft.Office.Interop.Word.Selection.PasteSpecial%2A>) method has seven parameters, all of which are defined as optional reference parameters. Named and optional arguments enable you to designate the parameters you want to access by name and to send arguments to only those parameters. In this example, arguments are sent to indicate that a link to the workbook on the Clipboard should be created (parameter `Link`) and that the link is to be displayed in the Word document as an icon (parameter `DisplayAsIcon`).
+     The [PasteSpecial](<xref:Microsoft.Office.Interop.Word.Selection.PasteSpecial*>) method has seven parameters, all of which are defined as optional reference parameters. Named and optional arguments enable you to designate the parameters you want to access by name and to send arguments to only those parameters. In this example, arguments are sent to indicate that a link to the workbook on the Clipboard should be created (parameter `Link`) and that the link is to be displayed in the Word document as an icon (parameter `DisplayAsIcon`).
 
 ## Run the application
 
@@ -139,7 +139,7 @@ You must have Microsoft Office Excel and Microsoft Office Word installed on your
 
 ## See also
 
-- [Auto-Implemented Properties (Visual Basic)](../language-features/procedures/auto-implemented-properties.md)
+- [Automatically implemented properties (Visual Basic)](../language-features/procedures/auto-implemented-properties.md)
 - [Collection Initializers](../language-features/collection-initializers/index.md)
 - [Optional Parameters](../language-features/procedures/optional-parameters.md)
 - [Passing Arguments by Position and by Name](../language-features/procedures/passing-arguments-by-position-and-by-name.md)

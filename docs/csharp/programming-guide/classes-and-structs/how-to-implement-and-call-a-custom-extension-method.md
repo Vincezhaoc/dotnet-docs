@@ -1,46 +1,59 @@
 ---
 title: "How to implement and call a custom extension method"
 description: Learn how to implement extension methods for any .NET type. Client code can use your methods by adding a reference to a DLL and adding a using directive.
-ms.date: 07/20/2015
+ms.date: 10/02/2024
 helpviewer_keywords: 
   - "extension methods [C#], implementing and calling"
 ms.topic: how-to
-ms.assetid: 7dab2a56-cf8e-4a47-a444-fe610a02772a
 ---
 # How to implement and call a custom extension method (C# Programming Guide)
 
-This topic shows how to implement your own extension methods for any .NET type. Client code can use your extension methods by adding a reference to the DLL that contains them, and adding a [using](../../language-reference/keywords/using-directive.md) directive that specifies the namespace in which the extension methods are defined.  
-  
-## To define and call the extension method  
-  
-1. Define a static [class](./static-classes-and-static-class-members.md) to contain the extension method.  
-  
-     The class must be visible to client code. For more information about accessibility rules, see [Access Modifiers](./access-modifiers.md).  
-  
-2. Implement the extension method as a static method with at least the same visibility as the containing class.  
-  
-3. The first parameter of the method specifies the type that the method operates on; it must be preceded with the [this](../../language-reference/keywords/this.md) modifier.  
-  
-4. In the calling code, add a `using` directive to specify the [namespace](../../language-reference/keywords/namespace.md) that contains the extension method class.  
-  
-5. Call the methods as if they were instance methods on the type.  
-  
-     Note that the first parameter is not specified by calling code because it represents the type on which the operator is being applied, and the compiler already knows the type of your object. You only have to provide arguments for parameters 2 through `n`.  
-  
-## Example  
+This article shows how to implement your own extension methods for any .NET type. Client code can use your extension methods. Client projects must reference the assembly that contains them. Client projects must add a [using](../../language-reference/keywords/using-directive.md) directive that specifies the namespace in which the extension methods are defined.
 
- The following example implements an extension method named `WordCount` in the `CustomExtensions.StringExtension` class. The method operates on the <xref:System.String> class, which is specified as the first method parameter. The `CustomExtensions` namespace is imported into the application namespace, and the method is called inside the `Main` method.  
-  
- [!code-csharp[csProgGuideExtensionMethods#1](~/samples/snippets/csharp/VS_Snippets_VBCSharp/csProgGuideExtensionMethods/cs/extensionmethods.cs#1)]  
-  
-## .NET Security  
+Beginning with C# 14, there are two syntaxes you can use to define extension methods. C# 14 adds [extension](../../language-reference/keywords/extension.md) blocks, where you define extension members for a type. Before C# 14, you add the [this](../../language-reference/keywords/this.md) modifier to the first parameter of a static method to indicate that the method appears as a member of an instance of the parameter type.
 
- Extension methods present no specific security vulnerabilities. They can never be used to impersonate existing methods on a type, because all name collisions are resolved in favor of the instance or static method defined by the type itself. Extension methods cannot access any private data in the extended class.  
-  
+## Extension blocks (C# 14 and later)
+
+Beginning with C# 14, you can declare extension methods using *extension blocks*. An extension block is a block in a non-nested, non-generic, static class that contains extension members for a type or an instance of that type.
+
+To define and call an extension method using extension blocks:
+
+1. Define a static [class](./static-classes-and-static-class-members.md) to contain the extension method. The class can't be nested inside another type and must be visible to client code. For more information about accessibility rules, see [Access Modifiers](./access-modifiers.md).
+1. Use an [extension](../../language-reference/keywords/extension.md) block to declare extension members for a type.
+1. In the calling code, add a `using` directive to specify the [namespace](../../language-reference/keywords/namespace.md) that contains the extension method class.
+1. Call the methods as instance methods on the type.
+
+The following example implements an extension method named `WordCount` using the C# 14 extension block syntax. The method operates on the <xref:System.String> class. The `CustomExtensions` namespace is imported into the application namespace, and the method is called as if it were an instance method on the string.
+
+:::code language="csharp" source="./snippets/how-to-implement-and-call-a-custom-extension-method/Program.cs" :::
+
+## Extension methods (earlier versions)
+
+Before C# 14, you declare an extension method by adding the [this](../../language-reference/keywords/this.md) modifier to the first parameter of a static method.
+
+To define and call an extension method using the classic syntax:
+
+1. Define a static [class](./static-classes-and-static-class-members.md) to contain the extension method. The class can't be nested inside another type and must be visible to client code. For more information about accessibility rules, see [Access Modifiers](./access-modifiers.md).
+1. Implement the extension method as a static method with at least the same visibility as the containing class.
+1. The first parameter of the method specifies the type that the method operates on; it must be preceded with the [this](../../language-reference/keywords/this.md) modifier.
+1. In the calling code, add a `using` directive to specify the [namespace](../../language-reference/keywords/namespace.md) that contains the extension method class.
+1. Call the methods as instance methods on the type.
+
+The following example implements an extension method named `WordCount` using the classic syntax. The method operates on the <xref:System.String> class, which is specified as the first method parameter with the `this` modifier. The `CustomExtensions` namespace is imported into the application namespace, and the method is called as if it were an instance method on the string.
+
+:::code language="csharp" source="./snippets/how-to-implement-and-call-a-custom-extension-method-classic/Program.cs" :::
+
+> [!NOTE]
+> The first parameter is not specified by calling code because it represents the type on which the method is being applied, and the compiler already knows the type of your object. You only have to provide arguments for parameters 2 through `n`.
+
+## General information
+
+Overload resolution prefers instance or static methods defined by the type itself to extension methods. Extension methods can't access any private data in the extended class.
+
 ## See also
 
 - [Extension Methods](./extension-methods.md)
-- [LINQ (Language-Integrated Query)](/dotnet/csharp/linq/)
+- [LINQ (Language-Integrated Query)](../../linq/index.md)
 - [Static Classes and Static Class Members](./static-classes-and-static-class-members.md)
 - [protected](../../language-reference/keywords/protected.md)
 - [internal](../../language-reference/keywords/internal.md)

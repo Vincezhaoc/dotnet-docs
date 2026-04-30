@@ -2,8 +2,9 @@
 title: .NET project SDK overview
 titleSuffix: ""
 description: Learn about the .NET project SDKs.
-ms.date: 06/30/2022
-ms.topic: conceptual
+ms.date: 03/20/2026
+ai-usage: ai-assisted
+ms.topic: concept-article
 no-loc: ["EmbeddedResource", "Compile", "None", "Blazor"]
 ---
 # .NET project SDKs
@@ -12,22 +13,25 @@ Modern .NET projects are associated with a project software development kit (SDK
 
 ## Available SDKs
 
-The following SDKs are available:
+The available SDKs include:
 
-| ID                         | Description                                             | Repo                                   |
-|----------------------------|---------------------------------------------------------|----------------------------------------|
-| `Microsoft.NET.Sdk`        | The .NET SDK                                            | <https://github.com/dotnet/sdk>        |
-| `Microsoft.NET.Sdk.Web`    | The .NET [Web SDK](/aspnet/core/razor-pages/web-sdk)    | <https://github.com/dotnet/sdk>        |
-| `Microsoft.NET.Sdk.Razor`  | The .NET [Razor SDK](/aspnet/core/razor-pages/sdk)      | <https://github.com/dotnet/aspnetcore> |
+| ID                         | Description                                                                          | Repo                                   |
+|----------------------------|--------------------------------------------------------------------------------------|----------------------------------------|
+| `Microsoft.NET.Sdk`        | The .NET SDK                                                                         | <https://github.com/dotnet/sdk>        |
+| `Microsoft.NET.Sdk.Web`    | The .NET [Web SDK](/aspnet/core/razor-pages/web-sdk)                                 | <https://github.com/dotnet/sdk>        |
+| `Microsoft.NET.Sdk.Razor`  | The .NET [Razor SDK](/aspnet/core/razor-pages/sdk)                                   | <https://github.com/dotnet/aspnetcore> |
 | `Microsoft.NET.Sdk.BlazorWebAssembly` | The .NET [Blazor WebAssembly SDK](/aspnet/core/blazor#blazor-webassembly) | <https://github.com/dotnet/aspnetcore> |
-| `Microsoft.NET.Sdk.Worker` | The .NET [Worker Service](../extensions/workers.md) SDK |                                        |
-| `MSTest.Sdk`               | The [MSTest SDK](../testing/unit-testing-mstest-sdk.md) | <https://github.com/microsoft/testfx>  |
+| `Microsoft.NET.Sdk.Worker` | The .NET [Worker Service SDK](../extensions/workers.md)                              | <https://github.com/dotnet/aspnetcore> |
+| `Aspire.AppHost.Sdk`       | The .NET [Aspire SDK](/dotnet/aspire/fundamentals/dotnet-aspire-sdk)                 | <https://github.com/dotnet/aspire>     |
+| `MSTest.Sdk`               | The [MSTest SDK](../testing/unit-testing-mstest-sdk.md)                              | <https://github.com/microsoft/testfx>  |
 
 The .NET SDK is the base SDK for .NET. The other SDKs reference the .NET SDK, and projects that are associated with the other SDKs have all the .NET SDK properties available to them. The Web SDK, for example, depends on both the .NET SDK and the Razor SDK.
 
-You can also author your own SDK that can be distributed via NuGet.
-
 For Windows Forms and Windows Presentation Foundation (WPF) projects, you specify the .NET SDK (`Microsoft.NET.Sdk`) and set some additional properties in the project file. For more information, see [Enable .NET Desktop SDK](msbuild-props-desktop.md#enable-net-desktop-sdk).
+
+MSBuild SDKs, which you can use to configure and extend your build, are listed at [MSBuild SDKs](https://github.com/microsoft/MSBuildSdks/blob/main/README.md).
+
+You can also author your own SDK that can be distributed via NuGet.
 
 ## Project files
 
@@ -35,9 +39,22 @@ For Windows Forms and Windows Presentation Foundation (WPF) projects, you specif
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
-  ...
+    <!-- Omitted for brevity... -->
 </Project>
 ```
+
+The `Project/Sdk` attribute and `Sdk` element enable additive SDKs. Consider the following example, where the Aspire SDK (`Aspire.AppHost.Sdk`) is added to the project atop the `Microsoft.NET.Sdk`:
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <Sdk Name="Aspire.AppHost.Sdk" Version="9.0.0" />
+    <!-- Omitted for brevity... -->
+
+</Project>
+```
+
+In the preceding project file, both SDKs are used to resolve dependencies in an additive nature. For more information, see [Aspire SDK](/dotnet/aspire/fundamentals/dotnet-aspire-sdk).
 
 To specify an SDK that comes from NuGet, include the version at the end of the name, or specify the name and version in the *global.json* file.
 
@@ -81,26 +98,41 @@ If the project has multiple target frameworks, focus the results of the command 
 
 ## Default includes and excludes
 
-The default includes and excludes for [`Compile` items](/visualstudio/msbuild/common-msbuild-project-items#compile), [embedded resources](/visualstudio/msbuild/common-msbuild-project-items#embeddedresource), and [`None` items](/visualstudio/msbuild/common-msbuild-project-items#none) are defined in the SDK. Unlike non-SDK .NET Framework projects, you don't need to specify these items in your project file, because the defaults cover most common use cases. This behavior makes the project file smaller and easier to understand and edit by hand, if needed.
+The SDK automatically manages three types of items for your project:
 
-The following table shows which elements and which [globs](https://en.wikipedia.org/wiki/Glob_(programming)) are included and excluded in the .NET SDK:
+- [`Compile` items](/visualstudio/msbuild/common-msbuild-project-items#compile): source code files (`*.cs`, `*.vb`, and other language-specific extensions) that get compiled into your assembly.
+- [`EmbeddedResource` items](/visualstudio/msbuild/common-msbuild-project-items#embeddedresource): `*.resx` files that get embedded into your assembly.
+- [`None` items](/visualstudio/msbuild/common-msbuild-project-items#none): all other files tracked in the project, such as configuration and content files, that aren't compiled or embedded.
+
+Unlike non-SDK .NET Framework projects, you don't need to specify these items in your project file, because the defaults cover most common use cases. This behavior makes the project file smaller and easier to understand and edit by hand, if needed.
+
+The SDK uses [glob](https://en.wikipedia.org/wiki/Glob_(programming)) patterns to determine which files belong to each item type:
+
+- **Include glob**: Specifies which files to add to the item type.
+- **Exclude glob**: Specifies which files to skip when applying the include glob.
+- **Remove glob**: Specifies which files to remove from items that were already added by the include glob.
+
+The following table shows the default glob patterns for each item type in the .NET SDK:
 
 | Element | Include glob | Exclude glob | Remove glob |
 |---------|--------------|--------------|-------------|
-| Compile | \*\*/\*.cs (or other language extensions) | \*\*/\*.user;  \*\*/\*.\*proj;  \*\*/\*.sln;  \*\*/\*.vssscc  | N/A |
-| EmbeddedResource  | \*\*/\*.resx | \*\*/\*.user; \*\*/\*.\*proj; \*\*/\*.sln; \*\*/\*.vssscc | N/A |
-| None | \*\*/\* | \*\*/\*.user; \*\*/\*.\*proj; \*\*/\*.sln; \*\*/\*.vssscc     | \*\*/\*.cs; \*\*/\*.resx |
+| Compile | \*\*/\*.cs (or other language extensions) | \*\*/\*.user;  \*\*/\*.\*proj;  \*\*/\*.sln(x);  \*\*/\*.vssscc  | N/A |
+| EmbeddedResource  | \*\*/\*.resx | \*\*/\*.user; \*\*/\*.\*proj; \*\*/\*.sln(x); \*\*/\*.vssscc | N/A |
+| None | \*\*/\* | \*\*/\*.user; \*\*/\*.\*proj; \*\*/\*.sln(x); \*\*/\*.vssscc     | \*\*/\*.cs; \*\*/\*.resx |
+
+Because `None` uses `**/*` as its include glob, it would otherwise include *.cs* and *.resx* files that are already captured by `Compile` and `EmbeddedResource`. The remove glob (`**/*.cs; **/*.resx`) prevents those files from appearing in both item types at the same time.
 
 > [!NOTE]
 > The `./bin` and `./obj` folders, which are represented by the `$(BaseOutputPath)` and `$(BaseIntermediateOutputPath)` MSBuild properties, are excluded from the globs by default. Excludes are represented by the [DefaultItemExcludes property](msbuild-props.md#defaultitemexcludes).
 
 The .NET Desktop SDK has additional includes and excludes for WPF. For more information, see [WPF default includes and excludes](msbuild-props-desktop.md#wpf-default-includes-and-excludes).
 
-If you explicitly define any of these items in your project file, you're likely to get a [NETSDK1022](../tools/sdk-errors/netsdk1022.md) build error. For information about how to resolve the error, see [NETSDK1022: Duplicate items were included](../tools/sdk-errors/netsdk1022.md).
+> [!WARNING]
+> Avoid defining `Compile`, `EmbeddedResource`, or `None` items that duplicate the SDK's default `Include` globs. Duplicating included files causes the build to include the same files twice, which results in a [NETSDK1022](../tools/sdk-errors/netsdk1022.md) build error. Customizations that use `Remove` or `Update`, or that add items after you set `EnableDefaultItems`, `EnableDefaultCompileItems`, or `EnableDefaultEmbeddedResourceItems` to `false`, are supported. For information about how to resolve the error, see [NETSDK1022: Duplicate items were included](../tools/sdk-errors/netsdk1022.md).
 
 ## Implicit using directives
 
-Starting in .NET 6, implicit [`global using` directives](../../csharp/language-reference/keywords/using-directive.md#global-modifier) are added to new C# projects. This means that you can use types defined in these namespaces without having to specify their fully qualified name or manually add a `using` directive. The *implicit* aspect refers to the fact that the `global using` directives are added to a generated file in the project's *obj* directory.
+Starting in .NET 6, implicit [`global using` directives](../../csharp/language-reference/keywords/using-directive.md#the-global-modifier) are added to new C# projects. This means that you can use types defined in these namespaces without having to specify their fully qualified name or manually add a `using` directive. The *implicit* aspect refers to the fact that the `global using` directives are added to a generated file in the project's *obj* directory.
 
 Implicit `global using` directives are added for projects that use one of the following SDKs:
 
@@ -128,6 +160,9 @@ You can specify additional implicit `global using` directives by adding `Using` 
     <Using Include="System.IO.Pipes" />
   </ItemGroup>
   ```
+
+> [!NOTE]
+> Starting with the .NET 8 SDK, <xref:System.Net.Http> is [no longer included](../compatibility/sdk/8.0/implicit-global-using-netfx.md) in `Microsoft.NET.Sdk` when targeting .NET Framework.
 
 ## Implicit package references
 

@@ -81,9 +81,6 @@ conceptualContent:
                 text: Kubernetes deployment
                 url: deployment/kubernetes.md
               - itemType: concept
-                text: Docker deployment
-                url: deployment/docker-deployment.md
-              - itemType: concept
                 text: Service Fabric deployment
                 url: deployment/service-fabric.md
               - itemType: concept
@@ -95,9 +92,6 @@ conceptualContent:
               - itemType: concept
                 text: Azure Container Apps
                 url: deployment/deploy-to-azure-container-apps.md
-              - itemType: concept
-                text: Multi-cluster deployment
-                url: deployment/multi-cluster-support/overview.md
         - title: Host Orleans apps
           links:
               - itemType: get-started
@@ -176,11 +170,11 @@ additionalContent:
               - title: Webcasts and shows
                 links:
                     - text: Azure Friday
-                      url: https://azure.microsoft.com/resources/videos/azure-friday/
+                      url: /shows/azure-friday/
                     - text: The Cloud Native Show
-                      url: /Shows/The-Cloud-Native-Show
+                      url: /shows/The-Cloud-Native-Show
                     - text: On .NET
-                      url: /Shows/On-NET
+                      url: /shows/On-NET
                     - text: .NET Community Standup
                       url: https://dotnet.microsoft.com/platform/community/standup
                     - text: On .NET Live

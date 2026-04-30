@@ -1,8 +1,7 @@
 ---
-description: "Learn more about: CLR Method to Canonical Function Mapping"
 title: "CLR Method to Canonical Function Mapping"
+description: "Learn more about: CLR Method to Canonical Function Mapping"
 ms.date: "03/30/2017"
-ms.assetid: e3363261-2cb8-4b54-9555-2870be99b929
 ---
 
 # CLR Method to Canonical Function Mapping
@@ -21,7 +20,7 @@ For LINQ scenarios, queries against the Entity Framework involve mapping certain
 |Boolean Equals(String `a`, String `b`)|= operator|
 |Boolean IsNullOrEmpty(String `value`)|(IsNull(`value`)) OR Length(`value`) = 0|
 |Boolean op_Equality(String `a`, String `b`)|= operator|
-|Boolean op_Inequality(String `a` , String `b`)|!= operator|
+|Boolean op_Inequality(String `a`, String `b`)|!= operator|
 |Microsoft.VisualBasic.Strings.Trim(String `str`)|Trim(`str`)|
 |Microsoft.VisualBasic.Strings.LTrim(String `str`)|Ltrim(`str`)|
 |Microsoft.VisualBasic.Strings.RTrim(String `str`)|Rtrim(`str`)|
@@ -43,7 +42,7 @@ For LINQ scenarios, queries against the Entity Framework involve mapping certain
 |Int32 IndexOf(String `value`)|IndexOf(`this`, `value`) - 1||
 |System.String Insert(Int32 `startIndex`, String `value`)|Concat(Concat(Substring(`this`, 1, `startIndex`), `value`), Substring(`this`, `startIndex`+1, Length(`this`) - `startIndex`))||
 |System.String Remove(Int32 `startIndex`)|Substring(`this`, 1, `startIndex`)||
-|System.String Remove(Int32 `startIndex`, Int32 `count`)|Concat(Substring(`this`, 1, `startIndex`) , Substring(`this`, `startIndex` + `count` +1, Length(`this`) - (`startIndex` + `count`)))|Remove(`startIndex`, `count`) is only supported if `count` is an integer greater than or equal to 0.|
+|System.String Remove(Int32 `startIndex`, Int32 `count`)|Concat(Substring(`this`, 1, `startIndex`), Substring(`this`, `startIndex` + `count` +1, Length(`this`) - (`startIndex` + `count`)))|Remove(`startIndex`, `count`) is only supported if `count` is an integer greater than or equal to 0.|
 |System.String Replace(String `oldValue`, String `newValue`)|Replace(`this`, `oldValue`, `newValue`)||
 |System.String Substring(Int32 `startIndex`)|Substring(`this`, `startIndex` +1, Length(`this`) - `startIndex`)||
 |System.String Substring(Int32 `startIndex`, Int32 `length`)|Substring(`this`, `startIndex` +1, `length`)||
@@ -104,7 +103,7 @@ The mapping shown for the `get` methods on the listed properties.
 |Year|Year(`this`)|Not supported against SQL Server 2005.|
 
 > [!NOTE]
-> The <xref:System.DateTimeOffset.Equals%2A> method returns `true` if the compared <xref:System.DateTimeOffset> objects are equal; `false` otherwise. The <xref:System.DateTimeOffset.CompareTo%2A> method returns 0, 1, or -1 depending on whether the compared <xref:System.DateTimeOffset> object is equal, greater than, or less than, respectively.
+> The <xref:System.DateTimeOffset.Equals*> method returns `true` if the compared <xref:System.DateTimeOffset> objects are equal; `false` otherwise. The <xref:System.DateTimeOffset.CompareTo*> method returns 0, 1, or -1 depending on whether the compared <xref:System.DateTimeOffset> object is equal, greater than, or less than, respectively.
 
 ## System.DateTimeOffset Method (Static) Mapping
 
@@ -126,7 +125,7 @@ The mapping shown for the `get` methods on the listed properties.
 |Seconds|Second(`this`)|Not supported against SQL Server 2005.|
 
 > [!NOTE]
-> The <xref:System.TimeSpan.Equals%2A> method returns `true` if the compared <xref:System.TimeSpan> objects are equal; `false` otherwise. The <xref:System.TimeSpan.CompareTo%2A> method returns 0, 1, or -1 depending on whether the compared <xref:System.TimeSpan> object is equal, greater than, or less than, respectively.
+> The <xref:System.TimeSpan.Equals*> method returns `true` if the compared <xref:System.TimeSpan> objects are equal; `false` otherwise. The <xref:System.TimeSpan.CompareTo*> method returns 0, 1, or -1 depending on whether the compared <xref:System.TimeSpan> object is equal, greater than, or less than, respectively.
 
 ### DatePart Function
 

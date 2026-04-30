@@ -1,11 +1,15 @@
 ---
 title: dotnet store command
 description: The 'dotnet store' command stores the specified assemblies in the runtime package store.
-ms.date: 02/14/2020
+ms.date: 02/04/2026
+ai-usage: ai-assisted
 ---
 # dotnet store
 
-**This article applies to:** ✔️ .NET Core 3.1 SDK and later versions
+**This article applies to:** ✔️ .NET 6 SDK and later versions
+
+> [!WARNING]
+> The `dotnet store` command and the runtime package store feature are **deprecated and no longer supported**. This command has known issues with .NET 6 and later versions and **is not recommended for use**. The .NET team plans to eventually stop shipping this command. For more information, see [GitHub issue #24752](https://github.com/dotnet/sdk/issues/24752).
 
 ## Name
 
@@ -14,16 +18,21 @@ ms.date: 02/14/2020
 ## Synopsis
 
 ```dotnetcli
-dotnet store -m|--manifest <PATH_TO_MANIFEST_FILE>
-    -f|--framework <FRAMEWORK_VERSION> -r|--runtime <RUNTIME_IDENTIFIER>
-    [--framework-version <FRAMEWORK_VERSION>] [--output <OUTPUT_DIRECTORY>]
-    [--skip-optimization] [--skip-symbols] [-v|--verbosity <LEVEL>]
-    [--working-dir <WORKING_DIRECTORY>]
+dotnet store [-m|--manifest <PATH_TO_MANIFEST_FILE>]
+  [-f|--framework <FRAMEWORK_VERSION>] [--disable-build-servers]
+  [--framework-version <FRAMEWORK_VERSION>]
+  [--output <OUTPUT_DIRECTORY>] [-r|--runtime <RUNTIME_IDENTIFIER>] 
+  [--skip-optimization] [--skip-symbols]
+  [--ucr|--use-current-runtime] [-v|--verbosity <LEVEL>]
+  [--working-dir <WORKING_DIRECTORY>]
 
 dotnet store -h|--help
 ```
 
 ## Description
+
+> [!CAUTION]
+> The runtime package store feature is deprecated and no longer functional on .NET 6+. This command might fail with crossgen-related errors. Even when using the `--skip-optimization` workaround, the generated stores might not work correctly.
 
 `dotnet store` stores the specified assemblies in the [runtime package store](../deploying/runtime-store.md). By default, assemblies are optimized for the target runtime and framework. For more information, see the [runtime package store](../deploying/runtime-store.md) topic.
 
@@ -32,6 +41,8 @@ dotnet store -h|--help
 - **`-f|--framework <FRAMEWORK>`**
 
   Specifies the [target framework](../../standard/frameworks.md). The target framework has to be specified in the project file.
+
+- [!INCLUDE [disable-build-servers](includes/cli-disable-build-servers.md)]
 
 - **`-m|--manifest <PATH_TO_MANIFEST_FILE>`**
 
@@ -47,8 +58,6 @@ dotnet store -h|--help
 
   Specifies the .NET SDK version. This option enables you to select a specific framework version beyond the framework specified by the `-f|--framework` option.
 
-[!INCLUDE [help](../../../includes/cli-help.md)]
-
 - **`-o|--output <OUTPUT_DIRECTORY>`**
 
   Specifies the path to the runtime package store. If not specified, it defaults to the *store* subdirectory of the user profile .NET installation directory.
@@ -61,11 +70,17 @@ dotnet store -h|--help
 
   Skips symbol generation. Currently, you can only generate symbols on Windows and Linux.
 
-[!INCLUDE [verbosity](../../../includes/cli-verbosity.md)]
+- **`--ucr|--use-current-runtime`**
+
+  Use current runtime as the target runtime. The default is `false`.
+
+- [!INCLUDE [verbosity](includes/cli-verbosity.md)]
 
 - **`-w|--working-dir <WORKING_DIRECTORY>`**
 
   The working directory used by the command. If not specified, it uses the *obj* subdirectory of the current directory.
+
+- [!INCLUDE [help](includes/cli-help.md)]
 
 ## Examples
 

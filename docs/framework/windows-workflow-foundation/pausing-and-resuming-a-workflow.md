@@ -3,6 +3,7 @@ description: "Learn more about pausing and resuming workflows. Workflows pause a
 title: "Pausing and Resuming a Workflow"
 ms.date: "03/30/2017"
 ms.topic: "how-to"
+ms.custom: sfi-ropc-nochange
 ---
 # Pause and Resume a workflow
 
@@ -10,7 +11,7 @@ Workflows pause and resume in response to bookmarks and blocking activities such
 
 ## Pause a workflow
 
-To pause a workflow, use <xref:System.Activities.WorkflowApplication.Unload%2A>. This method requests that the workflow persist and unload, and will throw a <xref:System.TimeoutException> if the workflow does not unload in 30 seconds.
+To pause a workflow, use <xref:System.Activities.WorkflowApplication.Unload*>. This method requests that the workflow persist and unload, and will throw a <xref:System.TimeoutException> if the workflow does not unload in 30 seconds.
 
 ```csharp
 try
@@ -26,7 +27,7 @@ catch (TimeoutException e)
 
 ## Resume a workflow
 
-To resume a previously paused and unloaded workflow, use <xref:System.Activities.WorkflowApplication.Load%2A>. This method loads a workflow from a persistence store into memory.
+To resume a previously paused and unloaded workflow, use <xref:System.Activities.WorkflowApplication.Load*>. This method loads a workflow from a persistence store into memory.
 
 ```csharp
 WorkflowApplication application = new WorkflowApplication(activity);

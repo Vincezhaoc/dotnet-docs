@@ -14,9 +14,9 @@ Sometimes you have to read arbitrarily large XML files, and write your applicati
 
 One option is to write your application using <xref:System.Xml.XmlReader>. However, you might want to use LINQ to query the XML tree. If so, you can write your own custom axis method. For more information, see [How to write a LINQ to XML axis method](write-linq-xml-axis-method.md).
 
-To write your own axis method, you write a small method that uses the <xref:System.Xml.XmlReader> to read nodes until it reaches one of the nodes in which you're interested. The method then calls <xref:System.Xml.Linq.XNode.ReadFrom%2A>, which reads from the <xref:System.Xml.XmlReader> and instantiates an XML fragment. It then yields each fragment through `yield return` to the method that's enumerating your custom axis method. You can then write LINQ queries on your custom axis method.
+To write your own axis method, you write a small method that uses the <xref:System.Xml.XmlReader> to read nodes until it reaches one of the nodes in which you're interested. The method then calls <xref:System.Xml.Linq.XNode.ReadFrom*>, which reads from the <xref:System.Xml.XmlReader> and instantiates an XML fragment. It then yields each fragment through `yield return` to the method that's enumerating your custom axis method. You can then write LINQ queries on your custom axis method.
 
-Streaming techniques are best applied in situations where you need to process the source document only once, and you can process the elements in document order. Certain standard query operators, such as <xref:System.Linq.Enumerable.OrderBy%2A>, iterate their source, collect all of the data, sort it, and then finally yield the first item in the sequence. If you use a query operator that materializes its source before yielding the first item, you won't retain a small memory footprint.
+Streaming techniques are best applied in situations where you need to process the source document only once, and you can process the elements in document order. Certain standard query operators, such as <xref:System.Linq.Enumerable.OrderBy*>, iterate their source, collect all of the data, sort it, and then finally yield the first item in the sequence. If you use a query operator that materializes its source before yielding the first item, you won't retain a small memory footprint.
 
 ## Example: Implement and use a custom axis method that streams XML fragments from the file specified by a URI
 
@@ -76,54 +76,50 @@ The following example shows how to implement and use a custom axis method that s
 ```csharp
 static IEnumerable<XElement> StreamCustomerItem(string uri)
 {
-    using (XmlReader reader = XmlReader.Create(uri))
+    using XmlReader reader = XmlReader.Create(uri);
+
+    reader.MoveToContent();
+
+    // Parse the file, save header information when encountered, and yield the
+    // Item XElement objects as they're created.
+
+    // Loop through Customer elements
+    do
     {
-        XElement name = null;
-        XElement item = null;
-
-        reader.MoveToContent();
-
-        // Parse the file, save header information when encountered, and yield the
-        // Item XElement objects as they're created.
-
-        // loop through Customer elements
-        while (reader.Read())
+        if (reader.NodeType == XmlNodeType.Element && reader.Name == "Customer")
         {
-            if (reader.NodeType == XmlNodeType.Element
-                && reader.Name == "Customer")
+            // Move to Name element
+            XElement? name = null;
+            do
             {
-                // move to Name element
-                while (reader.Read())
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "Name")
                 {
-                    if (reader.NodeType == XmlNodeType.Element &&
-                        reader.Name == "Name")
-                    {
-                        name = XElement.ReadFrom(reader) as XElement;
-                        break;
-                    }
+                    name = XNode.ReadFrom(reader) as XElement;
+                    break;
                 }
+            }
+            while (reader.Read());
 
-                // Loop through Item elements
-                while (reader.Read())
+            // Loop through Item elements
+            while (reader.NodeType != XmlNodeType.EndElement)
+            {
+                if (reader.NodeType == XmlNodeType.Element && reader.Name == "Item")
                 {
-                    if (reader.NodeType == XmlNodeType.EndElement)
-                        break;
-                    if (reader.NodeType == XmlNodeType.Element
-                        && reader.Name == "Item")
+                    if (XNode.ReadFrom(reader) is XElement item && name != null)
                     {
-                        item = XElement.ReadFrom(reader) as XElement;
-                        if (item != null) {
-                            XElement tempRoot = new XElement("Root",
-                                new XElement(name)
-                            );
-                            tempRoot.Add(item);
-                            yield return item;
-                        }
+                        XElement tempRoot = new XElement("Root",
+                            new XElement(name),
+                            item
+                        );
+                        yield return item;
                     }
                 }
+                else if (!reader.Read())
+                    break;
             }
         }
     }
+    while (reader.Read());
 }
 
 static void Main(string[] args)
@@ -141,12 +137,69 @@ static void Main(string[] args)
 ```
 
 ```vb
+Imports System.Xml
+
 Module Module1
+
+    Public Iterator Function StreamCustomerItem(uri As String) As IEnumerable(Of XElement)
+        Using reader As XmlReader = XmlReader.Create(uri)
+            reader.MoveToContent()
+
+            ' Parse the file, save header information when encountered, And yield the
+            ' Item XElement objects as they're created.
+
+            ' Loop through Customer elements
+            Do
+
+                If reader.NodeType = XmlNodeType.Element And reader.Name = "Customer" Then
+
+                    ' Move to Name element
+                    Dim name As XElement = Nothing
+                    Do
+                        If reader.NodeType = XmlNodeType.Element And reader.Name = "Name" Then
+
+                            name = TryCast(XNode.ReadFrom(reader), XElement)
+                            Exit Do
+
+                        End If
+
+                    Loop While reader.Read()
+
+                    ' Loop through Item elements
+                    While reader.NodeType <> XmlNodeType.EndElement
+
+                        If reader.NodeType = XmlNodeType.Element And reader.Name = "Item" Then
+
+                            Dim item = TryCast(XNode.ReadFrom(reader), XElement)
+
+                            If name IsNot Nothing AndAlso item IsNot Nothing Then
+
+                                Dim tempRoot = <Root>
+                                                   <Name><%= name.Value %></Name>
+                                                   <%= item %>
+                                               </Root>
+
+                                Yield item
+
+                            End If
+
+                        ElseIf Not reader.Read() Then
+                            Exit While
+                        End If
+
+                    End While
+
+                End If
+
+            Loop While reader.Read()
+
+        End Using
+    End Function
 
     Sub Main()
         Dim xmlTree = <Root>
                           <%=
-                              From el In New StreamCustomerItem("Source.xml")
+                              From el In StreamCustomerItem("Source.xml")
                               Let itemKey = CInt(el.<Key>.Value)
                               Where itemKey >= 3 AndAlso itemKey <= 7
                               Select <Item>
@@ -160,115 +213,6 @@ Module Module1
     End Sub
 
 End Module
-
-Public Class StreamCustomerItem
-    Implements IEnumerable(Of XElement)
-
-    Private _uri As String
-
-    Public Sub New(ByVal uri As String)
-        _uri = uri
-    End Sub
-
-    Public Function GetEnumerator() As IEnumerator(Of XElement) Implements IEnumerable(Of XElement).GetEnumerator
-        Return New StreamCustomerItemEnumerator(_uri)
-    End Function
-
-    Public Function GetEnumerator1() As IEnumerator Implements IEnumerable.GetEnumerator
-        Return Me.GetEnumerator()
-    End Function
-End Class
-
-Public Class StreamCustomerItemEnumerator
-    Implements IEnumerator(Of XElement)
-
-    Private _current As XElement
-    Private _customerName As String
-    Private _reader As Xml.XmlReader
-    Private _uri As String
-
-    Public Sub New(ByVal uri As String)
-        _uri = uri
-        _reader = Xml.XmlReader.Create(_uri)
-        _reader.MoveToContent()
-    End Sub
-
-    Public ReadOnly Property Current As XElement Implements IEnumerator(Of XElement).Current
-        Get
-            Return _current
-        End Get
-    End Property
-
-    Public ReadOnly Property Current1 As Object Implements IEnumerator.Current
-        Get
-            Return Me.Current
-        End Get
-    End Property
-
-    Public Function MoveNext() As Boolean Implements IEnumerator.MoveNext
-        Dim item As XElement
-        Dim name As XElement
-
-        ' Parse the file, save header information when encountered, and return the
-        ' current Item XElement.
-
-        ' loop through Customer elements
-        While _reader.Read()
-            If _reader.NodeType = Xml.XmlNodeType.Element Then
-                Select Case _reader.Name
-                    Case "Customer"
-                        ' move to Name element
-                        While _reader.Read()
-
-                            If _reader.NodeType = Xml.XmlNodeType.Element AndAlso
-                                _reader.Name = "Name" Then
-
-                                name = TryCast(XElement.ReadFrom(_reader), XElement)
-                                _customerName = If(name IsNot Nothing, name.Value, "")
-                                Exit While
-                            End If
-
-                        End While
-                    Case "Item"
-                        item = TryCast(XElement.ReadFrom(_reader), XElement)
-                        Dim tempRoot = <Root>
-                                           <Name><%= _customerName %></Name>
-                                           <%= item %>
-                                       </Root>
-                        _current = item
-                        Return True
-                End Select
-            End If
-        End While
-
-        Return False
-    End Function
-
-    Public Sub Reset() Implements IEnumerator.Reset
-        _reader = Xml.XmlReader.Create(_uri)
-        _reader.MoveToContent()
-    End Sub
-
-#Region "IDisposable Support"
-    Private disposedValue As Boolean ' To detect redundant calls
-
-    ' IDisposable
-    Protected Overridable Sub Dispose(ByVal disposing As Boolean)
-        If Not Me.disposedValue Then
-            If disposing Then
-                _reader.Close()
-            End If
-        End If
-        Me.disposedValue = True
-    End Sub
-
-    Public Sub Dispose() Implements IDisposable.Dispose
-        Dispose(True)
-        GC.SuppressFinalize(Me)
-    End Sub
-#End Region
-
-End Class
 ```
 
  This code produces the following output:

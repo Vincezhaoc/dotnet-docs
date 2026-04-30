@@ -1,6 +1,6 @@
 ---
 title: Garbage collector config settings
-description: Learn about run-time settings for configuring how the garbage collector manages memory for .NET apps.
+description: Learn about runtime settings for configuring how the garbage collector manages memory for .NET apps.
 ms.date: 08/09/2024
 ---
 # Runtime configuration options for garbage collection
@@ -11,10 +11,10 @@ Settings are arranged into groups on this page. The settings within each group a
 
 > [!NOTE]
 >
-> - These configurations are only read by the runtime when the GC is initialized (usually this means during the process startup time). If you change an environment variable when a process is already running, the change won't be reflected in that process. Settings that can be changed through APIs at run time, such as [latency level](../../standard/garbage-collection/latency.md), are omitted from this page.
+> - These configurations are only read by the runtime when the GC is initialized (usually this means during the process startup time). If you change an environment variable when a process is already running, the change won't be reflected in that process. Settings that can be changed through APIs at runtime, such as [latency level](../../standard/garbage-collection/latency.md), are omitted from this page.
 > - Because GC is per process, it rarely ever makes sense to set these configurations at the machine level. For example, you wouldn't want every .NET process on a machine to use server GC or the same heap hard limit.
 > - For number values, use decimal notation for settings in the *runtimeconfig.json* or *runtimeconfig.template.json* file and hexadecimal notation for environment variable settings. For hexadecimal values, you can specify them with or without the "0x" prefix.
-> - If you're using the environment variables, .NET 6 and later versions standardize on the prefix `DOTNET_` instead of `COMPlus_`. However, the `COMPlus_` prefix will continue to work. If you're using a previous version of the .NET runtime, you should still use the `COMPlus_` prefix, for example, `COMPlus_gcServer`.
+> - If you're using the environment variables, .NET 6 and later versions standardize on the prefix `DOTNET_` instead of `COMPlus_`. However, the `COMPlus_` prefix continues to work. If you're using a previous version of the .NET runtime, you should still use the `COMPlus_` prefix, for example, `COMPlus_gcServer`.
 
 ## Ways to specify the configuration
 
@@ -23,7 +23,7 @@ For different versions of the .NET runtime, there are different ways to specify 
 | Config location      | .NET versions this location applies to | Formats  | How it's interpreted                                         |
 | -------------------- | -------------------------------------- | -------- | ------------------------------------------------------------ |
 | runtimeconfig.json file/</br>runtimeconfig.template.json file | .NET (Core)                           | n        | n is interpreted as a decimal value.                         |
-| Environment variable | .NET Framework, .NET (Core)              | 0xn or n | n is interpreted as a hex value in either format             |
+| Environment variable | .NET Framework, .NET              | 0xn or n | n is interpreted as a hex value in either format             |
 | app.config file      | .NET Framework                         | 0xn      | n is interpreted as a hex value<sup>1</sup>                  |
 
 <sup>1</sup> You can specify a value without the `0x` prefix for an app.config file setting, but it's not recommended. On .NET Framework 4.8+, due to a bug, a value specified without the `0x` prefix is interpreted as hexadecimal, but on previous versions of .NET Framework, it's interpreted as decimal. To avoid having to change your config, use the `0x` prefix when specifying a value in your app.config file.
@@ -50,27 +50,11 @@ SET DOTNET_gcServer=1
 SET DOTNET_GCHeapCount=c
 ```
 
-On Windows using .NET 5 or earlier:
-
-```cmd
-SET COMPlus_gcServer=1
-SET COMPlus_GCHeapCount=c
-```
-
-On other operating systems:
-
-For .NET 6 or later versions:
+On other operating systems using .NET 6 or a later version:
 
 ```bash
 export DOTNET_gcServer=1
 export DOTNET_GCHeapCount=c
-```
-
-For .NET 5 and earlier versions:
-
-```bash
-export COMPlus_gcServer=1
-export COMPlus_GCHeapCount=c
 ```
 
 If you're not using .NET Framework, you can also set the value in the *runtimeconfig.json* or *runtimeconfig.template.json* file.
@@ -119,7 +103,6 @@ Use the following settings to select flavors of garbage collection:
 | - | - | - | - |
 | **runtimeconfig.json** | `System.GC.Server` | `false` - workstation<br/>`true` - server | .NET Core 1.0 |
 | **MSBuild property** | `ServerGarbageCollection` | `false` - workstation<br/>`true` - server | .NET Core 1.0 |
-| **Environment variable** | `COMPlus_gcServer` | `0` - workstation<br/>`1` - server | .NET Core 1.0 |
 | **Environment variable** | `DOTNET_gcServer` | `0` - workstation<br/>`1` - server | .NET 6 |
 | **app.config for .NET Framework** | [GCServer](../../framework/configure-apps/file-schema/runtime/gcserver-element.md) | `false` - workstation<br/>`true` - server |  |
 
@@ -169,7 +152,6 @@ Project file:
 | - | - | - | - |
 | **runtimeconfig.json** | `System.GC.Concurrent` | `true` - background GC<br/>`false` - non-concurrent GC | .NET Core 1.0 |
 | **MSBuild property** | `ConcurrentGarbageCollection` | `true` - background GC<br/>`false` - non-concurrent GC | .NET Core 1.0 |
-| **Environment variable** | `COMPlus_gcConcurrent` | `1` - background GC<br/>`0` - non-concurrent GC | .NET Core 1.0 |
 | **Environment variable** | `DOTNET_gcConcurrent` | `1` - background GC<br/>`0` - non-concurrent GC | .NET 6 |
 | **app.config for .NET Framework** | [gcConcurrent](../../framework/configure-apps/file-schema/runtime/gcconcurrent-element.md) | `true` - background GC<br/>`false` - non-concurrent GC |  |
 
@@ -209,23 +191,402 @@ Project file:
 </Project>
 ```
 
-## Manage resource usage
+## Standalone GC
 
-Use the following settings to manage the garbage collector's memory and processor usage:
+To use a standalone garbage collector instead of the default GC implementation, you can specify either the *[path](#path)* (in .NET 9 and later versions) or the *[name](#name)* of a GC native library.
 
+### Path
+
+- Specifies the full path of a GC native library that the runtime loads in place of the default GC implementation. To be secure, this location should be protected from potentially malicious tampering.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.Path` | *string_path* | .NET 9 |
+| **Environment variable** | `DOTNET_GCPath` | *string_path* | .NET 9 |
+
+### Name
+
+- Specifies the name of a GC native library that the runtime loads in place of the default GC implementation. The behavior changed in .NET 9 with the introduction of the [Path](#path) config.
+
+  In .NET 8 and previous versions:
+
+  - If only a name of the library is specified, the library must reside in the same directory as the .NET runtime (*coreclr.dll* on Windows, *libcoreclr.so* on Linux, or *libcoreclr.dylib* on OSX).
+  - The value can also be a relative path, for example, if you specify "..\clrgc.dll" on Windows, *clrgc.dll* is loaded from the parent directory of the .NET runtime directory.
+
+  In .NET 9 and later versions, this value specifies a file name only (paths aren't allowed):
+
+  - .NET searches for the name you specify in the directory where the assembly that contains your app's `Main` method resides.
+  - If the file isn't found, the .NET runtime directory is searched.
+
+- This configuration setting is ignored if the [Path](#path) config is specified.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.Name` | *string_name* | .NET 7 |
+| **Environment variable** | `DOTNET_GCName` | *string_name* | .NET 6 |
+
+## LOH specific settings
+
+### Allow very large objects
+
+- Configures garbage collector support on 64-bit platforms for arrays that are greater than 2 gigabytes (GB) in total size.
+- Default: GC supports arrays greater than 2-GB. This is equivalent to setting the value to `1`.
+- This option may become obsolete in a future version of .NET.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | N/A | N/A | N/A |
+| **Environment variable** | `DOTNET_gcAllowVeryLargeObjects` | `1` - enabled<br/> `0` - disabled | .NET 6 |
+| **app.config for .NET Framework** | [gcAllowVeryLargeObjects](../../framework/configure-apps/file-schema/runtime/gcallowverylargeobjects-element.md) | `1` - enabled<br/> `0` - disabled | .NET Framework 4.5 |
+
+### Large object heap threshold
+
+- Specifies the threshold size, in bytes, that causes objects to go on the large object heap (LOH).
+- The default threshold is 85,000 bytes.
+- The value you specify must be larger than the default threshold.
+- The value might be capped by the runtime to the maximum possible size for the current configuration. You can inspect the value in use at runtime through the <xref:System.GC.GetConfigurationVariables?displayProperty=nameWithType> API.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.LOHThreshold` | *decimal value* | .NET Core 3.0 |
+| **Environment variable** | `DOTNET_GCLOHThreshold` | *hexadecimal value* | .NET 6 |
+| **app.config for .NET Framework** | [GCLOHThreshold](../../framework/configure-apps/file-schema/runtime/gclohthreshold-element.md) | *decimal value* | .NET Framework 4.8 |
+
+[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
+
+#### Examples
+
+*runtimeconfig.json* file:
+
+```json
+{
+   "runtimeOptions": {
+      "configProperties": {
+         "System.GC.LOHThreshold": 120000
+      }
+   }
+}
+```
+
+*runtimeconfig.template.json* file:
+
+```json
+{
+   "configProperties": {
+      "System.GC.LOHThreshold": 120000
+   }
+}
+```
+
+> [!TIP]
+> If you're setting the option in *runtimeconfig.json*, specify a decimal value. If you're setting the option as an environment variable, specify a hexadecimal value. For example, to set a threshold size of 120,000 bytes, the values would be 120000 for the JSON file and 0x1D4C0 or 1D4C0 for the environment variable.
+
+## Manage resource usage for all GC flavors
+
+The following settings apply to all flavors of the GC:
+
+- [Heap hard limit](#heap-hard-limit)
+- [Heap hard limit percent](#heap-hard-limit-percent)
+- [Per-object-heap hard limits](#per-object-heap-hard-limits)
+- [Per-object-heap hard limit percents](#per-object-heap-hard-limit-percents)
+- [Large pages](#large-pages)
+- [Region range](#region-range)
+- [Region size](#region-size)
+- [High memory percent](#high-memory-percent)
+- [Retain VM](#retain-vm)
+- [Conserve memory](#conserve-memory)
+
+### Heap hard limit
+
+- The heap hard limit is defined as the maximum commit size, in bytes, for the GC heap and GC bookkeeping.
+- This setting only applies to 64-bit computers.
+- If running in a memory-constrained environment (e.g., a container) and this value is unset, the default value is either 20 MB or the [heap hard limit percent](#heap-hard-limit-percent) of the container limit, whichever is larger.
+- This setting is ignored if the [Per-object-heap hard limits](#per-object-heap-hard-limits) are configured.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.HeapHardLimit` | *decimal value* | .NET Core 3.0 |
+| **Environment variable** | `DOTNET_GCHeapHardLimit` | *hexadecimal value* | .NET 6 |
+
+[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
+
+#### Examples
+
+*runtimeconfig.json* file:
+
+```json
+{
+   "runtimeOptions": {
+      "configProperties": {
+         "System.GC.HeapHardLimit": 209715200
+      }
+   }
+}
+```
+
+*runtimeconfig.template.json* file:
+
+```json
+{
+   "configProperties": {
+      "System.GC.HeapHardLimit": 209715200
+   }
+}
+```
+
+> [!TIP]
+> If you're setting the option in *runtimeconfig.json*, specify a decimal value. If you're setting the option as an environment variable, specify a hexadecimal value. For example, to specify a heap hard limit of 200 mebibytes (MiB), the values would be 209715200 for the JSON file and 0xC800000 or C800000 for the environment variable.
+
+### Heap hard limit percent
+
+- Specifies the heap hard limit as a percentage of total physical memory.
+- If the process runs inside an environment with a set memory limit (for example, a container), that limit is treated as the total physical memory. In such environments, the default value is 75%.
+- This setting only applies to 64-bit computers.
+- This setting is ignored if the [Per-object-heap hard limits](#per-object-heap-hard-limits) are configured or the [heap hard limit](#heap-hard-limit) is configured.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.HeapHardLimitPercent` | *decimal value* | .NET Core 3.0 |
+| **Environment variable** | `DOTNET_GCHeapHardLimitPercent` | *hexadecimal value* | .NET 6 |
+
+[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
+
+#### Examples
+
+*runtimeconfig.json* file:
+
+```json
+{
+   "runtimeOptions": {
+      "configProperties": {
+         "System.GC.HeapHardLimitPercent": 30
+      }
+   }
+}
+```
+
+*runtimeconfig.template.json* file:
+
+```json
+{
+   "configProperties": {
+      "System.GC.HeapHardLimitPercent": 30
+   }
+}
+```
+
+> [!TIP]
+> If you're setting the option in *runtimeconfig.json*, specify a decimal value. If you're setting the option as an environment variable, specify a hexadecimal value. For example, to limit the heap usage to 30%, the values would be 30 for the JSON file and 0x1E or 1E for the environment variable.
+
+### Per-object-heap hard limits
+
+You can specify the GC's heap hard limit on a per-object-heap basis. The different heaps are the large object heap (LOH), small object heap (SOH), and pinned object heap (POH).
+
+- If you specify a value for any of the `DOTNET_GCHeapHardLimitSOH`, `DOTNET_GCHeapHardLimitLOH`, or `DOTNET_GCHeapHardLimitPOH` settings, you must also specify a value for `DOTNET_GCHeapHardLimitSOH` and `DOTNET_GCHeapHardLimitLOH`. If you don't, the runtime will fail to initialize.
+- The default value for `DOTNET_GCHeapHardLimitPOH` is 0. `DOTNET_GCHeapHardLimitSOH` and `DOTNET_GCHeapHardLimitLOH` don't have default values.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.HeapHardLimitSOH` | *decimal value* | .NET 5 |
+| **Environment variable** | `DOTNET_GCHeapHardLimitSOH` | *hexadecimal value* | .NET 6 |
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.HeapHardLimitLOH` | *decimal value* | .NET 5 |
+| **Environment variable** | `DOTNET_GCHeapHardLimitLOH` | *hexadecimal value* | .NET 6 |
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.HeapHardLimitPOH` | *decimal value* | .NET 5 |
+| **Environment variable** | `DOTNET_GCHeapHardLimitPOH` | *hexadecimal value* | .NET 6 |
+
+These configuration settings don't have specific MSBuild properties. However, you can add a `RuntimeHostConfigurationOption` MSBuild item instead. Use the *runtimeconfig.json* setting name as the value of the `Include` attribute. For an example, see [MSBuild properties](index.md#msbuild-properties).
+
+> [!TIP]
+> If you're setting the option in *runtimeconfig.json*, specify a decimal value. If you're setting the option as an environment variable, specify a hexadecimal value. For example, to specify a heap hard limit of 200 mebibytes (MiB), the values would be 209715200 for the JSON file and 0xC800000 or C800000 for the environment variable.
+
+### Per-object-heap hard limit percents
+
+You can specify the GC's heap hard limit on a per-object-heap basis. The different heaps are the large object heap (LOH), small object heap (SOH), and pinned object heap (POH).
+
+- If you specify a value for any of the `DOTNET_GCHeapHardLimitSOHPercent`, `DOTNET_GCHeapHardLimitLOHPercent`, or `DOTNET_GCHeapHardLimitPOHPercent` settings, you must also specify a value for `DOTNET_GCHeapHardLimitSOHPercent` and `DOTNET_GCHeapHardLimitLOHPercent`. If you don't, the runtime will fail to initialize.
+- These settings are ignored if `DOTNET_GCHeapHardLimitSOH`, `DOTNET_GCHeapHardLimitLOH`, and `DOTNET_GCHeapHardLimitPOH` are specified.
+- A value of 1 means that GC uses 1% of total physical memory for that object heap.
+- Each value must be greater than zero and less than 100. Additionally, the sum of the three percentage values must be less than 100. Otherwise, the runtime will fail to initialize.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.HeapHardLimitSOHPercent` | *decimal value* | .NET 5 |
+| **Environment variable** | `DOTNET_GCHeapHardLimitSOHPercent` | *hexadecimal value* | .NET 6 |
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.HeapHardLimitLOHPercent` | *decimal value* | .NET 5 |
+| **Environment variable** | `DOTNET_GCHeapHardLimitLOHPercent` | *hexadecimal value* | .NET 6 |
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.HeapHardLimitPOHPercent` | *decimal value* | .NET 5 |
+| **Environment variable** | `DOTNET_GCHeapHardLimitPOHPercent` | *hexadecimal value* | .NET 6 |
+
+These configuration settings don't have specific MSBuild properties. However, you can add a `RuntimeHostConfigurationOption` MSBuild item instead. Use the *runtimeconfig.json* setting name as the value of the `Include` attribute. For an example, see [MSBuild properties](index.md#msbuild-properties).
+
+> [!TIP]
+> If you're setting the option in *runtimeconfig.json*, specify a decimal value. If you're setting the option as an environment variable, specify a hexadecimal value. For example, to limit the heap usage to 30%, the values would be 30 for the JSON file and 0x1E or 1E for the environment variable.
+
+### Large pages
+
+- Specifies whether large pages should be used when a heap hard limit is set.
+- Default: Don't use large pages when a heap hard limit is set. This is equivalent to setting the value to `0`.
+- This is an experimental setting.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | N/A | N/A | N/A |
+| **Environment variable** | `DOTNET_GCLargePages` | `0` - disabled<br/>`1` - enabled | .NET 6 |
+
+### Region range
+
+Starting in .NET 7, the GC heap switched its physical representation from segments to regions for 64-bit Windows and Linux. (For more information, see [Maoni Stephens' blog article](https://itnext.io/how-segments-and-regions-differ-in-decommitting-memory-in-the-net-7-gc-68c58465ab5a).) With this change, the GC reserves a range of virtual memory during initialization. Note that this is only reserving memory, not committing (the GC heap size is committed memory). It's merely a range to define the maximum range the GC heap can commit. Most applications don't need to commit nearly this much.
+
+If you don't have any other configurations and aren't running in a memory-constrained environment (which would cause some GC configs to be set), by default 256 GB is reserved. If you have more than 256 GB physical memory available, it will be twice that amount.
+
+If the per heap hard limits are set, the reserve range is the same as the total hard limit. If a single hard limit config is set, this range is five times that amount.
+
+This range is limited by the amount of total virtual memory. Normally on 64-bit this is never a problem, but there could be a virtual memory limit set on a process. This range is limited by half that amount. For example, if you set the `HeapHardLimit` config to 1 GB and have a 4 GB virtual memory limit set on the process, this range is `min (5x1GB, 4GB/2)`, which is 2 GB.
+
+You can use the <xref:System.GC.GetConfigurationVariables?displayProperty=nameWithType> API to see the value of this range under the name `GCRegionRange`. If you do get `E_OUTOFMEMORY` during the runtime initialization and want to see if it's due to reserving this range, look at the `VirtualAlloc` call with `MEM_RESERVE` on Windows, or the `mmap` call with `PROT_NONE` on Linux, during GC initialization and see if the OOM is from that call. If this reserve call is failing, you can change it via the following configuration settings. The recommendation for the reservation amount is two to five times the committed size for your GC heap. If your scenario does not make many large allocations (this could be any allocations on UOH or larger than the UOH region size), twice the committed size should be safe. Otherwise, you might want to make it larger so you don't incur too frequent full-compacting GCs to make space for those larger regions. If you don't know your GC heap's committed size, you can set this to two times the amount of physical memory available to your process.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.RegionRange` | *decimal value* | .NET 10 |
+| **Environment variable** | `DOTNET_GCRegionRange` | *hexadecimal value* | .NET 7 |
+
+[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
+
+### Region size
+
+Starting with .NET 7, the GC heap switched its physical representation from segments to regions for 64-bit Windows and Linux. (For more information, see [Maoni Stephens' blog article](https://itnext.io/how-segments-and-regions-differ-in-decommitting-memory-in-the-net-7-gc-68c58465ab5a).) By default, each region is 4 MB for SOH. For UOH (LOH and POH), it's eight times the SOH region size. You can use this config to change the SOH region size, and the UOH regions will be adjusted accordingly.
+
+Regions are only allocated when needed, so in general you don't need to worry about the region size. However, there are two cases where you might want to adjust this size:
+
+- For processes that have very small GC heaps, changing the region size to be smaller is beneficial for native memory usage from GC's own bookkeeping. The recommendation is 1 MB.
+- On Linux, if you need to reduce the number of memory mappings, you can change the region size to be larger, for example, 32 MB.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.RegionSize` | *decimal value* | .NET 10 |
+| **Environment variable** | `DOTNET_GCRegionSize` | *hexadecimal value* | .NET 7 |
+
+[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
+
+### High memory percent
+
+Memory load is indicated by the percentage of physical memory in use. By default, when the physical memory load reaches **90%**, garbage collection becomes more aggressive about doing full, compacting garbage collections to avoid paging. When memory load is below 90%, GC favors background collections for full garbage collections, which have shorter pauses but don't reduce the total heap size by much. On machines with a significant amount of memory (80GB or more), the default load threshold is between 90% and 97%.
+
+The high memory load threshold can be adjusted by the `DOTNET_GCHighMemPercent` environment variable or `System.GC.HighMemoryPercent` JSON configuration setting. Consider adjusting the threshold if you want to control heap size. For example, for the dominant process on a machine with 64GB of memory, it's reasonable for GC to start reacting when there's 10% of memory available. But for smaller processes, for example, a process that only consumes 1GB of memory, GC can comfortably run with less than 10% of memory available. For these smaller processes, consider setting the threshold higher. On the other hand, if you want larger processes to have smaller heap sizes (even when there's plenty of physical memory available), lowering this threshold is an effective way for GC to react sooner to compact the heap down.
+
+> [!NOTE]
+> For processes running in a container, GC considers the physical memory based on the container limit.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.HighMemoryPercent` | *decimal value* | .NET 5 |
+| **Environment variable** | `DOTNET_GCHighMemPercent` | *hexadecimal value* | .NET 6 |
+
+[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
+
+> [!TIP]
+> If you're setting the option in *runtimeconfig.json*, specify a decimal value. If you're setting the option as an environment variable, specify a hexadecimal value. For example, to set the high memory threshold to 75%, the values would be 75 for the JSON file and 0x4B or 4B for the environment variable.
+
+### Retain VM
+
+- Configures whether segments that should be deleted are put on a standby list for future use or are released back to the operating system (OS).
+- Default: Release segments back to the operating system. This is equivalent to setting the value to `false`.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.RetainVM` | `false` - release to OS<br/>`true` - put on standby | .NET Core 1.0 |
+| **MSBuild property** | `RetainVMGarbageCollection` | `false` - release to OS<br/>`true` - put on standby | .NET Core 1.0 |
+| **Environment variable** | `DOTNET_GCRetainVM` | `0` - release to OS<br/>`1` - put on standby | .NET 6 |
+
+#### Examples
+
+*runtimeconfig.json* file:
+
+```json
+{
+   "runtimeOptions": {
+      "configProperties": {
+         "System.GC.RetainVM": true
+      }
+   }
+}
+```
+
+*runtimeconfig.template.json* file:
+
+```json
+{
+   "configProperties": {
+      "System.GC.RetainVM": true
+   }
+}
+```
+
+Project file:
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RetainVMGarbageCollection>true</RetainVMGarbageCollection>
+  </PropertyGroup>
+
+</Project>
+```
+
+### Conserve memory
+
+- Configures the garbage collector to conserve memory at the expense of more frequent garbage collections and possibly longer pause times.
+- Default value is 0 - this implies no change.
+- Besides the default value 0, values between 1 and 9 (inclusive) are valid. The higher the value, the more the garbage collector tries to conserve memory and thus to keep the heap small.
+- If the value is non-zero, the large object heap will be compacted automatically if it has too much fragmentation.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.ConserveMemory` | `0` - `9` | .NET 6 |
+| **Environment variable** | `DOTNET_GCConserveMemory` | `0` -`9` | .NET 6 |
+| **app.config for .NET Framework** | [GCConserveMemory](../../framework/configure-apps/file-schema/runtime/gcconservememory-element.md) | `0` -`9` | .NET Framework 4.8 |
+
+[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
+
+Example *app.config* file:
+
+```xml
+
+<configuration>
+  <runtime>
+    <GCConserveMemory enabled="5"/>
+  </runtime>
+</configuration>
+```
+
+> [!TIP]
+> Experiment with different numbers to see which value works best for you. Start with a value between 5 and 7.
+
+## Manage resource usage for Server GC
+
+The following settings affect the number of Server GC threads and if/how they are affinitized to cores. They have no effect on Workstation GC.
+
+- [Heap count](#heap-count)
 - [Affinitize](#affinitize)
 - [Affinitize mask](#affinitize-mask)
 - [Affinitize ranges](#affinitize-ranges)
 - [CPU groups](#cpu-groups)
-- [Heap count](#heap-count)
-- [Heap limit](#heap-limit)
-- [Heap limit percent](#heap-limit-percent)
-- [High memory percent](#high-memory-percent)
-- [Per-object-heap limits](#per-object-heap-limits)
-- [Per-object-heap limit percents](#per-object-heap-limit-percents)
-- [Retain VM](#retain-vm)
+- [DATAS](#dynamic-adaptation-to-application-sizes-datas)
 
-For more information about some of these settings, see the [Middle ground between workstation and server GC](https://devblogs.microsoft.com/dotnet/middle-ground-between-server-and-workstation-gc/) blog entry.
+For more information about the first 3 settings, see the [Middle ground between workstation and server GC](https://devblogs.microsoft.com/dotnet/middle-ground-between-server-and-workstation-gc/) blog entry.
 
 ### Heap count
 
@@ -238,7 +599,6 @@ For more information about some of these settings, see the [Middle ground betwee
 | | Setting name | Values | Version introduced |
 | - | - | - | - |
 | **runtimeconfig.json** | `System.GC.HeapCount` | *decimal value* | .NET Core 3.0 |
-| **Environment variable** | `COMPlus_GCHeapCount` | *hexadecimal value* | .NET Core 3.0 |
 | **Environment variable** | `DOTNET_GCHeapCount` | *hexadecimal value* | .NET 6 |
 | **app.config for .NET Framework** | [GCHeapCount](../../framework/configure-apps/file-schema/runtime/gcheapcount-element.md) | *decimal value* | .NET Framework 4.6.2 |
 
@@ -271,6 +631,44 @@ For more information about some of these settings, see the [Middle ground betwee
 > [!TIP]
 > If you're setting the option in *runtimeconfig.json*, specify a decimal value. If you're setting the option as an environment variable, specify a hexadecimal value. For example, to limit the number of heaps to 16, the values would be 16 for the JSON file and 0x10 or 10 for the environment variable.
 
+### Affinitize
+
+- Specifies whether to *affinitize* garbage collection threads with processors. To affinitize a GC thread means that it can only run on its specific CPU. A heap is created for each GC thread.
+- Applies to server garbage collection only.
+- Default: Affinitize garbage collection threads with processors. This is equivalent to setting the value to `false`.
+
+| | Setting name | Values | Version introduced |
+| - | - | - | - |
+| **runtimeconfig.json** | `System.GC.NoAffinitize` | `false` - affinitize<br/>`true` - don't affinitize | .NET Core 3.0 |
+| **Environment variable** | `DOTNET_GCNoAffinitize` | `0` - affinitize<br/>`1` - don't affinitize | .NET 6 |
+| **app.config for .NET Framework** | [GCNoAffinitize](../../framework/configure-apps/file-schema/runtime/gcnoaffinitize-element.md) | `false` - affinitize<br/>`true` - don't affinitize | .NET Framework 4.6.2 |
+
+[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
+
+#### Examples
+
+*runtimeconfig.json* file:
+
+```json
+{
+   "runtimeOptions": {
+      "configProperties": {
+         "System.GC.NoAffinitize": true
+      }
+   }
+}
+```
+
+*runtimeconfig.template.json* file:
+
+```json
+{
+   "configProperties": {
+      "System.GC.NoAffinitize": true
+   }
+}
+```
+
 ### Affinitize mask
 
 - Specifies the exact processors that garbage collector threads should use.
@@ -281,7 +679,6 @@ For more information about some of these settings, see the [Middle ground betwee
 | | Setting name | Values | Version introduced |
 | - | - | - | - |
 | **runtimeconfig.json** | `System.GC.HeapAffinitizeMask` | *decimal value* | .NET Core 3.0 |
-| **Environment variable** | `COMPlus_GCHeapAffinitizeMask` | *hexadecimal value* | .NET Core 3.0 |
 | **Environment variable** | `DOTNET_GCHeapAffinitizeMask` | *hexadecimal value* | .NET 6 |
 | **app.config for .NET Framework** | [GCHeapAffinitizeMask](../../framework/configure-apps/file-schema/runtime/gcheapaffinitizemask-element.md) | *decimal value* | .NET Framework 4.6.2 |
 
@@ -324,7 +721,6 @@ For more information about some of these settings, see the [Middle ground betwee
 | | Setting name | Values | Version introduced |
 | - | - | - | - |
 | **runtimeconfig.json** | `System.GC.HeapAffinitizeRanges` | Comma-separated list of processor numbers or ranges of processor numbers.<br/>Unix example: "1-10,12,50-52,70"<br/>Windows example: "0:1-10,0:12,1:50-52,1:7" | .NET Core 3.0 |
-| **Environment variable** | `COMPlus_GCHeapAffinitizeRanges` | Comma-separated list of processor numbers or ranges of processor numbers.<br/>Unix example: "1-10,12,50-52,70"<br/>Windows example: "0:1-10,0:12,1:50-52,1:7" | .NET Core 3.0 |
 | **Environment variable** | `DOTNET_GCHeapAffinitizeRanges` | Comma-separated list of processor numbers or ranges of processor numbers.<br/>Unix example: "1-10,12,50-52,70"<br/>Windows example: "0:1-10,0:12,1:50-52,1:7" | .NET 6 |
 
 [!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
@@ -369,7 +765,6 @@ For more information about some of these settings, see the [Middle ground betwee
 | | Setting name | Values | Version introduced |
 | - | - | - | - |
 | **runtimeconfig.json** | `System.GC.CpuGroup` | `false` - disabled<br/>`true` - enabled | .NET 5 |
-| **Environment variable** | `COMPlus_GCCpuGroup` | `0` - disabled<br/>`1` - enabled | .NET Core 1.0 |
 | **Environment variable** | `DOTNET_GCCpuGroup` | `0` - disabled<br/>`1` - enabled | .NET 6 |
 | **app.config for .NET Framework** | [GCCpuGroup](../../framework/configure-apps/file-schema/runtime/gccpugroup-element.md) | `false` - disabled<br/>`true` - enabled |  |
 
@@ -378,401 +773,9 @@ For more information about some of these settings, see the [Middle ground betwee
 > [!NOTE]
 > To configure the common language runtime (CLR) to also distribute threads from the thread pool across all CPU groups, enable the [Thread_UseAllCpuGroups element](../../framework/configure-apps/file-schema/runtime/thread-useallcpugroups-element.md) option. For .NET Core apps, you can enable this option by setting the value of the `DOTNET_Thread_UseAllCpuGroups` environment variable to `1`.
 
-### Affinitize
+### Dynamic adaptation to application sizes (DATAS)
 
-- Specifies whether to *affinitize* garbage collection threads with processors. To affinitize a GC thread means that it can only run on its specific CPU. A heap is created for each GC thread.
-- Applies to server garbage collection only.
-- Default: Affinitize garbage collection threads with processors. This is equivalent to setting the value to `false`.
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.NoAffinitize` | `false` - affinitize<br/>`true` - don't affinitize | .NET Core 3.0 |
-| **Environment variable** | `COMPlus_GCNoAffinitize` | `0` - affinitize<br/>`1` - don't affinitize | .NET Core 3.0 |
-| **Environment variable** | `DOTNET_GCNoAffinitize` | `0` - affinitize<br/>`1` - don't affinitize | .NET 6 |
-| **app.config for .NET Framework** | [GCNoAffinitize](../../framework/configure-apps/file-schema/runtime/gcnoaffinitize-element.md) | `false` - affinitize<br/>`true` - don't affinitize | .NET Framework 4.6.2 |
-
-[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
-
-#### Examples
-
-*runtimeconfig.json* file:
-
-```json
-{
-   "runtimeOptions": {
-      "configProperties": {
-         "System.GC.NoAffinitize": true
-      }
-   }
-}
-```
-
-*runtimeconfig.template.json* file:
-
-```json
-{
-   "configProperties": {
-      "System.GC.NoAffinitize": true
-   }
-}
-```
-
-### Heap limit
-
-- Specifies the maximum commit size, in bytes, for the GC heap and GC bookkeeping.
-- This setting only applies to 64-bit computers.
-- This setting is ignored if the [Per-object-heap limits](#per-object-heap-limits) are configured.
-- The default value, which only applies in certain cases, is the greater of 20 MB or 75% of the memory limit on the container. The default value applies if:
-
-  - The process is running inside a container that has a specified memory limit.
-  - [System.GC.HeapHardLimitPercent](#heap-limit-percent) is not set.
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.HeapHardLimit` | *decimal value* | .NET Core 3.0 |
-| **Environment variable** | `COMPlus_GCHeapHardLimit` | *hexadecimal value* | .NET Core 3.0 |
-| **Environment variable** | `DOTNET_GCHeapHardLimit` | *hexadecimal value* | .NET 6 |
-
-[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
-
-#### Examples
-
-*runtimeconfig.json* file:
-
-```json
-{
-   "runtimeOptions": {
-      "configProperties": {
-         "System.GC.HeapHardLimit": 209715200
-      }
-   }
-}
-```
-
-*runtimeconfig.template.json* file:
-
-```json
-{
-   "configProperties": {
-      "System.GC.HeapHardLimit": 209715200
-   }
-}
-```
-
-> [!TIP]
-> If you're setting the option in *runtimeconfig.json*, specify a decimal value. If you're setting the option as an environment variable, specify a hexadecimal value. For example, to specify a heap hard limit of 200 mebibytes (MiB), the values would be 209715200 for the JSON file and 0xC800000 or C800000 for the environment variable.
-
-### Heap limit percent
-
-- Specifies the allowable GC heap usage as a percentage of the total physical memory.
-- If [System.GC.HeapHardLimit](#heap-limit) is also set, this setting is ignored.
-- This setting only applies to 64-bit computers.
-- If the process is running inside a container that has a specified memory limit, the percentage is calculated as a percentage of that memory limit.
-- This setting is ignored if the [Per-object-heap limits](#per-object-heap-limits) are configured.
-- The default value, which only applies in certain cases, is the greater of 20 MB or 75% of the memory limit on the container. The default value applies if:
-
-  - The process is running inside a container that has a specified memory limit.
-  - [System.GC.HeapHardLimit](#heap-limit) is not set.
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.HeapHardLimitPercent` | *decimal value* | .NET Core 3.0 |
-| **Environment variable** | `COMPlus_GCHeapHardLimitPercent` | *hexadecimal value* | .NET Core 3.0 |
-| **Environment variable** | `DOTNET_GCHeapHardLimitPercent` | *hexadecimal value* | .NET 6 |
-
-[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
-
-#### Examples
-
-*runtimeconfig.json* file:
-
-```json
-{
-   "runtimeOptions": {
-      "configProperties": {
-         "System.GC.HeapHardLimitPercent": 30
-      }
-   }
-}
-```
-
-*runtimeconfig.template.json* file:
-
-```json
-{
-   "configProperties": {
-      "System.GC.HeapHardLimitPercent": 30
-   }
-}
-```
-
-> [!TIP]
-> If you're setting the option in *runtimeconfig.json*, specify a decimal value. If you're setting the option as an environment variable, specify a hexadecimal value. For example, to limit the heap usage to 30%, the values would be 30 for the JSON file and 0x1E or 1E for the environment variable.
-
-### Per-object-heap limits
-
-You can specify the GC's allowable heap usage on a per-object-heap basis. The different heaps are the large object heap (LOH), small object heap (SOH), and pinned object heap (POH).
-
-- If you specify a value for any of the `DOTNET_GCHeapHardLimitSOH`, `DOTNET_GCHeapHardLimitLOH`, or `DOTNET_GCHeapHardLimitPOH` settings, you must also specify a value for `DOTNET_GCHeapHardLimitSOH` and `DOTNET_GCHeapHardLimitLOH`. If you don't, the runtime will fail to initialize.
-- The default value for `DOTNET_GCHeapHardLimitPOH` is 0. `DOTNET_GCHeapHardLimitSOH` and `DOTNET_GCHeapHardLimitLOH` don't have default values.
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.HeapHardLimitSOH` | *decimal value* | .NET 5 |
-| **Environment variable** | `COMPlus_GCHeapHardLimitSOH` | *hexadecimal value* | .NET 5 |
-| **Environment variable** | `DOTNET_GCHeapHardLimitSOH` | *hexadecimal value* | .NET 6 |
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.HeapHardLimitLOH` | *decimal value* | .NET 5 |
-| **Environment variable** | `COMPlus_GCHeapHardLimitLOH` | *hexadecimal value* | .NET 5 |
-| **Environment variable** | `DOTNET_GCHeapHardLimitLOH` | *hexadecimal value* | .NET 6 |
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.HeapHardLimitPOH` | *decimal value* | .NET 5 |
-| **Environment variable** | `COMPlus_GCHeapHardLimitPOH` | *hexadecimal value* | .NET 5 |
-| **Environment variable** | `DOTNET_GCHeapHardLimitPOH` | *hexadecimal value* | .NET 6 |
-
-These configuration settings don't have specific MSBuild properties. However, you can add a `RuntimeHostConfigurationOption` MSBuild item instead. Use the *runtimeconfig.json* setting name as the value of the `Include` attribute. For an example, see [MSBuild properties](index.md#msbuild-properties).
-
-> [!TIP]
-> If you're setting the option in *runtimeconfig.json*, specify a decimal value. If you're setting the option as an environment variable, specify a hexadecimal value. For example, to specify a heap hard limit of 200 mebibytes (MiB), the values would be 209715200 for the JSON file and 0xC800000 or C800000 for the environment variable.
-
-### Per-object-heap limit percents
-
-You can specify the GC's allowable heap usage on a per-object-heap basis. The different heaps are the large object heap (LOH), small object heap (SOH), and pinned object heap (POH).
-
-- If you specify a value for any of the `DOTNET_GCHeapHardLimitSOHPercent`, `DOTNET_GCHeapHardLimitLOHPercent`, or `DOTNET_GCHeapHardLimitPOHPercent` settings, you must also specify a value for `DOTNET_GCHeapHardLimitSOHPercent` and `DOTNET_GCHeapHardLimitLOHPercent`. If you don't, the runtime will fail to initialize.
-- These settings are ignored if `DOTNET_GCHeapHardLimitSOH`, `DOTNET_GCHeapHardLimitLOH`, and `DOTNET_GCHeapHardLimitPOH` are specified.
-- A value of 1 means that GC uses 1% of total physical memory for that object heap.
-- Each value must be greater than zero and less than 100. Additionally, the sum of the three percentage values must be less than 100. Otherwise, the runtime will fail to initialize.
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.HeapHardLimitSOHPercent` | *decimal value* | .NET 5 |
-| **Environment variable** | `COMPlus_GCHeapHardLimitSOHPercent` | *hexadecimal value* | .NET 5 |
-| **Environment variable** | `DOTNET_GCHeapHardLimitSOHPercent` | *hexadecimal value* | .NET 6 |
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.HeapHardLimitLOHPercent` | *decimal value* | .NET 5 |
-| **Environment variable** | `COMPlus_GCHeapHardLimitLOHPercent` | *hexadecimal value* | .NET 5 |
-| **Environment variable** | `DOTNET_GCHeapHardLimitLOHPercent` | *hexadecimal value* | .NET 6 |
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.HeapHardLimitPOHPercent` | *decimal value* | .NET 5 |
-| **Environment variable** | `COMPlus_GCHeapHardLimitPOHPercent` | *hexadecimal value* | .NET 5 |
-| **Environment variable** | `DOTNET_GCHeapHardLimitPOHPercent` | *hexadecimal value* | .NET 6 |
-
-These configuration settings don't have specific MSBuild properties. However, you can add a `RuntimeHostConfigurationOption` MSBuild item instead. Use the *runtimeconfig.json* setting name as the value of the `Include` attribute. For an example, see [MSBuild properties](index.md#msbuild-properties).
-
-> [!TIP]
-> If you're setting the option in *runtimeconfig.json*, specify a decimal value. If you're setting the option as an environment variable, specify a hexadecimal value. For example, to limit the heap usage to 30%, the values would be 30 for the JSON file and 0x1E or 1E for the environment variable.
-
-### High memory percent
-
-Memory load is indicated by the percentage of physical memory in use. By default, when the physical memory load reaches **90%**, garbage collection becomes more aggressive about doing full, compacting garbage collections to avoid paging. When memory load is below 90%, GC favors background collections for full garbage collections, which have shorter pauses but don't reduce the total heap size by much. On machines with a significant amount of memory (80GB or more), the default load threshold is between 90% and 97%.
-
-The high memory load threshold can be adjusted by the `DOTNET_GCHighMemPercent` environment variable or `System.GC.HighMemoryPercent` JSON configuration setting. Consider adjusting the threshold if you want to control heap size. For example, for the dominant process on a machine with 64GB of memory, it's reasonable for GC to start reacting when there's 10% of memory available. But for smaller processes, for example, a process that only consumes 1GB of memory, GC can comfortably run with less than 10% of memory available. For these smaller processes, consider setting the threshold higher. On the other hand, if you want larger processes to have smaller heap sizes (even when there's plenty of physical memory available), lowering this threshold is an effective way for GC to react sooner to compact the heap down.
-
-> [!NOTE]
-> For processes running in a container, GC considers the physical memory based on the container limit.
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.HighMemoryPercent` | *decimal value* | .NET 5 |
-| **Environment variable** | `COMPlus_GCHighMemPercent` | *hexadecimal value* | .NET Core 3.0<br/>.NET Framework 4.7.2 |
-| **Environment variable** | `DOTNET_GCHighMemPercent` | *hexadecimal value* | .NET 6 |
-
-[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
-
-> [!TIP]
-> If you're setting the option in *runtimeconfig.json*, specify a decimal value. If you're setting the option as an environment variable, specify a hexadecimal value. For example, to set the high memory threshold to 75%, the values would be 75 for the JSON file and 0x4B or 4B for the environment variable.
-
-### Retain VM
-
-- Configures whether segments that should be deleted are put on a standby list for future use or are released back to the operating system (OS).
-- Default: Release segments back to the operating system. This is equivalent to setting the value to `false`.
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.RetainVM` | `false` - release to OS<br/>`true` - put on standby | .NET Core 1.0 |
-| **MSBuild property** | `RetainVMGarbageCollection` | `false` - release to OS<br/>`true` - put on standby | .NET Core 1.0 |
-| **Environment variable** | `COMPlus_GCRetainVM` | `0` - release to OS<br/>`1` - put on standby | .NET Core 1.0 |
-| **Environment variable** | `DOTNET_GCRetainVM` | `0` - release to OS<br/>`1` - put on standby | .NET 6 |
-
-#### Examples
-
-*runtimeconfig.json* file:
-
-```json
-{
-   "runtimeOptions": {
-      "configProperties": {
-         "System.GC.RetainVM": true
-      }
-   }
-}
-```
-
-*runtimeconfig.template.json* file:
-
-```json
-{
-   "configProperties": {
-      "System.GC.RetainVM": true
-   }
-}
-```
-
-Project file:
-
-```xml
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <RetainVMGarbageCollection>true</RetainVMGarbageCollection>
-  </PropertyGroup>
-
-</Project>
-```
-
-## Large pages
-
-- Specifies whether large pages should be used when a heap hard limit is set.
-- Default: Don't use large pages when a heap hard limit is set. This is equivalent to setting the value to `0`.
-- This is an experimental setting.
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | N/A | N/A | N/A |
-| **Environment variable** | `COMPlus_GCLargePages` | `0` - disabled<br/>`1` - enabled | .NET Core 3.0 |
-| **Environment variable** | `DOTNET_GCLargePages` | `0` - disabled<br/>`1` - enabled | .NET 6 |
-
-## Allow large objects
-
-- Configures garbage collector support on 64-bit platforms for arrays that are greater than 2 gigabytes (GB) in total size.
-- Default: GC supports arrays greater than 2-GB. This is equivalent to setting the value to `1`.
-- This option may become obsolete in a future version of .NET.
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | N/A | N/A | N/A |
-| **Environment variable** | `COMPlus_gcAllowVeryLargeObjects` | `1` - enabled<br/> `0` - disabled | .NET Core 1.0 |
-| **Environment variable** | `DOTNET_gcAllowVeryLargeObjects` | `1` - enabled<br/> `0` - disabled | .NET 6 |
-| **app.config for .NET Framework** | [gcAllowVeryLargeObjects](../../framework/configure-apps/file-schema/runtime/gcallowverylargeobjects-element.md) | `1` - enabled<br/> `0` - disabled | .NET Framework 4.5 |
-
-## Large object heap threshold
-
-- Specifies the threshold size, in bytes, that causes objects to go on the large object heap (LOH).
-- The default threshold is 85,000 bytes.
-- The value you specify must be larger than the default threshold.
-- The value might be capped by the runtime to the maximum possible size for the current configuration. You can inspect the value in use at run time through the <xref:System.GC.GetConfigurationVariables?displayProperty=nameWithType> API.
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.LOHThreshold` | *decimal value* | .NET Core 1.0 |
-| **Environment variable** | `COMPlus_GCLOHThreshold` | *hexadecimal value* | .NET Core 1.0 |
-| **Environment variable** | `DOTNET_GCLOHThreshold` | *hexadecimal value* | .NET 6 |
-| **app.config for .NET Framework** | [GCLOHThreshold](../../framework/configure-apps/file-schema/runtime/gclohthreshold-element.md) | *decimal value* | .NET Framework 4.8 |
-
-[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
-
-### Examples
-
-*runtimeconfig.json* file:
-
-```json
-{
-   "runtimeOptions": {
-      "configProperties": {
-         "System.GC.LOHThreshold": 120000
-      }
-   }
-}
-```
-
-*runtimeconfig.template.json* file:
-
-```json
-{
-   "configProperties": {
-      "System.GC.LOHThreshold": 120000
-   }
-}
-```
-
-> [!TIP]
-> If you're setting the option in *runtimeconfig.json*, specify a decimal value. If you're setting the option as an environment variable, specify a hexadecimal value. For example, to set a threshold size of 120,000 bytes, the values would be 120000 for the JSON file and 0x1D4C0 or 1D4C0 for the environment variable.
-
-## Standalone GC
-
-To use a standalone garbage collector instead of the default GC implementation, you can specify either the *[path](#path)* (in .NET 9 and later versions) or the *[name](#name)* of a GC native library.
-
-### Path
-
-- Specifies the full path of a GC native library that the runtime loads in place of the default GC implementation. To be secure, this location should be protected from potentially malicious tampering.
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.Path` | *string_path* | .NET 9 |
-| **Environment variable** | `DOTNET_GCPath` | *string_path* | .NET 9 |
-
-### Name
-
-- Specifies the name of a GC native library that the runtime loads in place of the default GC implementation. The behavior changed in .NET 9 with the introduction of the [Path](#path) config.
-
-  In .NET 8 and previous versions:
-
-  - If only a name of the library is specified, the library must reside in the same directory as the .NET runtime (*coreclr.dll* on Windows, *libcoreclr.so* on Linux, or *libcoreclr.dylib* on OSX).
-  - The value can also be a relative path, for example, if you specify "..\clrgc.dll" on Windows, *clrgc.dll* is loaded from the parent directory of the .NET runtime directory.
-
-  In .NET 9 and later versions, this value specifies a file name only (paths aren't allowed):
-
-  - .NET searches for the name you specify in the directory where the assembly that contains your app's `Main` method resides.
-  - If the file isn't found, the .NET runtime directory is searched.
-
-- This configuration setting is ignored if the [Path](#path) config is specified.
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.Name` | *string_name* | .NET 7 |
-| **Environment variable** | `COMPlus_GCName` | *string_name* | .NET Core 2.0 |
-| **Environment variable** | `DOTNET_GCName` | *string_name* | .NET 6 |
-
-## Conserve memory
-
-- Configures the garbage collector to conserve memory at the expense of more frequent garbage collections and possibly longer pause times.
-- Default value is 0 - this implies no change.
-- Besides the default value 0, values between 1 and 9 (inclusive) are valid. The higher the value, the more the garbage collector tries to conserve memory and thus to keep the heap small.
-- If the value is non-zero, the large object heap will be compacted automatically if it has too much fragmentation.
-
-| | Setting name | Values | Version introduced |
-| - | - | - | - |
-| **runtimeconfig.json** | `System.GC.ConserveMemory` | `0` - `9` | .NET 6 |
-| **Environment variable** | `COMPlus_GCConserveMemory` | `0` -`9` | .NET Framework 4.8 |
-| **Environment variable** | `DOTNET_GCConserveMemory` | `0` -`9` | .NET 6 |
-| **app.config for .NET Framework** | [GCConserveMemory](../../framework/configure-apps/file-schema/runtime/gcconservememory-element.md) | `0` -`9` | .NET Framework 4.8 |
-
-[!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
-
-Example *app.config* file:
-
-```xml
-
-<configuration>
-  <runtime>
-    <GCConserveMemory enabled="5"/>
-  </runtime>
-</configuration>
-```
-
-> [!TIP]
-> Experiment with different numbers to see which value works best for you. Start with a value between 5 and 7.
-
-## Dynamic adaptation to application sizes (DATAS)
+#### Enabling or disabling DATAS
 
 - Configures the garbage collector to use DATAS. DATAS adapts to application memory requirements, meaning the app heap size should be roughly proportional to the long-lived data size.
 - Enabled by default starting in .NET 9.
@@ -783,4 +786,65 @@ Example *app.config* file:
 | **MSBuild property** | `GarbageCollectionAdaptationMode` | `1` - enabled<br/> `0` - disabled | .NET 8 |
 | **runtimeconfig.json**   | `System.GC.DynamicAdaptationMode` | `1` - enabled<br/> `0` - disabled | .NET 8 |
 
+#### Target TCP
+
+DATAS uses the Throughput Cost Percentage (TCP) as the memory cost measurement on throughput. It takes into consideration both GC pauses and how much allocations have to wait. Usually, GC pauses dominates, so you can use the "% pause time in GC" to approximate this cost. There are two transient cases where the allocation wait time can dominate:
+
+- When a process starts, DATAS always starts with one heap. So if there are enough threads allocating, they experience waits.
+- When the workload changes from lighter to heavier, for example, when peak hours start, allocating threads might experience waits during that period of time. That's because it takes a few GCs before the number of heaps gets increased.
+
+DATAS uses 2% as the default TCP, which you can adjust with this setting. It's an integer that is interpreted as a percentage, for example, 5 means the target TCP will be 5%.
+
+|                          | Setting name               | Values    | Version introduced |
+|--------------------------|----------------------------|-----------|--------------------|
+| **runtimeconfig.json** | `System.GC.DTargetTCP` | *decimal value* | .NET 9 |
+| **Environment variable** | `DOTNET_GCDTargetTCP` | *hexadecimal value* | .NET 9 |
+
 [!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
+
+#### Gen0 max budget settings
+
+Adjusting the gen0 budget is one of the key elements DATAS uses to adapt to application sizes. DATAS defines an upper threshold called the BCD (Budget Computed via DATAS) for the total gen0 budget as a function of the application size. The formula to calculate a multiplier is as follows:
+
+$$
+f(\text{application\_size\_in\_MB}) = \frac{20 - \text{conserve\_memory}}{\sqrt{\text{application\_size\_in\_MB}}}
+$$
+
+The formula is then clamped by a maximum and minimum value before it's applied to the application size in MB. If the [conserve memory](#conserve-memory) setting isn't specified, DATAS uses 5 by default. The maximum and minimum value default to 10 and 0.1, respectively.
+
+For example, if the application size is 1 GB, the formula calculates `(20 - 5) / sqrt (1000) = 0.474`. Since it's between 10 and 0.1, clamping has no effect. This means the total gen0 budget is 47.4% of 1 GB which is 474 MB. If the application size is 1 MB, the formula would calculate 15 which would then be adjusted to 10, meaning the total gen0 budget allowed is 10 MB.
+
+Three settings are provided to adjust what the formula calculates and modify the clamping values:
+
+- The percent that will be applied to what `f` calculates.
+
+  |                          | Setting name               | Values    | Version introduced |
+  |--------------------------|----------------------------|-----------|--------------------|
+  | **runtimeconfig.json** | `System.GC.DGen0GrowthPercent` | *decimal value* | .NET 10 |
+  | **Environment variable** | `DOTNET_GCDGen0GrowthPercent` | *hexadecimal value* | .NET 10 |
+
+  [!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
+
+  So if `f` calculates 0.474 and this setting is 200, the multiplier becomes `0.474 * 200% = 0.948` before the clamping is applied.
+
+- The maximum clamping value in permil.
+
+  |                          | Setting name               | Values    | Version introduced |
+  |--------------------------|----------------------------|-----------|--------------------|
+  | **runtimeconfig.json** | `System.GC.DGen0GrowthMaxFactor` | *decimal value* | .NET 10 |
+  | **Environment variable** | `DOTNET_GCDGen0GrowthMaxFactor` | *hexadecimal value* | .NET 10 |
+
+  [!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
+
+  If this value is 20000, it means the maximum clamping value is `20000 * 0.001 = 20`.
+
+- The minimum clamping value in permil.
+
+  |                          | Setting name               | Values    | Version introduced |
+  |--------------------------|----------------------------|-----------|--------------------|
+  | **runtimeconfig.json** | `System.GC.DGen0GrowthMinFactor` | *decimal value* | .NET 10 |
+  | **Environment variable** | `DOTNET_GCDGen0GrowthMinFactor` | *hexadecimal value* | .NET 10 |
+
+  [!INCLUDE [runtimehostconfigurationoption](includes/runtimehostconfigurationoption.md)]
+
+  If this value is 200, the minimum clamping value is `200 * 0.001 = 0.2`.

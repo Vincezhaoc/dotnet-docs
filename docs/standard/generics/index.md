@@ -5,7 +5,6 @@ ms.date: 07/26/2022
 dev_langs:
   - "csharp"
   - "vb"
-  - "cpp"
 helpviewer_keywords:
   - "generic methods, type inference"
   - "generics [.NET], collections"
@@ -29,21 +28,17 @@ ms.assetid: 2994d786-c5c7-4666-ab23-4c83129fe39c
 ---
 # Generics in .NET
 
-Generics let you tailor a method, class, structure, or interface to the precise data type it acts upon. For example, instead of using the <xref:System.Collections.Hashtable> class, which allows keys and values to be of any type, you can use the <xref:System.Collections.Generic.Dictionary%602> generic class and specify the types allowed for the key and the value. Among the benefits of generics are increased code reusability and type safety.
+Generics let you tailor a method, class, structure, or interface to the precise data type it acts upon. For example, instead of using the <xref:System.Collections.Hashtable> class, which allows keys and values to be of any type, you can use the <xref:System.Collections.Generic.Dictionary`2> generic class and specify the types allowed for the key and the value. Among the benefits of generics are increased code reusability and type safety.
 
 ## Define and use generics
 
 Generics are classes, structures, interfaces, and methods that have placeholders (type parameters) for one or more of the types that they store or use. A generic collection class might use a type parameter as a placeholder for the type of objects that it stores. The type parameters appear as the types of its fields and the parameter types of its methods. A generic method might use its type parameter as the type of its return value or as the type of one of its formal parameters.
 
 The following code illustrates a simple generic class definition.
-
- [!code-cpp[Conceptual.Generics.Overview#2](../../../samples/snippets/cpp/VS_Snippets_CLR/conceptual.generics.overview/cpp/source.cpp#2)]
  [!code-csharp[Conceptual.Generics.Overview#2](../../../samples/snippets/csharp/VS_Snippets_CLR/conceptual.generics.overview/cs/source.cs#2)]
  [!code-vb[Conceptual.Generics.Overview#2](../../../samples/snippets/visualbasic/VS_Snippets_CLR/conceptual.generics.overview/vb/source.vb#2)]
 
  When you create an instance of a generic class, you specify the actual types to substitute for the type parameters. This establishes a new generic class, referred to as a constructed generic class, with your chosen types substituted everywhere that the type parameters appear. The result is a type-safe class that is tailored to your choice of types, as the following code illustrates.
-
- [!code-cpp[Conceptual.Generics.Overview#3](../../../samples/snippets/cpp/VS_Snippets_CLR/conceptual.generics.overview/cpp/source.cpp#3)]
  [!code-csharp[Conceptual.Generics.Overview#3](../../../samples/snippets/csharp/VS_Snippets_CLR/conceptual.generics.overview/cs/source.cs#3)]
  [!code-vb[Conceptual.Generics.Overview#3](../../../samples/snippets/visualbasic/VS_Snippets_CLR/conceptual.generics.overview/vb/source.vb#3)]
 
@@ -51,9 +46,9 @@ The following code illustrates a simple generic class definition.
 
 The following terms are used to discuss generics in .NET:
 
-- A *generic type definition* is a class, structure, or interface declaration that functions as a template, with placeholders for the types that it can contain or use. For example, the <xref:System.Collections.Generic.Dictionary%602?displayProperty=nameWithType> class can contain two types: keys and values. Because a generic type definition is only a template, you cannot create instances of a class, structure, or interface that is a generic type definition.
+- A *generic type definition* is a class, structure, or interface declaration that functions as a template, with placeholders for the types that it can contain or use. For example, the <xref:System.Collections.Generic.Dictionary`2?displayProperty=nameWithType> class can contain two types: keys and values. Because a generic type definition is only a template, you cannot create instances of a class, structure, or interface that is a generic type definition.
 
-- *Generic type parameters*, or *type parameters*, are the placeholders in a generic type or method definition. The <xref:System.Collections.Generic.Dictionary%602?displayProperty=nameWithType> generic type has two type parameters, `TKey` and `TValue`, that represent the types of its keys and values.
+- *Generic type parameters*, or *type parameters*, are the placeholders in a generic type or method definition. The <xref:System.Collections.Generic.Dictionary`2?displayProperty=nameWithType> generic type has two type parameters, `TKey` and `TValue`, that represent the types of its keys and values.
 
 - A *constructed generic type*, or *constructed type*, is the result of specifying types for the generic type parameters of a generic type definition.
 
@@ -63,17 +58,15 @@ The following terms are used to discuss generics in .NET:
 
 - *Covariance* and *contravariance* of generic type parameters enable you to use constructed generic types whose type arguments are more derived (covariance) or less derived (contravariance) than a target constructed type. Covariance and contravariance are collectively referred to as *variance*. For more information, see [Covariance and contravariance](covariance-and-contravariance.md).
 
-- *Constraints* are limits placed on generic type parameters. For example, you might limit a type parameter to types that implement the <xref:System.Collections.Generic.IComparer%601?displayProperty=nameWithType> generic interface, to ensure that instances of the type can be ordered. You can also constrain type parameters to types that have a particular base class, that have a parameterless constructor, or that are reference types or value types. Users of the generic type cannot substitute type arguments that do not satisfy the constraints.
+- *Constraints* are limits placed on generic type parameters. For example, you might limit a type parameter to types that implement the <xref:System.Collections.Generic.IComparer`1?displayProperty=nameWithType> generic interface, to ensure that instances of the type can be ordered. You can also constrain type parameters to types that have a particular base class, that have a parameterless constructor, or that are reference types or value types. Users of the generic type cannot substitute type arguments that do not satisfy the constraints.
 
 - A *generic method definition* is a method with two parameter lists: a list of generic type parameters and a list of formal parameters. Type parameters can appear as the return type or as the types of the formal parameters, as the following code shows.
 
-  [!code-cpp[Conceptual.Generics.Overview#4](../../../samples/snippets/cpp/VS_Snippets_CLR/conceptual.generics.overview/cpp/source.cpp#4)]
   [!code-csharp[Conceptual.Generics.Overview#4](../../../samples/snippets/csharp/VS_Snippets_CLR/conceptual.generics.overview/cs/source.cs#4)]
   [!code-vb[Conceptual.Generics.Overview#4](../../../samples/snippets/visualbasic/VS_Snippets_CLR/conceptual.generics.overview/vb/source.vb#4)]
 
   Generic methods can appear on generic or nongeneric types. It's important to note that a method is not generic just because it belongs to a generic type, or even because it has formal parameters whose types are the generic parameters of the enclosing type. A method is generic only if it has its own list of type parameters. In the following code, only method `G` is generic.
 
-  [!code-cpp[Conceptual.Generics.Overview#5](../../../samples/snippets/cpp/VS_Snippets_CLR/conceptual.generics.overview/cpp/source.cpp#5)]
   [!code-csharp[Conceptual.Generics.Overview#5](../../../samples/snippets/csharp/VS_Snippets_CLR/conceptual.generics.overview/cs/source.cs#5)]
   [!code-vb[Conceptual.Generics.Overview#5](../../../samples/snippets/visualbasic/VS_Snippets_CLR/conceptual.generics.overview/vb/source.vb#5)]
 
@@ -81,17 +74,16 @@ The following terms are used to discuss generics in .NET:
 
 There are many advantages to using generic collections and delegates:
 
-- Type safety. Generics shift the burden of type safety from you to the compiler. There is no need to write code to test for the correct data type because it is enforced at compile time. The need for type casting and the possibility of run-time errors are reduced.
+- Type safety. Generics shift the burden of type safety from you to the compiler. There is no need to write code to test for the correct data type because it is enforced at compile time. The need for type casting and the possibility of runtime errors are reduced.
 
-- Less code and code is more easily reused. There is no need to inherit from a base type and override members. For example, the <xref:System.Collections.Generic.LinkedList%601> is ready for immediate use. For example, you can create a linked list of strings with the following variable declaration:
+- Less code and code is more easily reused. There is no need to inherit from a base type and override members. For example, the <xref:System.Collections.Generic.LinkedList`1> is ready for immediate use. For example, you can create a linked list of strings with the following variable declaration:
 
-     [!code-cpp[HowToGeneric#24](../../../samples/snippets/cpp/VS_Snippets_CLR/HowToGeneric/cpp/source2.cpp#24)]
-     [!code-csharp[HowToGeneric#24](../../../samples/snippets/csharp/VS_Snippets_CLR/HowToGeneric/CS/source2.cs#24)]
-     [!code-vb[HowToGeneric#24](../../../samples/snippets/visualbasic/VS_Snippets_CLR/HowToGeneric/VB/source2.vb#24)]
+  [!code-csharp[HowToGeneric#24](../../../samples/snippets/csharp/VS_Snippets_CLR/HowToGeneric/CS/source2.cs#24)]
+  [!code-vb[HowToGeneric#24](../../../samples/snippets/visualbasic/VS_Snippets_CLR/HowToGeneric/VB/source2.vb#24)]
 
 - Better performance. Generic collection types generally perform better for storing and manipulating value types because there is no need to box the value types.
 
-- Generic delegates enable type-safe callbacks without the need to create multiple delegate classes. For example, the <xref:System.Predicate%601> generic delegate allows you to create a method that implements your own search criteria for a particular type and to use your method with methods of the <xref:System.Array> type such as <xref:System.Array.Find%2A>, <xref:System.Array.FindLast%2A>, and <xref:System.Array.FindAll%2A>.
+- Generic delegates enable type-safe callbacks without the need to create multiple delegate classes. For example, the <xref:System.Predicate`1> generic delegate allows you to create a method that implements your own search criteria for a particular type and to use your method with methods of the <xref:System.Array> type such as <xref:System.Array.Find*>, <xref:System.Array.FindLast*>, and <xref:System.Array.FindAll*>.
 
 - Generics streamline dynamically generated code. When you use generics with dynamically generated code you do not need to generate the type. This increases the number of scenarios in which you can use lightweight dynamic methods instead of generating entire assemblies. For more information, see [How to: Define and Execute Dynamic Methods](../../fundamentals/reflection/how-to-define-and-execute-dynamic-methods.md) and <xref:System.Reflection.Emit.DynamicMethod>.
 
@@ -103,20 +95,20 @@ The following are some limitations of generics:
 
 - Lightweight dynamic methods cannot be generic.
 
-- In Visual Basic, C#, and C++, a nested type that is enclosed in a generic type cannot be instantiated unless types have been assigned to the type parameters of all enclosing types. Another way of saying this is that in reflection, a nested type that is defined using these languages includes the type parameters of all its enclosing types. This allows the type parameters of enclosing types to be used in the member definitions of a nested type. For more information, see "Nested Types" in <xref:System.Type.MakeGenericType%2A>.
+- In Visual Basic, C#, and C++, a nested type that is enclosed in a generic type cannot be instantiated unless types have been assigned to the type parameters of all enclosing types. Another way of saying this is that in reflection, a nested type that is defined using these languages includes the type parameters of all its enclosing types. This allows the type parameters of enclosing types to be used in the member definitions of a nested type. For more information, see "Nested Types" in <xref:System.Type.MakeGenericType*>.
 
   > [!NOTE]
   > A nested type that is defined by emitting code in a dynamic assembly or by using the [Ilasm.exe (IL Assembler)](../../framework/tools/ilasm-exe-il-assembler.md) is not required to include the type parameters of its enclosing types; however, if it does not include them, the type parameters are not in scope in the nested class.
 
-  For more information, see "Nested Types" in <xref:System.Type.MakeGenericType%2A>.
+  For more information, see "Nested Types" in <xref:System.Type.MakeGenericType*>.
 
 ## Class library and language support
 
 .NET provides a number of generic collection classes in the following namespaces:
 
-- The <xref:System.Collections.Generic> namespace contains most of the generic collection types provided by .NET, such as the <xref:System.Collections.Generic.List%601> and <xref:System.Collections.Generic.Dictionary%602> generic classes.
+- The <xref:System.Collections.Generic> namespace contains most of the generic collection types provided by .NET, such as the <xref:System.Collections.Generic.List`1> and <xref:System.Collections.Generic.Dictionary`2> generic classes.
 
-- The <xref:System.Collections.ObjectModel> namespace contains additional generic collection types, such as the <xref:System.Collections.ObjectModel.ReadOnlyCollection%601> generic class, that are useful for exposing object models to users of your classes.
+- The <xref:System.Collections.ObjectModel> namespace contains additional generic collection types, such as the <xref:System.Collections.ObjectModel.ReadOnlyCollection`1> generic class, that are useful for exposing object models to users of your classes.
 
 Generic interfaces for implementing sort and equality comparisons are provided in the <xref:System> namespace, along with generic delegate types for event handlers, conversions, and search predicates.
 

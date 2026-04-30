@@ -1,7 +1,7 @@
 ---
 title: Interpret the analysis results from the Azure Migrate application and code assessment for .NET
 description: Learn how to interpret the results the analysis of .NET applications with the Azure Migrate application and code assessment tool.
-ms.topic: conceptual
+ms.topic: concept-article
 ms.date: 11/13/2023
 author: codemillmatt
 ms.author: masoucou
@@ -39,7 +39,7 @@ Categories section displays a graph with issues grouped by different categories 
 
 * **Projects**: the number of projects scanned.
 * **Issues**: the number of unique encounters of a rule that may need to be addressed.
-* **Incidents**: the total number of occurences of all issues found.
+* **Incidents**: the total number of occurrences of all issues found.
 * **Story points**: the estimated effort to fix all of the issues found. This is a relative measure of effort and is not meant to be an exact estimate.
 
 ## Projects view

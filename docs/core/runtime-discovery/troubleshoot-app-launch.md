@@ -9,7 +9,7 @@ zone_pivot_groups: operating-systems-set-one
 
 # Troubleshoot app launch failures
 
-This article describes some common reasons and possible solutions for application launch failures. It relates to [framework-dependent applications](../deploying/index.md#publish-framework-dependent), which rely on a .NET installation on your machine.
+This article describes some common reasons and possible solutions for application launch failures. It relates to [framework-dependent applications](../deploying/index.md#framework-dependent-deployment), which rely on a .NET installation on your machine.
 
 If you already know which .NET version you need, you can download it from [.NET downloads](https://dotnet.microsoft.com/download/dotnet).
 
@@ -237,7 +237,7 @@ For example, the error message in the previous section would correspond to:
 ./dotnet-install.sh --architecture x64 --install-dir /usr/local/share/dotnet/ --runtime dotnet --version 5.0.15
 ```
 
-For more information on installation using the script, see [Install with bash automation](../install/macos.md#install-with-bash-automation).
+For more information on installation using the script, see [Install .NET with a script](../install/macos.md#install-net-with-a-script).
 ::: zone-end
 
 ### Download binaries
@@ -253,7 +253,7 @@ For more information about manual installation, see [Install .NET on Linux](../i
 ::: zone-end
 
 ::: zone pivot="os-macos"
-For more information about manual installation, see [Install .NET on macOS](../install/macos.md#manual-install)
+For more information about manual installation, see [Install .NET on macOS](../install/macos.md#install-net-manually)
 ::: zone-end
 
 ### Configure roll-forward behavior
@@ -295,4 +295,4 @@ For more information, see [Multi-level lookup is disabled](../compatibility/depl
 - [Install .NET](../install/index.yml)
 - [.NET install locations](https://github.com/dotnet/designs/blob/main/accepted/2020/install-locations.md)
 - [Check installed .NET versions](../install/how-to-detect-installed-versions.md)
-- [Framework-dependent applications](../deploying/index.md#publish-framework-dependent)
+- [Framework-dependent applications](../deploying/index.md#framework-dependent-deployment)

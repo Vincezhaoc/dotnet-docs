@@ -1,8 +1,6 @@
 ---
 title: Network programming in .NET
 description: Learn about various networking approaches for .NET app development.
-author: IEvangelist
-ms.author: dapine
 ms.date: 08/24/2022
 ---
 
@@ -26,7 +24,7 @@ The <xref:System.Uri?displayProperty=nameWithType> type is used as a representat
 
 :::code language="csharp" source="snippets/misc/Program.Uri.cs" id="canonicaluri":::
 
-The `Uri` class automatically performs validation and canonicalization per [RCF 3986](https://datatracker.ietf.org/doc/html/rfc3986). These validation and canonicalization rules are used to ensure that a URI is well-formed and that the URI is in a canonical form.
+The `Uri` class automatically performs validation and canonicalization per [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986). These validation and canonicalization rules are used to ensure that a URI is well-formed and that the URI is in a canonical form.
 
 ## See also
 

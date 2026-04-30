@@ -20,7 +20,7 @@ This page is a reference for the MSBuild properties and items that you use to co
 To use WinForms or WPF, specify the following settings in the project file of your WinForms or WPF project:
 
 - Target the .NET SDK `Microsoft.NET.Sdk`. For more information, see [Project files](overview.md#project-files).
-- Set [`TargetFramework`](msbuild-props.md#targetframework) to a [Windows-specific target framework moniker](../../standard/frameworks.md#net-5-os-specific-tfms), such as `net8.0-windows`.
+- Set [`TargetFramework`](msbuild-props.md#targetframework) to a [Windows-specific target framework moniker](../../standard/frameworks.md#os-specific-tfms), such as `net8.0-windows`.
 - Add a UI framework property (or both, if necessary):
   - Set [`UseWPF`](#usewpf) to `true` to import and use WPF.
   - Set [`UseWindowsForms`](#usewindowsforms) to `true` to import and use WinForms.
@@ -52,16 +52,16 @@ The following table shows which elements and [globs](https://en.wikipedia.org/wi
 | Element               | Include glob                 | Exclude glob | Remove glob |
 |-----------------------|------------------------------|--------------|-------------|
 | ApplicationDefinition | App.xaml or Application.xaml | N/A          | N/A         |
-| Page                  | \*\*/\*.xaml                 | \*\*/\*.user; \*\*/\*.\*proj; \*\*/\*.sln; \*\*/\*.vssscc<br>Any XAML defined by *ApplicationDefinition* | N/A |
+| Page                  | \*\*/\*.xaml                 | \*\*/\*.user; \*\*/\*.\*proj; \*\*/\*.sln(x); \*\*/\*.vssscc<br>Any XAML defined by *ApplicationDefinition* | N/A |
 | None                  | N/A                          | N/A          | \*\*/\*.xaml |
 
 Here are the default include and exclude settings for all project types. For more information, see [Default includes and excludes](overview.md#default-includes-and-excludes).
 
 | Element | Include glob | Exclude glob | Remove glob |
 |---------|--------------|--------------|-------------|
-| Compile           | \*\*/\*.cs; \*\*/\*.vb (or other language extensions) | \*\*/\*.user;  \*\*/\*.\*proj;  \*\*/\*.sln;  \*\*/\*.vssscc | N/A |
-| EmbeddedResource  | \*\*/\*.resx | \*\*/\*.user; \*\*/\*.\*proj; \*\*/\*.sln; \*\*/\*.vssscc | N/A |
-| None              | \*\*/\* | \*\*/\*.user; \*\*/\*.\*proj; \*\*/\*.sln; \*\*/\*.vssscc | \*\*/\*.cs; \*\*/\*.resx |
+| Compile           | \*\*/\*.cs; \*\*/\*.vb (or other language extensions) | \*\*/\*.user;  \*\*/\*.\*proj;  \*\*/\*.sln(x);  \*\*/\*.vssscc | N/A |
+| EmbeddedResource  | \*\*/\*.resx | \*\*/\*.user; \*\*/\*.\*proj; \*\*/\*.sln(x); \*\*/\*.vssscc | N/A |
+| None              | \*\*/\* | \*\*/\*.user; \*\*/\*.\*proj; \*\*/\*.sln(x); \*\*/\*.vssscc | \*\*/\*.cs; \*\*/\*.resx |
 
 ### Errors related to "duplicate" items
 

@@ -29,7 +29,7 @@ namespace ca2214
         }
         public override void DoSomething()
         {
-            Console.WriteLine("Derived DoSomething is called - initialized ? {0}", initialized);
+            Console.WriteLine($"Derived DoSomething is called - initialized ? {initialized}");
         }
     }
 
@@ -37,7 +37,7 @@ namespace ca2214
     {
         public static void Main2214()
         {
-            DerivedType derivedInstance = new DerivedType();
+            DerivedType derivedInstance = new();
         }
     }
     //</snippet1>

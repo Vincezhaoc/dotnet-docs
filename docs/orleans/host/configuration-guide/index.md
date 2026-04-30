@@ -1,20 +1,32 @@
 ---
 title: Orleans configuration guide
 description: Explore a guide on how to configure .NET Orleans.
-ms.date: 07/03/2024
+ms.date: 01/21/2026
+ms.topic: overview
+zone_pivot_groups: orleans-version
 ---
 
 # Orleans configuration guide
 
-In this configuration guide, you'll learn the key configuration parameters and how they should be used for most typical usage scenarios. Orleans can be used in a variety of configurations that fit different usage scenarios, such as local single-node deployment for development and testing, clustering of servers, multi-instance Azure worker role, and so on.
+In this configuration guide, you learn the key configuration parameters and how to use them for most typical usage scenarios. You can use Orleans in various configurations fitting different scenarios, such as local single-node deployment for development and testing, server clustering, containerized deployments on Kubernetes or Azure Container Apps, and more.
 
-This guide provides instructions for the key configuration parameters that are necessary to make Orleans run in one of the target scenarios. Other configuration parameters primarily help fine-tune Orleans for better performance.
+This guide provides instructions for the key configuration parameters necessary to run Orleans in one of the target scenarios. Other configuration parameters primarily help you fine-tune Orleans for better performance.
 
-Silos and clients are configured programmatically via a <xref:Orleans.Hosting.SiloHostBuilder> and <xref:Orleans.ClientBuilder> respectively. This is possible using several supplemental option classes. Option classes in Orleans follow the [Options pattern in .NET](../../../core/extensions/options.md), and can be loaded via files, environment variables, or any other valid configuration provider.
+:::zone target="docs" pivot="orleans-7-0,orleans-8-0,orleans-9-0,orleans-10-0"
 
-If you want to configure a silo and a client for local development, look at the [Local development configuration](local-development-configuration.md) section. The [server configuration](server-configuration.md) and [client configuration](client-configuration.md) sections of the guide cover configuring silos and clients, respectively.
+Configure silos and clients programmatically via <xref:Microsoft.Extensions.Hosting.GenericHostExtensions.UseOrleans(Microsoft.Extensions.Hosting.IHostBuilder,System.Action{Microsoft.Extensions.Hosting.HostBuilderContext,Orleans.Hosting.ISiloBuilder})> and <xref:Microsoft.Extensions.Hosting.OrleansClientGenericHostExtensions.UseOrleansClient*>, respectively. You do this using several supplemental option classes. Option classes in Orleans follow the [Options pattern in .NET](../../../core/extensions/options.md) and can be loaded from files, environment variables, or any other valid configuration provider.
 
-The section on [typical configurations](typical-configurations.md) provides a summary of a few common configurations. A list of important core options that can be configured can be found on [this section](list-of-options-classes.md).
+:::zone-end
+
+:::zone target="docs" pivot="orleans-3-x"
+
+Configure silos and clients programmatically via <xref:Orleans.Hosting.SiloHostBuilder> and <xref:Orleans.ClientBuilder>, respectively. You do this using several supplemental option classes. Option classes in Orleans follow the [Options pattern in .NET](../../../core/extensions/options.md) and can be loaded from files, environment variables, or any other valid configuration provider.
+
+:::zone-end
+
+If you want to configure a silo and a client for local development, see the [Local development configuration](local-development-configuration.md) section. The [Server configuration](server-configuration.md) and [Client configuration](client-configuration.md) sections cover configuring silos and clients, respectively.
+
+The section on [Typical configurations](typical-configurations.md) provides a summary of a few common configurations. You can find a list of important core options that you can configure in [List of options classes](list-of-options-classes.md).
 
 > [!IMPORTANT]
 > Make sure you properly configure .NET garbage collection as detailed in [Configure .NET garbage collection](configuring-garbage-collection.md).

@@ -1,7 +1,7 @@
 ---
 title: Code-style rules overview
 description: Learn about the different .NET code-style rules and categories.
-ms.date: 12/11/2023
+ms.date: 05/20/2025
 author: gewarren
 ms.author: gewarren
 ---
@@ -32,16 +32,17 @@ The code-style rules are organized into the following subcategories:
 The following table list all the code-style rules by ID and [options](../code-style-rule-options.md), if any.
 
 > [!div class="mx-tdCol3BreakAll"]
+>
 > | Rule ID | Title | Option |
 > | - | - | - |
 > | [IDE0001](ide0001.md) | Simplify name | |
 > | [IDE0002](ide0002.md) | Simplify member access | |
-> | [IDE0003](ide0003-ide0009.md) | Remove `this` or `Me` qualification | [dotnet_style_qualification_for_field](ide0003-ide0009.md#dotnet_style_qualification_for_field)<br/> [dotnet_style_qualification_for_property](ide0003-ide0009.md#dotnet_style_qualification_for_property)<br/> [dotnet_style_qualification_for_method](ide0003-ide0009.md#dotnet_style_qualification_for_method)<br/> [dotnet_style_qualification_for_event](ide0003-ide0009.md#dotnet_style_qualification_for_event) |
+> | [IDE0003](ide0003-ide0009.md) | Name can be simplified | [dotnet_style_qualification_for_field](ide0003-ide0009.md#dotnet_style_qualification_for_field)<br/> [dotnet_style_qualification_for_property](ide0003-ide0009.md#dotnet_style_qualification_for_property)<br/> [dotnet_style_qualification_for_method](ide0003-ide0009.md#dotnet_style_qualification_for_method)<br/> [dotnet_style_qualification_for_event](ide0003-ide0009.md#dotnet_style_qualification_for_event) |
 > | [IDE0004](ide0004.md) | Remove unnecessary cast | |
 > | [IDE0005](ide0005.md) | Remove unnecessary import | |
 > | [IDE0007](ide0007-ide0008.md) | Use `var` instead of explicit type | [csharp_style_var_for_built_in_types](ide0007-ide0008.md#csharp_style_var_for_built_in_types)<br/> [csharp_style_var_when_type_is_apparent](ide0007-ide0008.md#csharp_style_var_when_type_is_apparent)<br/> [csharp_style_var_elsewhere](ide0007-ide0008.md#csharp_style_var_elsewhere)<br/> |
 > | [IDE0008](ide0007-ide0008.md) | Use explicit type instead of `var` | [csharp_style_var_for_built_in_types](ide0007-ide0008.md#csharp_style_var_for_built_in_types)<br/> [csharp_style_var_when_type_is_apparent](ide0007-ide0008.md#csharp_style_var_when_type_is_apparent)<br/> [csharp_style_var_elsewhere](ide0007-ide0008.md#csharp_style_var_elsewhere)<br/> |
-> | [IDE0009](ide0003-ide0009.md) | Add `this` or `Me` qualification | [dotnet_style_qualification_for_field](ide0003-ide0009.md#dotnet_style_qualification_for_field)<br/> [dotnet_style_qualification_for_property](ide0003-ide0009.md#dotnet_style_qualification_for_property)<br/> [dotnet_style_qualification_for_method](ide0003-ide0009.md#dotnet_style_qualification_for_method)<br/> [dotnet_style_qualification_for_event](ide0003-ide0009.md#dotnet_style_qualification_for_event) |
+> | [IDE0009](ide0003-ide0009.md) | Member access should be qualified | [dotnet_style_qualification_for_field](ide0003-ide0009.md#dotnet_style_qualification_for_field)<br/> [dotnet_style_qualification_for_property](ide0003-ide0009.md#dotnet_style_qualification_for_property)<br/> [dotnet_style_qualification_for_method](ide0003-ide0009.md#dotnet_style_qualification_for_method)<br/> [dotnet_style_qualification_for_event](ide0003-ide0009.md#dotnet_style_qualification_for_event) |
 > | [IDE0010](ide0010.md) | Add missing cases to switch statement | |
 > | [IDE0011](ide0011.md) | Add braces | [csharp_prefer_braces](ide0011.md#csharp_prefer_braces) |
 > | [IDE0016](ide0016.md) | Use throw expression | [csharp_style_throw_expression](ide0016.md#csharp_style_throw_expression) |
@@ -56,7 +57,7 @@ The following table list all the code-style rules by ID and [options](../code-st
 > | [IDE0025](ide0025.md) | Use expression body for properties | [csharp_style_expression_bodied_properties](ide0025.md#csharp_style_expression_bodied_properties) |
 > | [IDE0026](ide0026.md) | Use expression body for indexers | [csharp_style_expression_bodied_indexers](ide0026.md#csharp_style_expression_bodied_indexers) |
 > | [IDE0027](ide0027.md) | Use expression body for accessors | [csharp_style_expression_bodied_accessors](ide0027.md#csharp_style_expression_bodied_accessors) |
-> | [IDE0028](ide0028.md) | Use collection initializers | [dotnet_style_collection_initializer](ide0028.md#dotnet_style_collection_initializer)<br/>[dotnet_style_prefer_collection_expression (C# only)](ide0028.md#dotnet_style_prefer_collection_expression-c-only) |
+> | [IDE0028](ide0028.md) | Use collection initializers | [dotnet_style_collection_initializer](ide0028.md#dotnet_style_collection_initializer)<br/>[dotnet_style_prefer_collection_expression](ide0028.md#dotnet_style_prefer_collection_expression) |
 > | [IDE0029](ide0029-ide0030-ide0270.md) | Null check can be simplified | [dotnet_style_coalesce_expression](ide0029-ide0030-ide0270.md#dotnet_style_coalesce_expression) |
 > | [IDE0030](ide0029-ide0030-ide0270.md) | Null check can be simplified | [dotnet_style_coalesce_expression](ide0029-ide0030-ide0270.md#dotnet_style_coalesce_expression) |
 > | [IDE0031](ide0031.md) | Use null propagation | [dotnet_style_null_propagation](ide0031.md#dotnet_style_null_propagation) |
@@ -89,12 +90,12 @@ The following table list all the code-style rules by ID and [options](../code-st
 > | [IDE0059](ide0059.md) | Remove unnecessary value assignment | [csharp_style_unused_value_assignment_preference](ide0059.md#csharp_style_unused_value_assignment_preference)<br/> [visual_basic_style_unused_value_assignment_preference](ide0059.md#visual_basic_style_unused_value_assignment_preference) |
 > | [IDE0060](ide0060.md) | Remove unused parameter | [dotnet_code_quality_unused_parameters](ide0060.md#dotnet_code_quality_unused_parameters) |
 > | [IDE0061](ide0061.md) | Use expression body for local functions | [csharp_style_expression_bodied_local_functions](ide0061.md#csharp_style_expression_bodied_local_functions) |
-> | [IDE0062](ide0062.md) | Make local function static | [csharp_prefer_static_local_function](ide0062.md#csharp_prefer_static_local_function) |
+> | [IDE0062](ide0062.md) | Make local function `static` | [csharp_prefer_static_local_function](ide0062.md#csharp_prefer_static_local_function) |
 > | [IDE0063](ide0063.md) | Use simple `using` statement | [csharp_prefer_simple_using_statement](ide0063.md#csharp_prefer_simple_using_statement) |
 > | [IDE0064](ide0064.md) | Make struct fields writable | |
 > | [IDE0065](ide0065.md) | `using` directive placement | [csharp_using_directive_placement](ide0065.md#csharp_using_directive_placement) |
 > | [IDE0066](ide0066.md) | Use switch expression | [csharp_style_prefer_switch_expression](ide0066.md#csharp_style_prefer_switch_expression) |
-> | [IDE0070](ide0070.md) | Use <xref:System.HashCode.Combine%2A?displayProperty=fullName> | |
+> | [IDE0070](ide0070.md) | Use <xref:System.HashCode.Combine*?displayProperty=fullName> | [dotnet_prefer_system_hash_code](ide0070.md#dotnet_prefer_system_hash_code) |
 > | [IDE0071](ide0071.md) | Simplify interpolation | [dotnet_style_prefer_simplified_interpolation](ide0071.md#dotnet_style_prefer_simplified_interpolation) |
 > | [IDE0072](ide0072.md) | Add missing cases to switch expression | |
 > | [IDE0073](ide0073.md) | Use file header | [file_header_template](ide0073.md#file_header_template) |
@@ -113,6 +114,7 @@ The following table list all the code-style rules by ID and [options](../code-st
 > | [IDE0100](ide0100.md) | Remove unnecessary equality operator | |
 > | [IDE0110](ide0110.md) | Remove unnecessary discard | |
 > | [IDE0120](ide0120.md) | Simplify LINQ expression | |
+> | [IDE0121](ide0121.md) | Simplify LINQ type check and cast | |
 > | [IDE0130](ide0130.md) | Namespace does not match folder structure | [dotnet_style_namespace_match_folder](ide0130.md#dotnet_style_namespace_match_folder) |
 > | [IDE0140](ide0140.md) | Simplify object creation | [visual_basic_style_prefer_simplified_object_creation](ide0140.md#visual_basic_style_prefer_simplified_object_creation) |
 > | [IDE0150](ide0150.md) | Prefer `null` check over type check | [csharp_style_prefer_null_check_over_type_check](ide0150.md#csharp_style_prefer_null_check_over_type_check) |
@@ -124,6 +126,7 @@ The following table list all the code-style rules by ID and [options](../code-st
 > | [IDE0210](ide0210.md) | Convert to top-level statements | [csharp_style_prefer_top_level_statements](ide0210.md#csharp_style_prefer_top_level_statements) |
 > | [IDE0211](ide0211.md) | Convert to 'Program.Main' style program | [csharp_style_prefer_top_level_statements](ide0211.md#csharp_style_prefer_top_level_statements) |
 > | [IDE0220](ide0220.md) | Add explicit cast in foreach loop | [dotnet_style_prefer_foreach_explicit_cast_in_source](ide0220.md#dotnet_style_prefer_foreach_explicit_cast_in_source) |
+> | [IDE0221](ide0221.md) | Add explicit cast | [dotnet_style_prefer_non_hidden_explicit_cast_in_source](ide0221.md#dotnet_style_prefer_non_hidden_explicit_cast_in_source) |
 > | [IDE0230](ide0230.md) | Use UTF-8 string literal | [csharp_style_prefer_utf8_string_literals](ide0230.md#csharp_style_prefer_utf8_string_literals) |
 > | [IDE0240](ide0240.md) | Nullable directive is redundant | |
 > | [IDE0241](ide0241.md) | Nullable directive is unnecessary | |
@@ -139,8 +142,26 @@ The following table list all the code-style rules by ID and [options](../code-st
 > | [IDE0303](ide0303.md) | Use collection expression for `Create()` | [dotnet_style_prefer_collection_expression](ide0303.md#dotnet_style_prefer_collection_expression) |
 > | [IDE0304](ide0304.md) | Use collection expression for builder | [dotnet_style_prefer_collection_expression](ide0304.md#dotnet_style_prefer_collection_expression) |
 > | [IDE0305](ide0305.md) | Use collection expression for fluent | [dotnet_style_prefer_collection_expression](ide0305.md#dotnet_style_prefer_collection_expression) |
+> | [IDE0306](ide0306.md) | Use collection expression for new | [dotnet_style_prefer_collection_expression](ide0306.md#dotnet_style_prefer_collection_expression) |
+> | [IDE0320](ide0320.md) | Make anonymous function `static` | [csharp_prefer_static_anonymous_function](ide0320.md#csharp_prefer_static_anonymous_function) |
+> | [IDE0330](ide0330.md) | Prefer 'System.Threading.Lock' | [csharp_prefer_system_threading_lock](ide0330.md#csharp_prefer_system_threading_lock) |
+> | [IDE0340](ide0340.md) | Use unbound generic type | [csharp_style_prefer_unbound_generic_type_in_nameof](ide0340.md#csharp_style_prefer_unbound_generic_type_in_nameof) |
+> | [IDE0350](ide0350.md) | Use implicitly typed lambda | [csharp_style_prefer_implicitly_typed_lambda_expression](ide0350.md#csharp_style_prefer_implicitly_typed_lambda_expression) |
+> | [IDE0360](ide0360.md) | Simplify property accessor | [csharp_style_prefer_simple_property_accessors](ide0360.md#csharp_style_prefer_simple_property_accessors) |
+> | [IDE0370](ide0370.md) | Remove unnecessary suppression | |
+> | [IDE0380](ide0380.md) | Remove unnecessary 'unsafe' modifier | |
 > | [IDE1005](ide1005.md) | Use conditional delegate call | [csharp_style_conditional_delegate_call](ide1005.md#csharp_style_conditional_delegate_call) |
 > | [IDE1006](naming-rules.md) | Naming styles | |
+> | [IDE2000](ide2000.md) | Avoid multiple blank lines | [dotnet_style_allow_multiple_blank_lines_experimental](ide2000.md#dotnet_style_allow_multiple_blank_lines_experimental)† |
+> | [IDE2001](ide2001.md) | Embedded statements must be on their own line | [csharp_style_allow_embedded_statements_on_same_line_experimental](ide2001.md#csharp_style_allow_embedded_statements_on_same_line_experimental)† |
+> | [IDE2002](ide2002.md) | Consecutive braces must not have blank line between them | [csharp_style_allow_blank_lines_between_consecutive_braces_experimental](ide2002.md#csharp_style_allow_blank_lines_between_consecutive_braces_experimental)† |
+> | [IDE2003](ide2003.md) | Blank line required between block and subsequent statement | [dotnet_style_allow_statement_immediately_after_block_experimental](ide2003.md#dotnet_style_allow_statement_immediately_after_block_experimental)† |
+> | [IDE2004](ide2004.md) | Blank line not allowed after constructor initializer colon | [csharp_style_allow_blank_line_after_colon_in_constructor_initializer_experimental](ide2004.md#csharp_style_allow_blank_line_after_colon_in_constructor_initializer_experimental)† |
+> | [IDE2005](ide2005.md) | Blank line not allowed after conditional expression token | [csharp_style_allow_blank_line_after_token_in_conditional_expression_experimental](ide2005.md#csharp_style_allow_blank_line_after_token_in_conditional_expression_experimental)† |
+> | [IDE2006](ide2006.md) | Blank line not allowed after arrow expression clause token | [csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimental](ide2006.md#csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimental)† |
+> | [IDE3000](ide3000.md) | Implement with Copilot | |
+
+†These rules are experimental and subject to change or removal.
 
 > [!NOTE]
 > There are some rules that only surface in the Visual Studio IDE, and these regard JSON and regular expression pattern strings. For more information, see [JSON001](/visualstudio/ide/reference/json001), [JSON002](/visualstudio/ide/reference/json002), and [RE0001](/visualstudio/ide/reference/re0001).

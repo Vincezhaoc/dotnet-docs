@@ -1,7 +1,7 @@
 ---
 title: Tutorials for getting started with .NET
 description: Choose a tutorial for learning .NET app development or one of the .NET programming languages.
-ms.date: 09/30/2020
+ms.date: 03/03/2026
 ---
 # Tutorials for getting started with .NET
 
@@ -9,9 +9,7 @@ The following step-by-step tutorials run on Windows, Linux, or macOS, except as 
 
 ## Tutorials for creating apps
 
-* Create a console app
-  * [using Visual Studio Code](../core/tutorials/with-visual-studio-code.md)
-  * [using Visual Studio](../core/tutorials/with-visual-studio.md) (Windows)
+* [Create a console app](../core/tutorials/create-console-app.md)
 * Create a web app
   * [with server-side web UI](/aspnet/core/tutorials/razor-pages/razor-pages-start)
   * [with client-side web UI](https://dotnet.microsoft.com/learn/aspnet/blazor-tutorial/intro)
@@ -19,7 +17,7 @@ The following step-by-step tutorials run on Windows, Linux, or macOS, except as 
 * [Create a remote procedure call web app](/aspnet/core/tutorials/grpc/grpc-start)
 * [Create a real-time web app](/aspnet/core/tutorials/signalr)
 * [Create a serverless function in the cloud](/azure/azure-functions/functions-create-first-function-vs-code?pivots=programming-language-csharp)
-* [Create a mobile app for Android and iOS](https://dotnet.microsoft.com/learn/xamarin/hello-world-tutorial/intro) (Windows)
+* [Build your first multi-platform app using .NET MAUI](https://dotnet.microsoft.com/learn/maui/first-app-tutorial/intro)
 * Create a Windows desktop app
   * [WPF](/visualstudio/get-started/csharp/tutorial-wpf)
   * [Windows Forms](/visualstudio/ide/create-csharp-winform-visual-studio)
@@ -29,9 +27,7 @@ The following step-by-step tutorials run on Windows, Linux, or macOS, except as 
 
 ## Tutorials for creating class libraries
 
-* Create a class library
-  * [using Visual Studio Code](../core/tutorials/library-with-visual-studio-code.md)
-  * [using Visual Studio](../core/tutorials/library-with-visual-studio.md) (Windows)
+* [Create a class library](../core/tutorials/create-class-library.md)
 
 ## Resources for learning .NET languages
 

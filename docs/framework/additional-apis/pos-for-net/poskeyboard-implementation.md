@@ -3,7 +3,7 @@ title: PosKeyboard Implementation
 description: PosKeyboard Implementation (POS for .NET v1.14 SDK Documentation)
 ms.date: 03/03/2014
 ms.topic: how-to
-ms.custom: "pos-restored-from-archive,UpdateFrequency5"
+ms.custom: "pos-restored-from-archive"
 ---
 
 # PosKeyboard Implementation (POS for .NET v1.14 SDK Documentation)
@@ -36,7 +36,7 @@ This section contains a sample **PosKeyboard** Service Object that generates sim
 
 4. Create a Service Object class derived from **PosKeyboardBase**.
 
-5. Add the **ServiceObject** attribute to your Service Object class, using the **DeviceType.PosKeyboard** value as your device type.
+5. Add the `ServiceObject` attribute to your Service Object class, using the **DeviceType.PosKeyboard** value as your device type.
 
 ## To add features to the sample keyboard Service Object
 

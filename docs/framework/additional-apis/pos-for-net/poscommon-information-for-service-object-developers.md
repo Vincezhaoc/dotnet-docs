@@ -3,7 +3,7 @@ title: PosCommon Information for Service Object Developers
 description: PosCommon Information for Service Object Developers (POS for .NET v1.14 SDK Documentation)
 ms.date: 02/27/2008
 ms.topic: how-to
-ms.custom: "pos-restored-from-archive,UpdateFrequency5"
+ms.custom: "pos-restored-from-archive"
 ---
 
 # PosCommon Information for Service Object Developers (POS for .NET v1.14 SDK Documentation)
@@ -50,7 +50,7 @@ This property is also used to enable or disable the device by setting the proper
 
 POS for .NET verifies that the device has been opened, and then retrieves the current value of the <xref:Microsoft.PointOfService.PosCommon.DeviceName> property.
 
-Within **Base** class implementations, this value is set automatically based on the contents of the **ServiceObject** attribute.
+Within **Base** class implementations, this value is set automatically based on the contents of the `ServiceObject` attribute.
 
 If you are not deriving from a POS for .NET **Base** class, and are instead deriving from an **Interface**-level or **Basic**-level class, then **DeviceName** should be set by the Service Subject during the <xref:Microsoft.PointOfService.PosCommon.Open> method.
 
@@ -138,11 +138,11 @@ Setting <xref:Microsoft.PointOfService.PowerState> can cause the following excep
 
 ## ServiceObjectDescription Property
 
-POS for .NET verifies that the device has been opened, and then retrieves the current value of the <xref:Microsoft.PointOfService.PosCommon.ServiceObjectDescription> property. The Service Object developer should not have to set this value, since it is set by the POS for .NET **Basic** class using the description information provided in the **ServiceObject** attribute.
+POS for .NET verifies that the device has been opened, and then retrieves the current value of the <xref:Microsoft.PointOfService.PosCommon.ServiceObjectDescription> property. The Service Object developer should not have to set this value, since it is set by the POS for .NET **Basic** class using the description information provided in the `ServiceObject` attribute.
 
 ## ServiceObjectVersion Property
 
-POS for .NET verifies that the device has been opened, and then retrieves the current value of the <xref:Microsoft.PointOfService.PosCommon.ServiceObjectVersion> property. The Service Object developer should not have to set this value, since it is set by the POS for .NET **Basic** class using the version information provided in the **ServiceObject** attribute.
+POS for .NET verifies that the device has been opened, and then retrieves the current value of the <xref:Microsoft.PointOfService.PosCommon.ServiceObjectVersion> property. The Service Object developer should not have to set this value, since it is set by the POS for .NET **Basic** class using the version information provided in the `ServiceObject` attribute.
 
 ## State Property
 

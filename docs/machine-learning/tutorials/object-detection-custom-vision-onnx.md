@@ -23,7 +23,7 @@ In this tutorial, you learn how to:
 
 ## Prerequisites
 
-- [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/).
+- [Visual Studio 2022 or later](https://visualstudio.microsoft.com/downloads/).
 - [Download the dataset](https://aka.ms/mlnet-object-detection-tutorial-dataset) of 50 stop-sign images.
 - Azure account. If you don't have one, [create a free Azure account](https://aka.ms/AMLFree).
 
@@ -85,7 +85,7 @@ To build the ML.NET pipeline, you'll need the names of the input and output colu
 
 ## Create a C# console project
 
-1. In Visual Studio, create a C# Console Application called "StopSignDetection". Choose .NET 6 as the target framework.
+1. In Visual Studio, create a C# Console Application called "StopSignDetection". Choose .NET 8 as the target framework.
 
 1. Install the following NuGet packages for the project:
 
@@ -275,7 +275,7 @@ Loop through the file paths to make a prediction with the model and output the r
     var prediction = predictionEngine.Predict(new StopSignInput { Image = testImage });
     ```
 
-1. With the prediction, you can get the bounding boxes. Use the <xref:System.Linq.Enumerable.Chunk%2A> method to determine how many objects the model has detected. Do this by taking the count of the predicted bounding boxes and dividing that by the number of labels that were predicted. For example, if you had three objects detected in an image, there would be 12 items in the `BoundingBoxes` array and three labels predicted. The `Chunk` method would then give you three arrays of four to represent the bounding boxes for each object.
+1. With the prediction, you can get the bounding boxes. Use the <xref:System.Linq.Enumerable.Chunk*> method to determine how many objects the model has detected. Do this by taking the count of the predicted bounding boxes and dividing that by the number of labels that were predicted. For example, if you had three objects detected in an image, there would be 12 items in the `BoundingBoxes` array and three labels predicted. The `Chunk` method would then give you three arrays of four to represent the bounding boxes for each object.
 
     ```csharp
     var boundingBoxes = prediction.BoundingBoxes.Chunk(prediction.BoundingBoxes.Count() / prediction.PredictedLabels.Count());

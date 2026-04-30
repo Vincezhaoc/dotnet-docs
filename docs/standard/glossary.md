@@ -2,8 +2,6 @@
 title: .NET glossary
 description: Find out the meaning of selected terms used in the .NET documentation.
 ms.date: 09/25/2024
-author: tdykstra
-ms.author: tdykstra
 ms.topic: reference
 ---
 # .NET glossary
@@ -14,7 +12,7 @@ The primary goal of this glossary is to clarify meanings of selected terms and a
 
 Ahead-of-time compiler.
 
-Similar to [JIT](#jit), this compiler also translates [IL](#il) to machine code. In contrast to JIT compilation, AOT compilation happens before the application is executed and is usually performed on a different machine. Because AOT tool chains don't compile at run time, they don't have to minimize time spent compiling. That means they can spend more time optimizing. Since the context of AOT is the entire application, the AOT compiler also performs cross-module linking and whole-program analysis, which means that all references are followed and a single executable is produced.
+Similar to [JIT](#jit), this compiler also translates [IL](#il) to machine code. In contrast to JIT compilation, AOT compilation happens before the application is executed and is usually performed on a different machine. Because AOT tool chains don't compile at runtime, they don't have to minimize time spent compiling. That means they can spend more time optimizing. Since the context of AOT is the entire application, the AOT compiler also performs cross-module linking and whole-program analysis, which means that all references are followed and a single executable is produced.
 
 See [CoreRT](#corert) and [.NET Native](#net-native).
 
@@ -22,7 +20,7 @@ See [CoreRT](#corert) and [.NET Native](#net-native).
 
 A [workload](#workload)-specific API. Here are some examples:
 
-- .NET Aspire
+- Aspire
 - ASP.NET
 - ASP.NET Web API
 - Entity Framework (EF)
@@ -61,7 +59,7 @@ The source code of the BCL for [.NET](#net) is contained in the [.NET runtime re
 
 The following terms often refer to the same collection of APIs that BCL refers to:
 
-- [core .NET libraries](../core/compatibility/corefx.md)
+- core .NET libraries
 - [framework libraries](#framework-libraries)
 - [runtime libraries](#runtime)
 - [shared framework](#shared-framework)
@@ -88,7 +86,7 @@ See [CLR](#clr).
 
 ## CoreRT
 
-In contrast to the [CLR](#clr), CoreRT is not a virtual machine, which means it doesn't include the facilities to generate and run code on-the-fly because it doesn't include a [JIT](#jit). It does, however, include the [GC](#gc) and the ability for run-time type identification (RTTI) and reflection. However, its type system is designed so that metadata for reflection isn't required. Not requiring metadata enables having an [AOT](#aot) tool chain that can link away superfluous metadata and (more importantly) identify code that the app doesn't use. CoreRT is in development.
+In contrast to the [CLR](#clr), CoreRT is not a virtual machine, which means it doesn't include the facilities to generate and run code on-the-fly because it doesn't include a [JIT](#jit). It does, however, include the [GC](#gc) and the ability for runtime type identification (RTTI) and reflection. However, its type system is designed so that metadata for reflection isn't required. Not requiring metadata enables having an [AOT](#aot) tool chain that can link away superfluous metadata and (more importantly) identify code that the app doesn't use. CoreRT is in development.
 
 See [Intro to CoreRT](https://github.com/dotnet/corert/blob/master/Documentation/intro-to-corert.md) and [.NET Runtime Lab](https://github.com/dotnet/runtimelab/blob/docs/README.md).
 
@@ -117,7 +115,7 @@ The word "framework" has a different meaning in the following terms:
 - [shared framework](#shared-framework)
 - [target framework](#target-framework)
 - [TFM (target framework moniker)](#tfm)
-- [framework-dependent app](../core/deploying/index.md#publish-framework-dependent)
+- [framework-dependent app](../core/deploying/index.md#framework-dependent-deployment)
 
 Sometimes "framework" refers to an [implementation of .NET](#implementation-of-net).
 
@@ -143,7 +141,7 @@ Higher-level .NET languages, such as C#, compile down to a hardware-agnostic ins
 
 Just-in-time compiler.
 
-Similar to [AOT](#aot), this compiler translates [IL](#il) to machine code that the processor understands. Unlike AOT, JIT compilation happens on demand and is performed on the same machine that the code needs to run on. Since JIT compilation occurs during execution of the application, the compile time is part of the run time. Thus, JIT compilers have to balance time spent optimizing code against the savings that the resulting code can produce. But a JIT knows the actual hardware and can free developers from having to ship different implementations.
+Similar to [AOT](#aot), this compiler translates [IL](#il) to machine code that the processor understands. Unlike AOT, JIT compilation happens on demand and is performed on the same machine that the code needs to run on. Since JIT compilation occurs during execution of the application, the compile time is part of the runtime. Thus, JIT compilers have to balance time spent optimizing code against the savings that the resulting code can produce. But a JIT knows the actual hardware and can free developers from having to ship different implementations.
 
 ## implementation of .NET
 
@@ -171,7 +169,7 @@ The words library and [framework](#framework) are often used synonymously.
 
 ## Mono
 
-An open source, [cross-platform](#cross-platform) [.NET implementation](#implementation-of-net) that's used when a small runtime is required. It's the runtime that powers Xamarin applications on Android, Mac, iOS, tvOS, and watchOS and is focused primarily on apps that require a small footprint.
+An open source, [cross-platform](#cross-platform) [.NET implementation](#implementation-of-net) that's used when a small runtime is required. It's the runtime that powered Xamarin applications (unsupported as of May 2024) on Android, Mac, iOS, tvOS, and watchOS. Mono focuses primarily on apps that require a small footprint.
 
 It supports all of the currently published .NET Standard versions.
 
@@ -183,7 +181,7 @@ For more information, see the [Mono documentation](https://www.mono-project.com/
 
 ## Native AOT
 
-A deployment mode where the app is self-contained and is [ahead-of-time](#aot) compiled to native code at the time of publish. Native AOT apps don't use a [JIT](#jit) compiler at run time. They can run on machines that don't have the .NET runtime installed.
+A deployment mode where the app is self-contained and is [ahead-of-time](#aot) compiled to native code at the time of publish. Native AOT apps don't use a [JIT](#jit) compiler at runtime. They can run on machines that don't have the .NET runtime installed.
 
 For more information, see [Native AOT deployment](../core/deploying/native-aot/index.md).
 
@@ -291,7 +289,7 @@ The word "runtime" has a different meaning in some contexts:
 
 - *.NET runtime* on the [.NET 5 download page](https://dotnet.microsoft.com/download/dotnet/5.0).
 
-  You can download the *.NET runtime* or other runtimes, such as the *ASP.NET Core runtime*. A *runtime* in this usage is the set of components that must be installed on a machine to run a [framework-dependent](../core/deploying/index.md#publish-framework-dependent) app on the machine. The .NET runtime includes the [CLR](#clr) and the .NET [shared framework](#shared-framework), which provides the [BCL](#bcl).
+  You can download the *.NET runtime* or other runtimes, such as the *ASP.NET Core runtime*. A *runtime* in this usage is the set of components that must be installed on a machine to run a [framework-dependent](../core/deploying/index.md#framework-dependent-deployment) app on the machine. The .NET runtime includes the [CLR](#clr) and the .NET [shared framework](#shared-framework), which provides the [BCL](#bcl).
 
 - *.NET runtime libraries*
 
@@ -312,7 +310,7 @@ Meaning depends on context. The *.NET shared framework* refers to the libraries 
 
 There are other shared frameworks. The *ASP.NET Core shared framework* refers to the libraries included in the [ASP.NET Core runtime](#runtime), which includes the BCL plus additional APIs for use by web apps.
 
-For [framework-dependent apps](../core/deploying/index.md#publish-framework-dependent), the shared framework consists of libraries that are contained in assemblies installed in a folder on the machine that runs the app. For [self-contained apps](../core/deploying/index.md#publish-self-contained), the shared framework assemblies are included with the app.
+For [framework-dependent apps](../core/deploying/index.md#framework-dependent-deployment), the shared framework consists of libraries that are contained in assemblies installed in a folder on the machine that runs the app. For [self-contained apps](../core/deploying/index.md#self-contained-deployment), the shared framework assemblies are included with the app.
 
 For more information, see [Deep-dive into .NET Core primitives, part 2: the shared framework](https://natemcmaster.com/blog/2018/08/29/netcore-primitives-2/).
 
@@ -326,7 +324,7 @@ A set of programming technologies that are used together to build and run applic
 
 The collection of APIs that a .NET app or library relies on.
 
-An app or library can target a version of [.NET Standard](#net-standard) (for example, .NET Standard 2.0), which is a specification for a standardized set of APIs across all [.NET implementations](#implementation-of-net). An app or library can also target a version of a specific .NET implementation, in which case it gets access to implementation-specific APIs. For example, an app that targets Xamarin.iOS gets access to Xamarin-provided iOS API wrappers.
+An app or library can target a version of [.NET Standard](#net-standard) (for example, .NET Standard 2.0), which is a specification for a standardized set of APIs across all [.NET implementations](#implementation-of-net). An app or library can also target a version of a specific .NET implementation, in which case it gets access to implementation-specific APIs.
 
 For some target frameworks (for example, [.NET Framework](#net-framework)) the available APIs are defined by the assemblies that a .NET implementation installs on a system, which can include application framework APIs (for example, ASP.NET, WinForms). For package-based target frameworks, the framework APIs are defined by the packages installed in the app or library.
 

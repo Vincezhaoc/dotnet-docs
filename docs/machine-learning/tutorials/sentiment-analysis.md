@@ -25,7 +25,7 @@ You can find the source code for this tutorial at the [dotnet/samples](https://g
 
 ## Prerequisites
 
-- [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/).
+- [Visual Studio 2022 or later](https://visualstudio.microsoft.com/downloads/).
 
 - [UCI Sentiment Labeled Sentences dataset](https://archive.ics.uci.edu/ml/machine-learning-databases/00331/sentiment%20labelled%20sentences.zip) (ZIP file)
 
@@ -33,7 +33,7 @@ You can find the source code for this tutorial at the [dotnet/samples](https://g
 
 1. Create a C# **Console Application** called "SentimentAnalysis". Click the **Next** button.
 
-2. Choose .NET 6 as the framework to use. Click the **Create** button.
+2. Choose .NET 8 as the framework to use. Click the **Create** button.
 
 3. Create a directory named *Data* in your project to save your data set files.
 
@@ -41,7 +41,7 @@ You can find the source code for this tutorial at the [dotnet/samples](https://g
 
     [!INCLUDE [mlnet-current-nuget-version](../../../includes/mlnet-current-nuget-version.md)]
 
-    In Solution Explorer, right-click on your project and select **Manage NuGet Packages**. Choose "nuget.org" as the package source, and then select the **Browse** tab. Search for **Microsoft.ML**, select the package you want, and then select the **Install** button. Proceed with the installation by agreeing to the license terms for the package you choose.
+    In Solution Explorer, right-click on your project and select **Manage NuGet Packages**. Choose "nuget.org" as the package source, and then select the **Browse** tab. Search for **Microsoft.ML**, select the package you want, and then select **Install**. Proceed with the installation by agreeing to the license terms for the package you choose.
 
 ## Prepare your data
 
@@ -68,7 +68,7 @@ You can find the source code for this tutorial at the [dotnet/samples](https://g
 
    - In **Solution Explorer**, right-click the project, and then select **Add** > **New Item**.
 
-   - In the **Add New Item** dialog box, select **Class** and change the **Name** field to *SentimentData.cs*. Then, select the **Add** button.
+   - In the **Add New Item** dialog box, select **Class** and change the **Name** field to *SentimentData.cs*. Then, select **Add**.
 
 1. The *SentimentData.cs* file opens in the code editor. Add the following `using` directive to the top of *SentimentData.cs*:
 
@@ -130,7 +130,7 @@ You prepare the app, and then load data:
 
     [!code-csharp[LoadData](./snippets/sentiment-analysis/csharp/Program.cs#LoadData "loading dataset")]
 
-    The [LoadFromTextFile()](xref:Microsoft.ML.TextLoaderSaverCatalog.LoadFromTextFile%60%601%28Microsoft.ML.DataOperationsCatalog,System.String,System.Char,System.Boolean,System.Boolean,System.Boolean,System.Boolean%29) method defines the data schema and reads in the file. It takes in the data path variables and returns an `IDataView`.
+    The [LoadFromTextFile()](xref:Microsoft.ML.TextLoaderSaverCatalog.LoadFromTextFile``1%28Microsoft.ML.DataOperationsCatalog,System.String,System.Char,System.Boolean,System.Boolean,System.Boolean,System.Boolean%29) method defines the data schema and reads in the file. It takes in the data path variables and returns an `IDataView`.
 
 ### Split the dataset for model training and testing
 
@@ -281,7 +281,7 @@ Use the following code to display the metrics:
 
     [!code-csharp[CreatePredictionEngine](./snippets/sentiment-analysis/csharp/Program.cs#CreatePredictionEngine1 "Create the PredictionEngine")]
 
-    The [PredictionEngine](xref:Microsoft.ML.PredictionEngine%602) is a convenience API, which allows you to perform a prediction on a single instance of data. [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine%602) is not thread-safe. It's acceptable to use in single-threaded or prototype environments. For improved performance and thread safety in production environments, use the `PredictionEnginePool` service, which creates an [`ObjectPool`](xref:Microsoft.Extensions.ObjectPool.ObjectPool%601) of [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine%602) objects for use throughout your application. See this guide on how to [use `PredictionEnginePool` in an ASP.NET Core Web API](../how-to-guides/serve-model-web-api-ml-net.md#register-predictionenginepool-for-use-in-the-application).
+    The [PredictionEngine](xref:Microsoft.ML.PredictionEngine`2) is a convenience API, which allows you to perform a prediction on a single instance of data. [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine`2) is not thread-safe. It's acceptable to use in single-threaded or prototype environments. For improved performance and thread safety in production environments, use the `PredictionEnginePool` service, which creates an [`ObjectPool`](xref:Microsoft.Extensions.ObjectPool.ObjectPool`1) of [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine`2) objects for use throughout your application. See this guide on how to [use `PredictionEnginePool` in an ASP.NET Core Web API](../how-to-guides/serve-model-web-api-ml-net.md#register-predictionenginepool-for-use-in-the-application).
 
     > [!NOTE]
     > `PredictionEnginePool` service extension is currently in preview.
@@ -290,11 +290,11 @@ Use the following code to display the metrics:
 
     [!code-csharp[PredictionData](./snippets/sentiment-analysis/csharp/Program.cs#CreateTestIssue1 "Create test data for single prediction")]
 
-5. Pass the test comment data to the [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine%602) by adding the following as the next lines of code in the `UseModelWithSingleItem()` method:
+5. Pass the test comment data to the [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine`2) by adding the following as the next lines of code in the `UseModelWithSingleItem()` method:
 
     [!code-csharp[Predict](./snippets/sentiment-analysis/csharp/Program.cs#Predict "Create a prediction of sentiment")]
 
-    The [Predict()](xref:Microsoft.ML.PredictionEngine%602.Predict%2A) function makes a prediction on a single row of data.
+    The [Predict()](xref:Microsoft.ML.PredictionEngine`2.Predict%2A) function makes a prediction on a single row of data.
 
 6. Display `SentimentText` and corresponding sentiment prediction using the following code:
 

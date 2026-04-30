@@ -1,9 +1,9 @@
 ---
 title: Task expressions
 description: Learn about support in the F# programming language for writing task expressions, which author .NET tasks directly.
-ms.date: 10/29/2021
+ms.date: 05/25/2025
 ---
-# Tasks expressions
+# Task expressions
 
 This article describes support in F# for task expressions, which are similar to [async expressions](async-expressions.md) but allow you to author .NET tasks directly. Like async expressions, task expressions execute code asynchronously, that is, without blocking execution of other work.
 
@@ -32,8 +32,8 @@ let! (result2 : int)  = stream.ReadAsync(buffer, offset, count, cancellationToke
 
 F# `task { }` expressions can await the following kinds of asynchronous operations:
 
-* .NET tasks, <xref:System.Threading.Tasks.Task%601> and the non-generic <xref:System.Threading.Tasks.Task>.
-* .NET value tasks, <xref:System.Threading.Tasks.ValueTask%601> and the non-generic <xref:System.Threading.Tasks.ValueTask>.
+* .NET tasks, <xref:System.Threading.Tasks.Task`1> and the non-generic <xref:System.Threading.Tasks.Task>.
+* .NET value tasks, <xref:System.Threading.Tasks.ValueTask`1> and the non-generic <xref:System.Threading.Tasks.ValueTask>.
 * F# async computations [`Async<T>`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-fsharpasync.html).
 * Any object following the "GetAwaiter" pattern specified in [F# RFC FS-1097](https://github.com/fsharp/fslang-design/blob/main/FSharp-6.0/FS-1097-task-builder.md).
 
@@ -55,6 +55,35 @@ Within task expressions, `use` bindings can bind to values of type <xref:System.
 
 In addition to `let!`, you can use `use!` to perform asynchronous bindings. The difference between `let!` and `use!` is the same as the difference between `let` and `use`. For `use!`, the object is disposed of at the close of the current scope. Note that in F# 6, `use!` does not allow a value to be initialized to null, even though `use` does.
 
+```fsharp
+open System
+open System.IO
+open System.Security.Cryptography
+task {
+    // use IDisposable
+    use httpClient = new Net.Http.HttpClient()
+    // use! Task<IDisposable>
+    use! exampleDomain = httpClient.GetAsync "https://example.com/data.enc"
+
+    // use IDisposable
+    use aes = Aes.Create()
+    aes.KeySize <- 256
+    aes.GenerateIV()
+    aes.GenerateKey()
+    // do! Task
+    do! File.WriteAllTextAsync("key.iv.txt", $"Key: {Convert.ToBase64String aes.Key}\nIV: {Convert.ToBase64String aes.IV}")
+
+    // use IAsyncDisposable
+    use outputStream = File.Create "secret.enc"
+    // use IDisposable
+    use encryptor = aes.CreateEncryptor()
+    // use IAsyncDisposable
+    use cryptoStream = new CryptoStream(outputStream, encryptor, CryptoStreamMode.Write)
+    // do! Task
+    do! exampleDomain.Content.CopyToAsync cryptoStream
+}
+```
+
 ## Value Tasks
 
 Value tasks are structs used to avoid allocations in task-based programming. A value task is an ephemeral value that's turned into a real task by using `.AsTask()`.
@@ -66,6 +95,28 @@ let makeTask() =
     task { return 1 }
 
 makeTask() |> ValueTask<int>
+```
+
+## `and!` bindings (starting from F# 10)
+
+Within task expressions, it is possible to concurrently await for multiple asynchronous operations (`Task<'T>`, `ValueTask<'T>`, `Async<'T>` etc). Compare:
+
+```fsharp
+// We'll wait for x to resolve and then for y to resolve. Overall execution time is sum of two execution times.
+let getResultsSequentially() =
+    task {
+        let! x = getX()
+        let! y = getY()
+        return x, y
+    }
+
+// x and y will be awaited concurrently. Overall execution time is the time of the slowest operation.
+let getResultsConcurrently() =
+    task {
+        let! x = getX()
+        and! y = getY()
+        return x, y
+    }
 ```
 
 ## Adding cancellation tokens and cancellation checks
@@ -86,7 +137,7 @@ If you intend to correctly make your code cancelable, carefully check that you p
 
 ## Background tasks
 
-By default, .NET tasks are scheduled using <xref:System.Threading.SynchronizationContext.Current%2A?displayProperty=nameWithType> if present. This allows tasks to serve as cooperative, interleaved agents executing on a user interface thread without blocking the UI. If not present, task continuations are scheduled to the .NET thread pool.
+By default, .NET tasks are scheduled using <xref:System.Threading.SynchronizationContext.Current*?displayProperty=nameWithType> if present. This allows tasks to serve as cooperative, interleaved agents executing on a user interface thread without blocking the UI. If not present, task continuations are scheduled to the .NET thread pool.
 
 In practice, it's often desirable that library code that generates tasks ignores the synchronization context and instead always switches to the .NET thread pool, if necessary. You can achieve this using `backgroundTask { }`:
 
@@ -159,6 +210,6 @@ Tasks are implemented using Resumable Code, a new feature in F# 6. Tasks are com
 - [Resumable State Machines - F# Compiler Community Session](https://www.youtube.com/watch?v=GYi3ZMF8Pm0)
 - [Resumable Code - RFC FS-1087](https://github.com/fsharp/fslang-design/blob/main/FSharp-6.0/FS-1087-resumable-code.md)
 - <xref:System.Threading.Tasks.Task>
-- <xref:System.Threading.Tasks.Task%601>
+- <xref:System.Threading.Tasks.Task`1>
 - <xref:System.Threading.Tasks.ValueTask>
-- <xref:System.Threading.Tasks.ValueTask%601>
+- <xref:System.Threading.Tasks.ValueTask`1>

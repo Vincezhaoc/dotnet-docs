@@ -1,54 +1,130 @@
 ---
 title: Compiler Directives
-description: Learn about F# language preprocessor directives, conditional compilation directives, line directives, and compiler directives.
-ms.date: 12/10/2018
+description: Learn about F# language conditional compilation directives, line directives, and warn directives.
+ms.date: 10/21/2025
 f1_keywords:
  - "#endif_FS"
+ai-usage: ai-assisted
 ---
 # Compiler Directives
 
-This topic describes processor directives and compiler directives.
+This topic describes compiler directives, for F# Interactive (`dotnet fsi`) directives, see [Interactive Programming with F#](../tools/fsharp-interactive/index.md).
 
-For F# Interactive (`dotnet fsi`) directives, see [Interactive Programming with F#](../tools/fsharp-interactive/index.md).
+A compiler directive is prefixed with the # symbol and appears on a line by itself.
 
-## Preprocessor Directives
-
-A preprocessor directive is prefixed with the # symbol and appears on a line by itself. It is interpreted by the preprocessor, which runs before the compiler itself.
-
-The following table lists the preprocessor directives that are available in F#.
+The following table lists the compiler directives that are available in F#.
 
 |Directive|Description|
 |---------|-----------|
-|`#if` *symbol*|Supports conditional compilation. Code in the section after the `#if` is included if the *symbol* is defined. The symbol can also be negated with `!`.|
-|`#else`|Supports conditional compilation. Marks a section of code to include if the symbol used with the previous `#if` is not defined.|
+|`#if` *if-expression*|Supports conditional compilation. Code in the section after the `#if` is included if the *if-expression* evaluates to `defined` (see below).|
+|`#else`|Supports conditional compilation. Marks a section of code to include if the symbol used with the previous `#if` does not evaluate to `defined`.|
 |`#endif`|Supports conditional compilation. Marks the end of a conditional section of code.|
 |`#`[line] *int*,<br/>`#`[line] *int* *string*,<br/>`#`[line] *int* *verbatim-string*|Indicates the original source code line and file name, for debugging. This feature is provided for tools that generate F# source code.|
-|`#nowarn` *warningcode*|Disables a compiler warning or warnings. To disable a warning, find its number from the compiler output and include it in quotation marks. Omit the "FS" prefix. To disable multiple warning numbers on the same line, include each number in quotation marks, and separate each string by a space. <br/> For example: `#nowarn "9" "40"`|
-
-The effect of disabling a warning applies to the entire file, including portions of the file that precede the directive.|
+|`#nowarn` *warningcodes*|Disables one or more compiler warnings as specified by *warningcodes* (see below).|
+|`#warnon` *warningcodes*|Enables one or more compiler warnings as specified by *warningcodes* (see below).|
 
 ## Conditional Compilation Directives
 
 Code that is deactivated by one of these directives appears dimmed in the Visual Studio Code Editor.
 
-> [!NOTE]
-> The behavior of the conditional compilation directives is not the same as it is in other languages. For example, you cannot use Boolean expressions involving symbols, and `true` and `false` have no special meaning. Symbols that you use in the `if` directive must be defined by the command line or in the project settings; there is no `define` preprocessor directive.
-
 The following code illustrates the use of the `#if`, `#else`, and `#endif` directives. In this example, the code contains two versions of the definition of `function1`. When `VERSION1` is defined by using the [-define compiler option](./compiler-options.md), the code between the `#if` directive and the `#else` directive is activated. Otherwise, the code between `#else` and `#endif` is activated.
 
 [!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-2/snippet7301.fs)]
 
-There is no `#define` preprocessor directive in F#. You must use the compiler option or project settings to define the symbols used by the `#if` directive.
-
-Conditional compilation directives can be nested. Indentation is not significant for preprocessor directives.
-
-You can also negate a symbol with `!`. In this example, a string's value is something only when _not_ debugging:
+The `#if` directive also accepts logical expressions:
 
 ```fsharp
-#if !DEBUG
-let str = "Not debugging!"
+#if SILVERLIGHT || COMPILED && (NETCOREFX || !DEBUG)
+#endif
+```
+
+The following expressions can be used.
+
+| if-expr | evaluation |
+| --- | --- |
+| `if-expr1 \|\| if-expr2` | `defined` if `if-expr1` or `if-expr2` is `defined`. |
+| `if-expr1 && if-expr2` | `defined` if `if-expr1` and `if-expr2` are `defined`. |
+| `!if-expr1` | `defined` if `if-expr1` is not `defined`. |
+| `( if-expr1 )` | defined if `if-expr1` is defined. |
+| `symbol` | `defined` if it is flagged as defined by the `-define` compiler option. |
+
+The logical operators have the usual logical precedence.
+
+There is no `#define` compiler directive in F#. You must use the compiler option or project settings to define the symbols used by the `#if` directive.
+
+Conditional compilation directives can be nested. Indentation is not significant for compiler directives.
+
+## Predefined symbols
+
+The F# compiler and build system automatically define several symbols that can be used for conditional compilation.
+
+### Build configuration symbols
+
+The following symbols are defined based on your build configuration:
+
+- `DEBUG`: Defined when compiling in Debug mode. In the project system, the `DEBUG` symbol is automatically defined in the Debug configuration, but not in the Release configuration. This symbol is commonly used with assertions and diagnostic code. For more information, see [Assertions](assertions.md).
+- `TRACE`: Defined for builds that enable tracing. Like `DEBUG`, this symbol is typically defined in Debug configurations but can also be enabled in Release configurations.
+
+You can override these values using the [`-define` compiler option](compiler-options.md) or project settings.
+
+### Compilation mode symbols
+
+The following symbols distinguish between different compilation modes:
+
+- `COMPILED`: Defined when compiling code with the F# compiler. This symbol is useful when you need code to behave differently in compiled assemblies versus F# Interactive sessions.
+- `INTERACTIVE`: Defined when compiling or executing code in F# Interactive (`dotnet fsi`), including both interactive sessions and script execution. This allows you to write code that works differently when running interactively.
+
+For more information about using these symbols in scripts, see [Interactive Programming with F#](../tools/fsharp-interactive/index.md).
+
+Example:
+
+```fsharp
+#if INTERACTIVE
+// Code specific to F# Interactive
+#r "nuget: Newtonsoft.Json"
+#endif
+
+#if COMPILED
+// Code specific to compiled assemblies
+open System.Configuration
+#endif
+```
+
+### Target framework symbols
+
+The build system also defines preprocessor symbols for different target frameworks in SDK-style projects. These symbols are useful when creating libraries or applications that target multiple .NET versions.
+
+[!INCLUDE [Preprocessor symbols](~/includes/preprocessor-symbols.md)]
+
+For example, you can use these symbols to conditionally compile code based on the target framework:
+
+```fsharp
+#if NET6_0_OR_GREATER
+// Use .NET 6+ specific APIs
 #else
-let str = "Debugging!"
+// Use alternative implementation for older frameworks
+#endif
+```
+
+## NULLABLE directive
+
+Starting with F# 9, you can enable nullable reference types in the project:
+
+```xml
+<Nullable>enable</Nullable>
+```
+
+This automatically sets `NULLABLE` directive to the build. It's useful while initially rolling out the feature, to conditionally change conflicting code by `#if NULLABLE` hash directives:
+
+```fsharp
+#if NULLABLE 
+let length (arg: 'T when 'T: not null) =
+    Seq.length arg
+#else
+let length arg =
+    match arg with
+    | null -> -1
+    | s -> Seq.length s
 #endif
 ```
 
@@ -61,6 +137,42 @@ When you use the `#line` directive, file names must be enclosed in quotation mar
 [!code-fsharp[Main](~/samples/snippets/fsharp/lang-ref-2/snippet7303.fs)]
 
 These tokens indicate that the F# code generated at this location is derived from some constructs at or near line `25` in `Script1`.
+
+Note that `#line` directives do not influence the behavior of `#nowarn` / `#warnon`. These two directives always relate the the file that is being compiled.
+
+## Warn Directives
+
+Warn directives disable or enable specified compiler warnings for parts of a source file.
+
+A warn directive is a single line of source code that consists of
+
+- Optional leading whitespace
+- The string `#nowarn` or `#warnon`
+- Whitespace
+- One or more *warningcodes* (see below), separated by whitespace
+- Optional whitespace
+- Optional line comment
+
+A *warningcode* is a sequence of digits (representing the warning number), optionally preceded by `FS`, optionally surrounded by double quotes.
+
+A `#nowarn` directive disables a warning until a `#warnon` directive for the same warning number is found, or else until end of file. Similarly, a `#nowarn` directive disables a warning until a `#warnon` directive for the same warning numberis found, or else until end of file. Before and after such pairs, the compilation default applies, which is
+
+- no warning if disabled by a --nowarn compiler option (or the respective msbuild property)
+- no warning for [opt-in warnings](./compiler-options.md#opt-in-warnings), unless enabled by the --warnon compiler option (or the respective msbuild property)
+
+Here is a (contrived) example.
+
+```
+module A
+match None with None -> ()     // warning
+let x =
+    #nowarn 25
+    match None with None -> 1  // no warning
+    #warnon FS25
+match None with None -> ()     // warning
+#nowarn "FS25" FS007 "42"
+match None with None -> ()     // no warning
+```
 
 ## See also
 

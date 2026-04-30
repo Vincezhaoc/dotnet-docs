@@ -408,7 +408,7 @@ public abstract class BaseSpecification<T> : ISpecification<T>
     }
 
     // string-based includes allow for including children of children
-    // e.g. Basket.Items.Product
+    // for example, Basket.Items.Product
     protected virtual void AddInclude(string includeString)
     {
         IncludeStrings.Add(includeString);
@@ -472,9 +472,6 @@ Learn [how the specification pattern is applied in the eShopOnWeb sample](https:
 
 - **Table Mapping** \
   [https://learn.microsoft.com/ef/core/modeling/relational/tables](/ef/core/modeling/relational/tables)
-
-- **Use HiLo to generate keys with Entity Framework Core** \
-  <https://www.talkingdotnet.com/use-hilo-to-generate-keys-with-entity-framework-core/>
 
 - **Backing Fields** \
   [https://learn.microsoft.com/ef/core/modeling/backing-field](/ef/core/modeling/backing-field)

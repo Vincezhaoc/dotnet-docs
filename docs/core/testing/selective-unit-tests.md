@@ -56,6 +56,12 @@ For `FullyQualifiedName` values that include a comma for generic type parameters
 dotnet test --filter "FullyQualifiedName=MyNamespace.MyTestsClass<ParameterType1%2CParameterType2>.MyTestMethod"
 ```
 
+For `Name` or `DisplayName`, use the URL encoding for the special characters. For example, to run a test with the name `MyTestMethod` and a string value `"text"`, use the following filter:
+
+```dotnetcli
+dotnet test --filter "Name=MyTestMethod \(%22text%22\)"
+```
+
 :::zone pivot="mstest"
 
 ## MSTest examples
@@ -229,7 +235,7 @@ For more information, see [TestCase filter](https://github.com/Microsoft/vstest-
 ## See also
 
 - [dotnet test](../tools/dotnet-test.md)
-- [dotnet test --filter](../tools/dotnet-test.md#filter-option-details)
+- [dotnet test --filter](../tools/dotnet-test-vstest.md#filter-option-details)
 
 ## Next steps
 

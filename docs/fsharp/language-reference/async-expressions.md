@@ -17,7 +17,7 @@ async { expression }
 
 ## Remarks
 
-In the previous syntax, the computation represented by `expression` is set up to run asynchronously, that is, without blocking the current computation thread when asynchronous sleep operations, I/O, and other asynchronous operations are performed. Asynchronous computations are often started on a background thread while execution continues on the current thread. The type of the expression is `Async<'T>`, where `'T` is the type returned by the expression when the `return` keyword is used.
+In the previous syntax, the computation represented by `expression` is set up to run asynchronously, that is, without blocking the current computation thread when asynchronous sleep operations, I/O, and other asynchronous operations are performed. The type of the expression is `Async<'T>`, where `'T` is the type returned by the expression when the `return` keyword is used.
 
 The [`Async`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-fsharpasync.html) class provides methods that support several scenarios. The general approach is to create `Async` objects that represent the computation or computations that you want to run asynchronously, and then start these computations by using one of the triggering functions. The triggering you use depends on whether you want to use the current thread, a background thread, or a .NET task object. For example, to start an async computation on the current thread, you can use [`Async.StartImmediate`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-fsharpasync.html#StartImmediate). When you start an async computation from the UI thread, you do not block the main event loop that processes user actions such as keystrokes and mouse activity, so your application remains responsive.
 
@@ -36,8 +36,8 @@ let! (result2 : byte[])  = stream.AsyncRead(bufferSize)
 
 `let!` can only be used to await F# async computations [`Async<T>`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-fsharpasync.html) directly. You can await other kinds of asynchronous operations indirectly:
 
-* .NET tasks, <xref:System.Threading.Tasks.Task%601> and the non-generic <xref:System.Threading.Tasks.Task>, by combining with `Async.AwaitTask`
-* .NET value tasks, <xref:System.Threading.Tasks.ValueTask%601> and the non-generic <xref:System.Threading.Tasks.ValueTask>, by combining with `.AsTask()` and `Async.AwaitTask`
+* .NET tasks, <xref:System.Threading.Tasks.Task`1> and the non-generic <xref:System.Threading.Tasks.Task>, by combining with `Async.AwaitTask`
+* .NET value tasks, <xref:System.Threading.Tasks.ValueTask`1> and the non-generic <xref:System.Threading.Tasks.ValueTask>, by combining with `.AsTask()` and `Async.AwaitTask`
 * Any object following the "GetAwaiter" pattern specified in [F# RFC FS-1097](https://github.com/fsharp/fslang-design/blob/main/FSharp-6.0/FS-1097-task-builder.md), by combining with `task { return! expr } |> Async.AwaitTask`.
 
 ## Control Flow
@@ -54,7 +54,7 @@ In addition to `let!`, you can use `use!` to perform asynchronous bindings. The 
 
 ## Asynchronous Primitives
 
-A method that performs a single asynchronous task and returns the result is called an *asynchronous primitive*, and these are designed specifically for use with `let!`. Several asynchronous primitives are defined in the F# core library. Two such methods for Web applications are defined in the module [`FSharp.Control.WebExtensions`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-webextensions.html): [`WebRequest.AsyncGetResponse`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-webextensions.html#AsyncGetResponse) and [`WebClient.AsyncDownloadString`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-webextensions.html#AsyncDownloadString). Both primitives download data from a Web page, given a URL. `AsyncGetResponse` produces a `System.Net.WebResponse` object, and `AsyncDownloadString` produces a string that represents the HTML for a Web page.
+A method that performs a single asynchronous task and returns the result is called an *asynchronous primitive*, and these are designed specifically for use with `let!`. Several asynchronous primitives are defined in the F# core library. Two such methods for Web applications are defined in the module [`FSharp.Control.WebExtensions`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-webextensions.html): [`WebRequest.AsyncGetResponse`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-webextensions.html#AsyncGetResponse) and <xref:System.Net.Http.HttpClient.GetStringAsync*?displayProperty=nameWithType> (wrapped with `Async.AwaitTask` for compatibility with F#'s asynchronous model). Both primitives download data from a Web page, given a URL. `AsyncGetResponse` produces a `System.Net.WebResponse` object, and `GetStringAsync` produces a string that represents the HTML for a Web page.
 
 Several primitives for asynchronous I/O operations are included in the [`FSharp.Control.CommonExtensions`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-commonextensions.html) module. These extension methods of the `System.IO.Stream` class are [`Stream.AsyncRead`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-commonextensions.html#AsyncRead) and [`Stream.AsyncWrite`](https://fsharp.github.io/fsharp-core-docs/reference/fsharp-control-commonextensions.html#AsyncWrite).
 

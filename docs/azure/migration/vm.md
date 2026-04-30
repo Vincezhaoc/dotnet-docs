@@ -2,7 +2,7 @@
 title: Migrate an ASP.NET Web app to an Azure VM
 description: Learn how to migrate an ASP.NET Web application from on-premises to an Azure Virtual Machine.
 ms.topic: how-to
-ms.date: 06/20/2020
+ms.date: 07/22/2025
 ---
 
 # Migrate an ASP.NET Web application to an Azure Virtual Machine
@@ -52,7 +52,7 @@ Azure Virtual Networks enable you to:
 - Connect your VM to your on-premises network using one of several [connectivity options](/azure/vpn-gateway/vpn-gateway-about-vpngateways#s2smulti)
 - Integrate your virtual machine into your on-premises network using [ExpressRoute](https://azure.microsoft.com/services/expressroute/)
 
-To get started, see the [Virtual Network documentation](/azure/virtual-network/)
+To get started, see the [Virtual Network documentation](/azure/virtual-network/).
 
 ### Active Directory
 

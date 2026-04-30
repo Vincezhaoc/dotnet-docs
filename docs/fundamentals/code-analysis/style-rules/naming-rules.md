@@ -40,17 +40,17 @@ Each property should only be set once, but some settings allow multiple, comma-s
 
 The order of the properties is not important.
 
-## \<kind> values
+## `<kind>` values
 
 **\<kind>** specifies which kind of entity is being defined&mdash;naming rule, symbol group, or naming style&mdash;and must be one of the following:
 
-| To set a property for | Use the \<kind> value | Example |
+| To set a property for | Use the `<kind>` value | Example |
 | --- | --- | -- |
 | Naming rule | `dotnet_naming_rule` | `dotnet_naming_rule.types_should_be_pascal_case.severity = suggestion` |
 | Symbol group | `dotnet_naming_symbols` | `dotnet_naming_symbols.interface.applicable_kinds = interface` |
 | Naming style | `dotnet_naming_style` | `dotnet_naming_style.pascal_case.capitalization = pascal_case` |
 
-## \<entityName>
+## `<entityName>`
 
 **\<entityName>** is a descriptive name you choose that associates multiple property settings into a single definition. For example, the following properties produce two symbol group definitions, `interface` and `types`, each of which has two properties set on it.
 
@@ -62,7 +62,7 @@ dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum, d
 dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
 ```
 
-## \<propertyName> and \<propertyValue>
+## `<propertyName>` and `<propertyValue>`
 
 Each kind of entity&mdash;[naming rule](#naming-rule-properties), [symbol group](#symbol-group-properties), or [naming style](#naming-style-properties)&mdash;has its own supported properties, as described in the following sections.
 
@@ -122,8 +122,6 @@ All naming rule properties are required for a rule to take effect.
 ## Rule order
 
 The order in which naming rules are defined in an EditorConfig file doesn't matter. The naming rules are automatically ordered according to the definitions of the rules themselves. More specific rules regarding accessibilities, modifiers, and symbols take precedence over less specific rules. If there's overlap between rules or if the rule ordering causes problems, you can break out the intersection of the two rules into a new rule that takes precedence over the broader rules from which it was derived. For examples, see [Example: Overlapping naming strategies](#example-overlapping-naming-strategies) and [Example: `const` modifier includes `static` and `readonly`](#example-const-modifier-includes-static-and-readonly).
-
-The [EditorConfig Language Service extension](https://marketplace.visualstudio.com/items?itemName=MadsKristensen.EditorConfig) can analyze an EditorConfig file and report cases where the rule ordering in the file is different to what the compiler will use at run time.
 
 > [!NOTE]
 > If you're using a version of Visual Studio earlier than Visual Studio 2019, naming rules should be ordered from most-specific to least-specific in the EditorConfig file. The first rule encountered that can be applied is the only rule that is applied. However, if there are multiple rule *properties* with the same name, the most recently found property with that name takes precedence. For more information, see [File hierarchy and precedence](/visualstudio/ide/create-portable-custom-editor-options#file-hierarchy-and-precedence).

@@ -29,7 +29,6 @@ f1_keywords:
 - NETSDK1029
 - NETSDK1030
 - NETSDK1031
-- NETSDK1032
 - NETSDK1042
 - NETSDK1043
 - NETSDK1044
@@ -110,7 +109,6 @@ f1_keywords:
 - NETSDK1140
 - NETSDK1142
 - NETSDK1143
-- NETSDK1144
 - NETSDK1146
 - NETSDK1148
 - NETSDK1150
@@ -208,7 +206,7 @@ This list is a complete list of the errors that you might get from the .NET SDK 
 |NETSDK1029|Unable to use '{0}' as application host executable as it does not contain the expected placeholder byte sequence '{1}' that would mark where the application name would be written.|
 |NETSDK1030|Given file name '{0}' is longer than 1024 bytes.|
 |NETSDK1031|It is not supported to build or publish a self-contained application without specifying a RuntimeIdentifier. You must either specify a RuntimeIdentifier or set SelfContained to false.|
-|NETSDK1032|The RuntimeIdentifier platform '{0}' and the PlatformTarget '{1}' must be compatible.|
+|[NETSDK1032](netsdk1032.md)|The RuntimeIdentifier platform '{0}' and the PlatformTarget '{1}' must be compatible.|
 |NETSDK1042|Could not load PlatformManifest from '{0}' because it did not exist.|
 |NETSDK1043|Error parsing PlatformManifest from '{0}' line {1}.  Lines must have the format {2}.|
 |NETSDK1044|Error parsing PlatformManifest from '{0}' line {1}.  {2} '{3}' was invalid.|
@@ -307,7 +305,7 @@ This list is a complete list of the errors that you might get from the .NET SDK 
 |[NETSDK1141](netsdk1141.md)|Unable to resolve the .NET SDK version as specified in the global.json located at {0}.|
 |NETSDK1142|Including symbols in a single file bundle is not supported when publishing for .NET5 or higher.|
 |NETSDK1143|Including all content in a single file bundle also includes native libraries. If IncludeAllContentForSelfExtract is true, IncludeNativeLibrariesForSelfExtract must not be false.|
-|NETSDK1144|Optimizing assemblies for size failed. Optimization can be disabled by setting the PublishTrimmed property to false.|
+|[NETSDK1144](netsdk1144.md)|Optimizing assemblies for size failed. Optimization can be disabled by setting the PublishTrimmed property to false.|
 |[NETSDK1145](netsdk1145.md)|The {0} pack is not installed and NuGet package restore is not supported. Upgrade Visual Studio, remove global.json if it specifies a certain SDK version, and uninstall the newer SDK. For more options visit <https://aka.ms/targeting-apphost-pack-missing>. Pack Type:{0}, Pack directory: {1}, targetframework: {2}, Pack PackageId: {3}, Pack Package Version: {4}.|
 |NETSDK1146|PackAsTool does not support TargetPlatformIdentifier being set. For example, TargetFramework cannot be net5.0-windows, only net5.0. PackAsTool also does not support UseWPF or UseWindowsForms when targeting .NET 5 and higher.|
 |[NETSDK1147](netsdk1147.md)|To build this project, the following workloads must be installed: {0}.|
@@ -372,7 +370,8 @@ This list is a complete list of the errors that you might get from the .NET SDK 
 |NETSDK1207|Ahead-of-time compilation is not supported for the target framework.|
 |NETSDK1208|The target platform identifier {0} was not recognized. This is because MSBuildEnableWorkloadResolver is set to false which disables .NET SDK Workloads which is required for this identifier. Unset this environment variable or MSBuild property to enable workloads.|
 |NETSDK1209|The current Visual Studio version does not support targeting {0} {1}.  Either target {0} {2} or lower, or use Visual Studio version {3} or higher.|
-|NETSDK1210|IsAotCompatible and EnableAotAnalyzer are not supported for the target framework. Consider multi-targeting to a supported framework to enable ahead-of-time compilation analysis, and set IsAotCompatible only for the supported frameworks. For example:<br>`<IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '{0}'))>true</IsAotCompatible>`|
+|NETSDK1210|IsAotCompatible and EnableAotAnalyzer are not supported for the target framework. Consider multi-targeting to a supported framework to enable ahead-of-time compilation analysis, and set IsAotCompatible only for the supported frameworks. For example:<br>`<IsAotCompatible Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">true</IsAotCompatible>`|
 |NETSDK1211|EnableSingleFileAnalyzer is not supported for the target framework. Consider multi-targeting to a supported framework to enable single-file analysis, and set EnableSingleFileAnalyzer only for the supported frameworks. For example:<br>`<EnableSingleFileAnalyzer Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '{0}'))">true</EnableSingleFileAnalyzer>`|
-|NETSDK1212|IsTrimmable and EnableTrimAnalyzer are not supported for the target framework. Consider multi-targeting to a supported framework to enable trimming, and set IsTrimmable only for the supported frameworks. For example:<br>`<IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', '{0}'))">true</IsTrimmable>`|
+|NETSDK1212|IsTrimmable and EnableTrimAnalyzer are not supported for the target framework. Consider multi-targeting to a supported framework to enable trimming, and set IsTrimmable only for the supported frameworks. For example:<br>`<IsTrimmable Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net6.0'))">true</IsTrimmable>`|
 |NETSDK1213|Targeting .NET 8.0 or higher in Visual Studio 2022 17.7 is not supported.|
+|[NETSDK1237](netsdk1237.md)|Assembly '{0}' was listed in PublishReadyToRunPartialAssemblies but is being compiled into a composite image. Partial compilation is only supported for assemblies compiled separately. The assembly will be compiled fully into the composite image.|

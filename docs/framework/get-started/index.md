@@ -9,7 +9,7 @@ ms.assetid: c693fd34-88fe-4d90-b332-19eeadf3b7e7
 ---
 # Get started with .NET Framework
 
-.NET Framework is a run-time execution environment that manages apps that target .NET Framework. It consists of the common language runtime, which provides memory management and other system services, and an extensive class library, which enables programmers to take advantage of robust, reliable code for all major areas of app development.
+.NET Framework is a runtime execution environment that manages apps that target .NET Framework. It consists of the common language runtime, which provides memory management and other system services, and an extensive class library, which enables programmers to take advantage of robust, reliable code for all major areas of app development.
 
 [!INCLUDE [net-framework-future](../../../includes/net-framework-future.md)]
 
@@ -25,7 +25,7 @@ ms.assetid: c693fd34-88fe-4d90-b332-19eeadf3b7e7
 
 - Development frameworks and technologies. .NET Framework includes libraries for specific areas of app development, such as ASP.NET for web apps, ADO.NET for data access, Windows Communication Foundation for service-oriented apps, and Windows Presentation Foundation for Windows desktop apps.
 
-- Language interoperability. Language compilers that target .NET Framework emit an intermediate code named Common Intermediate Language (CIL), which, in turn, is compiled at run time by the common language runtime. With this feature, routines written in one language are accessible to other languages, and programmers focus on creating apps in their preferred languages.
+- Language interoperability. Language compilers that target .NET Framework emit an intermediate code named Common Intermediate Language (CIL), which, in turn, is compiled at runtime by the common language runtime. With this feature, routines written in one language are accessible to other languages, and programmers focus on creating apps in their preferred languages.
 
 - Version compatibility. With rare exceptions, apps that are developed by using a particular version of .NET Framework run without modification on a later version.
 
@@ -45,7 +45,7 @@ In general, you shouldn't uninstall versions of .NET Framework that are installe
 
 - If an app that you use depends on a specific version of .NET Framework, that app may break if that version is removed.
 
-- Some versions of .NET Framework are in-place updates to earlier versions. For example, .NET Framework 3.5 is an in-place update to version 2.0, and .NET Framework 4.8 is an in-place update to versions 4 through 4.7.2. For more information, see [.NET Framework Versions and Dependencies](../migration-guide/versions-and-dependencies.md).
+- Some versions of .NET Framework are in-place updates to earlier versions. For example, .NET Framework 3.5 is an in-place update to version 2.0, and .NET Framework 4.8 is an in-place update to versions 4 through 4.7.2. For more information, see [.NET Framework Versions and Dependencies](../install/versions-and-dependencies.md).
 
 On Windows versions before Windows 8, if you do choose to remove .NET Framework, always use **Programs and Features** from Control Panel to uninstall it. Never remove a version of .NET Framework manually. On Windows 8 and above, .NET Framework is an operating system component and cannot be independently uninstalled.
 

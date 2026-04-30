@@ -8,7 +8,7 @@ ms.date: 09/27/2021
 F# has two major feature areas that deal in the space of low-level programming:
 
 * The `byref`/`inref`/`outref` types, which are managed pointers. They have restrictions on usage so that you cannot compile a program that is invalid at run time.
-* A `byref`-like struct, which is a [struct](structs.md) that has similar semantics and the same compile-time restrictions as `byref<'T>`. One example is <xref:System.Span%601>.
+* A `byref`-like struct, which is a [struct](structs.md) that has similar semantics and the same compile-time restrictions as `byref<'T>`. One example is <xref:System.Span`1>.
 
 ## Syntax
 
@@ -179,6 +179,8 @@ A "`byref`-like" struct in F# is a stack-bound value type. It is never allocated
 * They cannot be static or instance members of a class or normal struct.
 * They cannot be captured by any closure construct (`async` methods or lambda expressions).
 * They cannot be used as a generic parameter.
+  * Starting with F# 9, this restriction is relaxed if the generic parameter is defined in C# using the allows ref struct anti-constraint. F# can instantiate such generics in types and methods with byref-like types. As a few examples, this affects BCL delegate types (`Action<>`, `Func<>`), interfaces (`IEnumerable<>`, `IComparable<>`) and generic arguments with a user-provided accumulator function (`String.string Create<TState>(int length, TState state, SpanAction<char, TState> action)`).
+  * It is impossible to author generic code supporting byref-like types in F#.
 
 This last point is crucial for F# pipeline-style programming, as `|>` is a generic function that parameterizes its input types. This restriction may be relaxed for `|>` in the future, as it is inline and does not make any calls to non-inlined generic functions in its body.
 

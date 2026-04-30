@@ -27,7 +27,7 @@ In this tutorial, you:
 
 ## Prerequisites
 
-For a list of pre-requisites and installation instructions, visit the [Model Builder installation guide](../how-to-guides/install-model-builder.md).
+For a list of prerequisites and installation instructions, visit the [Model Builder installation guide](../how-to-guides/install-model-builder.md).
 
 ## Create a C# Class Library
 
@@ -98,7 +98,7 @@ Throughout the training process, progress data is displayed in the `Training res
 
 Once training is complete the `mbconfig` file will have the generated model called `MovieRecommender.zip` after training and two C# files with it:
 
-- **MovieRecommender.consumption.cs**: This file has a public method `Predict` that loads the model and creates a [PredictionEngine](xref:Microsoft.ML.PredictionEngine%602) to make predictions. [PredictionEngine](xref:Microsoft.ML.PredictionEngine%602) is a convenience API for making predictions on a single data instance.
+- **MovieRecommender.consumption.cs**: This file has a public method `Predict` that loads the model and creates a [PredictionEngine](xref:Microsoft.ML.PredictionEngine`2) to make predictions. [PredictionEngine](xref:Microsoft.ML.PredictionEngine`2) is a convenience API for making predictions on a single data instance.
 - **MovieRecommender.training.cs**: This file consists of the training pipeline that Model Builder came up with to build the best model including any hyperparameters that it used.
 
 Click the **Next step** button to navigate to the evaluate step.
@@ -109,7 +109,7 @@ The result of the training step will be one model which had the best performance
 
 Additionally, in the **Output** window of Visual Studio, there will be a summary table containing top models and their metrics.
 
-In this section you can also test your model by performing a single prediction. It provides you with text boxes to input values for each of your feature columns and you can select the **Predict** button to get a prediction using the best model. By default this will be filled in by the first row in your dataset.
+In this section you can also test your model by performing a single prediction. It provides you with text boxes to input values for each of your feature columns and you can select **Predict** to get a prediction using the best model. By default this will be filled in by the first row in your dataset.
 
 ## (Optional) Consume the model
 
@@ -164,7 +164,7 @@ When adding a web API to your solution, you will be prompted to name the project
     4.577113
     ```
 
-Congratulations! You've successfully built a machine learning model to categorize the risk of health violations using Model Builder. You can find the source code for this tutorial at the [dotnet/machinelearning-samples](https://github.com/dotnet/machinelearning-samples/tree/main/samples/modelbuilder/MatrixFactorization_MovieRecommendation) GitHub repository.
+Congratulations! You've successfully built a machine learning model for movie recommendations using Model Builder. You can find the source code for this tutorial at the [dotnet/machinelearning-samples](https://github.com/dotnet/machinelearning-samples/tree/main/samples/modelbuilder/MatrixFactorization_MovieRecommendation) GitHub repository.
 
 ## Additional resources
 

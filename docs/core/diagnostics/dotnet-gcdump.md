@@ -1,12 +1,12 @@
 ---
 title: dotnet-gcdump diagnostic tool - .NET CLI
 description: Learn how to install and use dotnet-gcdump CLI tool to collect GC (Garbage Collector) dumps of live .NET processes using the .NET EventPipe.
-ms.date: 11/17/2020
+ms.date: 06/03/2025
 ms.topic: reference
 ---
 # Heap analysis tool (dotnet-gcdump)
 
-**This article applies to:** ✔️ `dotnet-gcdump` version 3.1.57502 and later versions
+**This article applies to:** ✔️ `dotnet-gcdump` version 10.0 and later versions
 
 ## Install
 
@@ -80,7 +80,7 @@ Collects a GC dump from a currently running process.
 ### Synopsis
 
 ```console
-dotnet-gcdump collect [-h|--help] [-p|--process-id <pid>] [-o|--output <gcdump-file-path>] [-v|--verbose] [-t|--timeout <timeout>] [-n|--name <name>]
+dotnet-gcdump collect [-h|--help] [-p|--process-id <pid>] [-o|--output <gcdump-file-path>] [-v|--verbose] [-t|--timeout <timeout>] [-n|--name <name>] [--dsrouter <ios|ios-sim|android|android-emu>]
 ```
 
 ### Options
@@ -92,6 +92,9 @@ dotnet-gcdump collect [-h|--help] [-p|--process-id <pid>] [-o|--output <gcdump-f
 - **`-p|--process-id <pid>`**
 
   The process ID to collect the GC dump from.
+
+  > [!NOTE]
+  > On Linux and macOS, using this option requires the target application and `dotnet-gcdump` to share the same `TMPDIR` environment variable. Otherwise, the command will time out.
 
 - **`-o|--output <gcdump-file-path>`**
 
@@ -109,11 +112,63 @@ dotnet-gcdump collect [-h|--help] [-p|--process-id <pid>] [-o|--output <gcdump-f
 
   The name of the process to collect the GC dump from.
 
-> [!NOTE]
-> On Linux and macOS, this command expects the target application and `dotnet-gcdump` to share the same `TMPDIR` environment variable. Otherwise, the command will time out.
+  > [!NOTE]
+  > On Linux and macOS, using this option requires the target application and `dotnet-gcdump` to share the same `TMPDIR` environment variable. Otherwise, the command will time out.
+
+- **`--diagnostic-port <port-address[,(listen|connect)]>`**
+
+  Sets the [diagnostic port](diagnostic-port.md) used to communicate with the process to be dumped. dotnet-gcdump and the .NET runtime inside the target process must agree on the port-address, with one listening and the other connecting. dotnet-gcdump automatically determines the correct port when attaching using the `--process-id` or `--name` options. It's usually only necessary to specify the port explicitly when communicating to a process that's running inside a container that isn't part of the current process namespace.
+
+  The `port-address` differs by OS:
+
+  - Linux and macOS - a path to a Unix domain socket such as `/foo/tool1.socket`.
+  - Windows - a path to a named pipe such as `\\.\pipe\my_diag_port1`.
+  - Android, iOS, and tvOS - an IP:port such as `127.0.0.1:9000`.
+  
+  By default, dotnet-gcdump listens at the specified address. You can request dotnet-gcdump to connect instead by appending `,connect` after the address. For example, `--diagnostic-port /foo/tool1.socket,connect` will connect to a .NET runtime process that's listening to the `/foo/tool1.socket` Unix domain socket.
+
+- **`--dsrouter <ios|ios-sim|android|android-emu>`**
+
+  Starts [dotnet-dsrouter](dotnet-dsrouter.md) and connects to it. Requires [dotnet-dsrouter](dotnet-dsrouter.md) to be installed. Run `dotnet-dsrouter -h` for more information.
 
 > [!NOTE]
 > To collect a GC dump using `dotnet-gcdump`, it needs to be run as the same user as the user running target process or as root. Otherwise, the tool will fail to establish a connection with the target process.
+
+### Examples
+
+- Collect a GC dump from a process with process ID 1902:
+
+  ```dotnetcli
+  > dotnet-gcdump collect --process-id 1902
+  Writing gcdump to './20250601_121500_1902.gcdump'...
+      Finished writing 5763432 bytes.
+  ```
+
+- Collect a GC dump from a process with process ID 1902 and save it to a custom path:
+
+  ```dotnetcli
+  > dotnet-gcdump collect --process-id 1902 --output ./myapp-dump.gcdump
+  Writing gcdump to './myapp-dump.gcdump'...
+      Finished writing 5763432 bytes.
+  ```
+
+- Collect a GC dump from a process by name with verbose output:
+
+  ```dotnetcli
+  > dotnet-gcdump collect --name my-aspnet-server --verbose
+  [20:54:11] Starting gcdump collection...
+  [20:54:11] Triggering GC...
+  [20:54:12] Writing gcdump to './20250601_205412_4521.gcdump'...
+      Finished writing 5763432 bytes.
+  ```
+
+- Collect a GC dump with a custom timeout of 60 seconds:
+
+  ```dotnetcli
+  > dotnet-gcdump collect --process-id 1902 --timeout 60
+  Writing gcdump to './20250601_121500_1902.gcdump'...
+      Finished writing 5763432 bytes.
+  ```
 
 ## `dotnet-gcdump ps`
 
@@ -159,6 +214,32 @@ dotnet-gcdump report [-h|--help] [-p|--process-id <pid>] [-t|--report-type <Heap
 - **`-t|--report-type <HeapStat>`**
 
   The type of report to generate. Available options: heapstat (default).
+
+### Examples
+
+- Generate a heap statistics report from a previously created `.gcdump` file:
+
+  ```dotnetcli
+  > dotnet-gcdump report ./20250601_121500_1902.gcdump
+  ```
+
+  The output displays type statistics:
+
+  ```output
+            Size (Bytes) Count       Type
+          ============== =====       ====
+          1,603,588,000  22,000,000  System.String
+            201,096,000   2,010,000  System.Byte[]
+            100,000,000   1,000,000  System.Char[]
+             50,000,000     500,000  System.Object[]
+             25,000,000     250,000  MyApp.Customer
+  ```
+
+- Generate a heap statistics report from a running process with process ID 1902:
+
+  ```dotnetcli
+  > dotnet-gcdump report --process-id 1902
+  ```
 
 ## Troubleshoot
 

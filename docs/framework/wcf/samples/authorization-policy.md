@@ -3,6 +3,7 @@ description: "Learn more about: Authorization Policy"
 title: "Authorization Policy"
 ms.date: "03/30/2017"
 ms.assetid: 1db325ec-85be-47d0-8b6e-3ba2fdf3dda0
+ms.custom: sfi-ropc-nochange
 ---
 # Authorization Policy
 
@@ -231,7 +232,7 @@ catch (Exception e)
 client2.Close();
 ```
 
-This sample uses a custom <xref:System.IdentityModel.Selectors.UserNamePasswordValidator> to validate user names and passwords. The sample implements `MyCustomUserNamePasswordValidator`, derived from <xref:System.IdentityModel.Selectors.UserNamePasswordValidator>. See the documentation about <xref:System.IdentityModel.Selectors.UserNamePasswordValidator> for more information. For the purposes of demonstrating the integration with the <xref:System.IdentityModel.Selectors.UserNamePasswordValidator>, this custom validator sample implements the <xref:System.IdentityModel.Selectors.UserNamePasswordValidator.Validate%2A> method to accept user name/password pairs where the user name matches the password as shown in the following code.
+This sample uses a custom <xref:System.IdentityModel.Selectors.UserNamePasswordValidator> to validate user names and passwords. The sample implements `MyCustomUserNamePasswordValidator`, derived from <xref:System.IdentityModel.Selectors.UserNamePasswordValidator>. See the documentation about <xref:System.IdentityModel.Selectors.UserNamePasswordValidator> for more information. For the purposes of demonstrating the integration with the <xref:System.IdentityModel.Selectors.UserNamePasswordValidator>, this custom validator sample implements the <xref:System.IdentityModel.Selectors.UserNamePasswordValidator.Validate*> method to accept user name/password pairs where the user name matches the password as shown in the following code.
 
 ```csharp
 public class MyCustomUserNamePasswordValidator : UserNamePasswordValidator
@@ -279,7 +280,7 @@ Or you can do the same thing in configuration:
 
 Windows Communication Foundation (WCF) provides a rich claims-based model for performing access checks. The <xref:System.ServiceModel.ServiceAuthorizationManager> object is used to perform the access check and determine whether the claims associated with the client satisfy the requirements necessary to access the service method.
 
-For the purposes of demonstration, this sample shows an implementation of <xref:System.ServiceModel.ServiceAuthorizationManager> that implements the <xref:System.ServiceModel.ServiceAuthorizationManager.CheckAccessCore%2A> method to allow a user's access to methods based on claims of type `http://example.com/claims/allowedoperation` whose value is the Action URI of the operation that is allowed to be called.
+For the purposes of demonstration, this sample shows an implementation of <xref:System.ServiceModel.ServiceAuthorizationManager> that implements the <xref:System.ServiceModel.ServiceAuthorizationManager.CheckAccessCore*> method to allow a user's access to methods based on claims of type `http://example.com/claims/allowedoperation` whose value is the Action URI of the operation that is allowed to be called.
 
 ```csharp
 public class MyServiceAuthorizationManager : ServiceAuthorizationManager

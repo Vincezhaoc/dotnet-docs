@@ -1,11 +1,8 @@
 ---
 title: ".NET regular expression source generators"
 description: Learn how to use regular expression source generators to optimize the performance of matching algorithms in .NET.
-ms.topic: conceptual
-ms.date: 05/29/2024
-author: IEvangelist
-ms.author: dapine
-zone_pivot_groups: dotnet-version-7-8
+ms.topic: concept-article
+ms.date: 10/20/2025
 ---
 
 # .NET regular expression source generators
@@ -25,7 +22,7 @@ There are several downsides to `RegexOptions.Compiled`. The most impactful is th
 
 ## Source generation
 
-.NET 7 introduced a new `RegexGenerator` source generator. A *source generator* is a component that plugs into the compiler and augments the compilation unit with additional source code. The .NET SDK (version 7 and later) includes a source generator that recognizes the <xref:System.Text.RegularExpressions.GeneratedRegexAttribute> attribute on a partial method that returns `Regex`. The source generator provides an implementation of that method that contains all the logic for the `Regex`. For example, you previously might have written code like this:
+.NET 7 introduced a new `RegexGenerator` source generator. A *source generator* is a component that plugs into the compiler and augments the compilation unit with additional source code. The .NET SDK includes a source generator that recognizes the <xref:System.Text.RegularExpressions.GeneratedRegexAttribute> attribute on a partial method that returns `Regex`. Starting in .NET 9, the attribute can also be applied to partial properties. The source generator provides an implementation of that method or property that contains all the logic for the `Regex`. For example, you previously might have written code like this:
 
 ```csharp
 private static readonly Regex s_abcOrDefGeneratedRegex =
@@ -56,6 +53,21 @@ private static void EvaluateText(string text)
 }
 ```
 
+Starting in .NET 9, you can also apply the `GeneratedRegexAttribute` to a partial property instead of a partial method. This is enabled by C# 13's support for partial properties. The following example shows the property equivalent:
+
+```csharp
+[GeneratedRegex("abc|def", RegexOptions.IgnoreCase, "en-US")]
+private static partial Regex AbcOrDefGeneratedRegexProperty { get; }
+
+private static void EvaluateText(string text)
+{
+    if (AbcOrDefGeneratedRegexProperty.IsMatch(text))
+    {
+        // Take action with matching text
+    }
+}
+```
+
 > [!TIP]
 > The `RegexOptions.Compiled` flag is ignored by the source generator, thus it's not needed in the source-generated version.
 
@@ -70,7 +82,7 @@ But as can be seen, it's not just doing `new Regex(...)`. Rather, the source gen
 :::image type="content" source="media/regular-expression-source-generators/debuggable-source.png" lightbox="media/regular-expression-source-generators/debuggable-source.png" alt-text="Debugging through source-generated Regex code":::
 
 > [!TIP]
-> In Visual Studio, right-click on your partial method declaration and select **Go To Definition**. Or, alternatively, select the project node in **Solution Explorer**, then expand **Dependencies** > **Analyzers** > **System.Text.RegularExpressions.Generator** > **System.Text.RegularExpressions.Generator.RegexGenerator** > _RegexGenerator.g.cs_ to see the generated C# code from this regex generator.
+> In Visual Studio, right-click on your partial method or property declaration and select **Go To Definition**. Or, alternatively, select the project node in **Solution Explorer**, then expand **Dependencies** > **Analyzers** > **System.Text.RegularExpressions.Generator** > **System.Text.RegularExpressions.Generator.RegexGenerator** > _RegexGenerator.g.cs_ to see the generated C# code from this regex generator.
 
 You can set breakpoints in it, you can step through it, and you can use it as a learning tool to understand exactly how the regex engine is processing your pattern with your input. The generator even generates [triple-slash (XML) comments](../../csharp/language-reference/xmldoc/index.md) to help make the expression understandable at a glance and where it's used.
 
@@ -79,8 +91,6 @@ You can set breakpoints in it, you can step through it, and you can use it as a 
 ## Inside the source-generated files
 
 With .NET 7, both the source generator and `RegexCompiler` were almost entirely rewritten, fundamentally changing the structure of the generated code. This approach has been extended to handle all constructs (with one caveat), and both `RegexCompiler` and the source generator still map mostly 1:1 with each other, following the new approach. Consider the source generator output for one of the primary functions from the `abc|def` expression:
-
-:::zone pivot="dotnet-8-0"
 
 ```csharp
 private bool TryMatchAtCurrentPosition(ReadOnlySpan<char> inputSpan)
@@ -132,87 +142,7 @@ private bool TryMatchAtCurrentPosition(ReadOnlySpan<char> inputSpan)
 }
 ```
 
-:::zone-end
-:::zone pivot="dotnet-7-0"
-
-```csharp
-private bool TryMatchAtCurrentPosition(ReadOnlySpan<char> inputSpan)
-{
-    int pos = base.runtextpos;
-    int matchStart = pos;
-    int capture_starting_pos = 0;
-    ReadOnlySpan<char> slice = inputSpan.Slice(pos);
-
-    // 1st capture group.
-    //{
-        capture_starting_pos = pos;
-
-        // Match with 2 alternative expressions.
-        //{
-            if (slice.IsEmpty)
-            {
-                UncaptureUntil(0);
-                return false; // The input didn't match.
-            }
-
-            switch (slice[0])
-            {
-                case 'a':
-                    pos++;
-                    slice = inputSpan.Slice(pos);
-                    break;
-
-                case 'b':
-                    // Match 'c'.
-                    if ((uint)slice.Length < 2 || slice[1] != 'c')
-                    {
-                        UncaptureUntil(0);
-                        return false; // The input didn't match.
-                    }
-
-                    pos += 2;
-                    slice = inputSpan.Slice(pos);
-                    break;
-
-                default:
-                    UncaptureUntil(0);
-                    return false; // The input didn't match.
-            }
-        //}
-
-        base.Capture(1, capture_starting_pos, pos);
-    //}
-
-    // Match 'd'.
-    if (slice.IsEmpty || slice[0] != 'd')
-    {
-        UncaptureUntil(0);
-        return false; // The input didn't match.
-    }
-
-    // The input matched.
-    pos++;
-    base.runtextpos = pos;
-    base.Capture(0, matchStart, pos);
-    return true;
-
-    // <summary>Undo captures until it reaches the specified capture position.</summary>
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    void UncaptureUntil(int capturePosition)
-    {
-        while (base.Crawlpos() > capturePosition)
-        {
-            base.Uncapture();
-        }
-    }
-}
-```
-
-:::zone-end
-
 The goal of the source-generated code is to be understandable, with an easy-to-follow structure, with comments explaining what's being done at each step, and in general with code emitted under the guiding principle that the generator should emit code as if a human had written it. Even when backtracking is involved, the structure of the backtracking becomes part of the structure of the code, rather than relying on a stack to indicate where to jump next. For example, here's the code for the same generated matching function when the expression is `[ab]*[bc]`:
-
-:::zone pivot="dotnet-8-0"
 
 ```csharp
 private bool TryMatchAtCurrentPosition(ReadOnlySpan<char> inputSpan)
@@ -277,81 +207,11 @@ private bool TryMatchAtCurrentPosition(ReadOnlySpan<char> inputSpan)
 }
 ```
 
-:::zone-end
-:::zone pivot="dotnet-7-0"
-
-```csharp
-private bool TryMatchAtCurrentPosition(ReadOnlySpan<char> inputSpan)
-{
-    int pos = base.runtextpos;
-    int matchStart = pos;
-    int charloop_starting_pos = 0, charloop_ending_pos = 0;
-    ReadOnlySpan<char> slice = inputSpan.Slice(pos);
-
-    // Match a character in the set [ABab] greedily any number of times.
-    //{
-        charloop_starting_pos = pos;
-
-        int iteration = slice.IndexOfAnyExcept("ABab");
-        if (iteration < 0)
-        {
-            iteration = slice.Length;
-        }
-
-        slice = slice.Slice(iteration);
-        pos += iteration;
-
-        charloop_ending_pos = pos;
-        goto CharLoopEnd;
-
-        CharLoopBacktrack:
-
-        if (Utilities.s_hasTimeout)
-        {
-            base.CheckTimeout();
-        }
-
-        if (charloop_starting_pos >= charloop_ending_pos ||
-            (charloop_ending_pos = inputSpan.Slice(charloop_starting_pos, charloop_ending_pos - charloop_starting_pos).LastIndexOfAny("BCbc")) < 0)
-        {
-            return false; // The input didn't match.
-        }
-        charloop_ending_pos += charloop_starting_pos;
-        pos = charloop_ending_pos;
-        slice = inputSpan.Slice(pos);
-
-        CharLoopEnd:
-    //}
-
-    // Advance the next matching position.
-    if (base.runtextpos < pos)
-    {
-        base.runtextpos = pos;
-    }
-
-    // Match a character in the set [BCbc].
-    if (slice.IsEmpty || ((uint)((slice[0] | 0x20) - 'b') > (uint)('c' - 'b')))
-    {
-        goto CharLoopBacktrack;
-    }
-
-    // The input matched.
-    pos++;
-    base.runtextpos = pos;
-    base.Capture(0, matchStart, pos);
-    return true;
-}
-```
-
-:::zone-end
-
 You can see the structure of the backtracking in the code, with a `CharLoopBacktrack` label emitted for where to backtrack to and a `goto` used to jump to that location when a subsequent portion of the regex fails.
 
 If you look at the code implementing `RegexCompiler` and the source generator, they will look extremely similar: similarly named methods, similar call structure, and even similar comments throughout the implementation. For the most part, they result in identical code, albeit one in IL and one in C#. Of course, the C# compiler is then responsible for translating the C# into IL, so the resulting IL in both cases likely won't be identical. The source generator relies on that in various cases, taking advantage of the fact that the C# compiler will further optimize various C# constructs. There are a few specific things the source generator will thus produce more optimized matching code than does `RegexCompiler`. For example, in one of the previous examples, you can see the source generator emitting a switch statement, with one branch for `'a'` and another branch for `'b'`. Because the C# compiler is very good at optimizing switch statements, with multiple strategies at its disposal for how to do so efficiently, the source generator has a special optimization that `RegexCompiler` does not. For [alternations](alternation-constructs-in-regular-expressions.md#Either_Or), the source generator looks at all of the branches, and if it can prove that every branch begins with a different starting character, it will emit a switch statement over that first character and avoid outputting any backtracking code for that alternation.
 
 Here's a slightly more complicated example of that. Alternations are more heavily analyzed to determine whether it's possible to refactor them in a way that will make them more easily optimized by the backtracking engines and that will lead to simpler source-generated code. One such optimization supports extracting common prefixes from branches, and if the alternation is atomic such that ordering doesn't matter, reordering branches to allow for more such extraction. You can see the impact of that for the following weekday pattern `Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday`, which produces a matching function like this:
-
-:::zone pivot="dotnet-8-0"
 
 ```csharp
 private bool TryMatchAtCurrentPosition(ReadOnlySpan<char> inputSpan)
@@ -508,154 +368,6 @@ private bool TryMatchAtCurrentPosition(ReadOnlySpan<char> inputSpan)
 }
 ```
 
-:::zone-end
-:::zone pivot="dotnet-7-0"
-
-```csharp
-private bool TryMatchAtCurrentPosition(ReadOnlySpan<char> inputSpan)
-{
-    int pos = base.runtextpos;
-    int matchStart = pos;
-    ReadOnlySpan<char> slice = inputSpan.Slice(pos);
-
-    // Match with 5 alternative expressions, atomically.
-    {
-        if (slice.IsEmpty)
-        {
-            return false; // The input didn't match.
-        }
-
-        switch (slice[0])
-        {
-            case 'M':
-                // Match the string "onday".
-                if (!slice.Slice(1).StartsWith("onday"))
-                {
-                    return false; // The input didn't match.
-                }
-
-                pos += 6;
-                slice = inputSpan.Slice(pos);
-                break;
-
-            case 'T':
-                // Match with 2 alternative expressions, atomically.
-                {
-                    if ((uint)slice.Length < 2)
-                    {
-                        return false; // The input didn't match.
-                    }
-
-                    switch (slice[1])
-                    {
-                        case 'u':
-                            // Match the string "esday".
-                            if (!slice.Slice(2).StartsWith("esday"))
-                            {
-                                return false; // The input didn't match.
-                            }
-
-                            pos += 7;
-                            slice = inputSpan.Slice(pos);
-                            break;
-
-                        case 'h':
-                            // Match the string "ursday".
-                            if (!slice.Slice(2).StartsWith("ursday"))
-                            {
-                                return false; // The input didn't match.
-                            }
-
-                            pos += 8;
-                            slice = inputSpan.Slice(pos);
-                            break;
-
-                        default:
-                            return false; // The input didn't match.
-                    }
-                }
-
-                break;
-
-            case 'W':
-                // Match the string "ednesday".
-                if (!slice.Slice(1).StartsWith("ednesday"))
-                {
-                    return false; // The input didn't match.
-                }
-
-                pos += 9;
-                slice = inputSpan.Slice(pos);
-                break;
-
-            case 'F':
-                // Match the string "riday".
-                if (!slice.Slice(1).StartsWith("riday"))
-                {
-                    return false; // The input didn't match.
-                }
-
-                pos += 6;
-                slice = inputSpan.Slice(pos);
-                break;
-
-            case 'S':
-                // Match with 2 alternative expressions, atomically.
-                {
-                    if ((uint)slice.Length < 2)
-                    {
-                        return false; // The input didn't match.
-                    }
-
-                    switch (slice[1])
-                    {
-                        case 'a':
-                            // Match the string "turday".
-                            if (!slice.Slice(2).StartsWith("turday"))
-                            {
-                                return false; // The input didn't match.
-                            }
-
-                            pos += 8;
-                            slice = inputSpan.Slice(pos);
-                            break;
-
-                        case 'u':
-                            // Match the string "nday".
-                            if (!slice.Slice(2).StartsWith("nday"))
-                            {
-                                return false; // The input didn't match.
-                            }
-
-                            pos += 6;
-                            slice = inputSpan.Slice(pos);
-                            break;
-
-                        default:
-                            return false; // The input didn't match.
-                    }
-                }
-
-                break;
-
-            default:
-                return false; // The input didn't match.
-        }
-    }
-
-    // The input matched.
-    base.runtextpos = pos;
-    base.Capture(0, matchStart, pos);
-    return true;
-}
-```
-
-Take notice of how `Thursday` was reordered to be just after `Tuesday`, and how for both the `Tuesday`/`Thursday` pair and the `Saturday`/`Sunday` pair, you end up with multiple levels of switches. In the extreme, if you were to create a long alternation of many different words, the source generator would end up emitting the logical equivalent of a trie[^1], reading each character and `switch`'ing to the branch for handling the remainder of the word. This is a very efficient way to match words, and it's what the source generator is doing here.
-
-[^1]: <https://en.wikipedia.org/wiki/Trie> "Wikipedia: Trie — A trie is a data structure that's used to store strings in a way that allows for efficient prefix matching."
-
-:::zone-end
-
 At the same time, the source generator has other issues to contend with that simply don't exist when outputting to IL directly. If you look a couple of code examples back, you can see some braces somewhat strangely commented out. That's not a mistake. The source generator is recognizing that, if those braces weren't commented out, the structure of the backtracking is relying on jumping from outside of the scope to a label defined inside of that scope; such a label would not be visible to such a `goto` and the code would fail to compile. Thus, the source generator needs to avoid there being a scope in the way. In some cases, it'll simply comment out the scope as was done here. In other cases where that's not possible, it may sometimes avoid constructs that require scopes (such as a multi-statement `if` block) if doing so would be problematic.
 
 The source generator handles everything `RegexCompiler` handles, with one exception. As with handling `RegexOptions.IgnoreCase`, the implementations now use a casing table to generate sets at construction time, and how `IgnoreCase` backreference matching needs to consult that casing table. That table is internal to `System.Text.RegularExpressions.dll`, and for now, at least, the code external to that assembly (including code emitted by the source generator) does not have access to it. That makes handling `IgnoreCase` backreferences a challenge in the source generator and they aren't supported. This is the one construct not supported by the source generator that is supported by `RegexCompiler`. If you try to use a pattern that has one of these (which is rare), the source generator won't emit a custom implementation and will instead fall back to caching a regular `Regex` instance:
@@ -669,7 +381,7 @@ Also, neither `RegexCompiler` nor the source generator supports the new `RegexOp
 The general guidance is if you can use the source generator, use it. If you're using `Regex` today in C# with arguments known at compile time, and especially if you're already using `RegexOptions.Compiled` (because the regex has been identified as a hot spot that would benefit from faster throughput), you should prefer to use the source generator. The source generator will give your regex the following benefits:
 
 - All the throughput benefits of `RegexOptions.Compiled`.
-- The startup benefits of not having to do all the regex parsing, analysis, and compilation at run time.
+- The startup benefits of not having to do all the regex parsing, analysis, and compilation at runtime.
 - The option of using ahead-of-time compilation with the code generated for the regex.
 - Better debuggability and understanding of the regex.
 - The possibility to reduce the size of your trimmed app by trimming out large swaths of code associated with `RegexCompiler` (and potentially even reflection emit itself).
@@ -687,5 +399,5 @@ When used with an option like `RegexOptions.NonBacktracking` for which the sourc
 - [.NET regular expressions](regular-expressions.md)
 - [Backtracking in regular expressions](backtracking-in-regular-expressions.md)
 - [Compilation and reuse in regular expressions](compilation-and-reuse-in-regular-expressions.md)
-- [Source generators](../../csharp/roslyn-sdk/source-generators-overview.md)
+- [Source generators](../../csharp/roslyn-sdk/index.md#source-generators)
 - [.NET Blog: Regular Expression improvements in .NET 7](https://devblogs.microsoft.com/dotnet/regular-expression-improvements-in-dotnet-7)

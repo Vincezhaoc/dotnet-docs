@@ -46,6 +46,18 @@ groups:
       title: Visual Studio Code
     - id: visualstudio
       title: Visual Studio
+- id: copilot-modernization-install
+  title: Development environment
+  prompt: Choose your development environment
+  pivots:
+    - id: visualstudio
+      title: Visual Studio
+    - id: vscode
+      title: Visual Studio Code
+    - id: copilot-cli
+      title: GitHub Copilot CLI
+    - id: github-com
+      title: GitHub.com
 - id: development-environment-one
   title: Development environment
   prompt: Choose a development environment
@@ -60,36 +72,34 @@ groups:
   title: .NET preview version
   prompt: Choose a .NET version
   pivots:
+    - id: dotnet-11-0
+      title: .NET 11 Preview
+    - id: dotnet-10-0
+      title: .NET 10
     - id: dotnet-9-0
-      title: .NET 9 Preview
+      title: .NET 9
     - id: dotnet-8-0
       title: .NET 8
-    - id: dotnet-7-0
-      title: .NET 7
-    - id: dotnet-6-0
-      title: .NET 6
 - id: dotnet-version
   title: .NET version
   prompt: Choose a .NET version
   pivots:
+    - id: dotnet-10-0
+      title: .NET 10
+    - id: dotnet-9-0
+      title: .NET 9
     - id: dotnet-8-0
       title: .NET 8
-    - id: dotnet-7-0
-      title: .NET 7
-    - id: dotnet-6-0
-      title: .NET 6
-- id: dotnet-version-7-8
-  title: .NET version
-  prompt: Choose a .NET version
-  pivots:
-    - id: dotnet-8-0
-      title: .NET 8
-    - id: dotnet-7-0
-      title: .NET 7
 - id: orleans-version
   title: Orleans version
   prompt: Choose an Orleans version
   pivots:
+    - id: orleans-10-0
+      title: Orleans 10.0
+    - id: orleans-9-0
+      title: Orleans 9.x
+    - id: orleans-8-0
+      title: Orleans 8.x
     - id: orleans-7-0
       title: Orleans 7.0
     - id: orleans-3-x
@@ -117,7 +127,7 @@ groups:
   prompt: Choose an Azure interface
   pivots:
     - id: azure-portal
-      title: Azure Portal
+      title: Azure portal
     - id: azure-cli
       title: Azure CLI
 - id: code-language
@@ -132,20 +142,18 @@ groups:
   title: Ubuntu Version
   prompt: Choose the Ubuntu distribution version
   pivots:
+  # order: lts versions (newest to oldest), interim versions (newest to oldest), other
+  # see: https://github.com/dotnet/docs/issues/47461
+    - id: os-linux-ubuntu-2604
+      title: "26.04"
     - id: os-linux-ubuntu-2404
       title: "24.04"
-    - id: os-linux-ubuntu-2310
-      title: "23.10"
     - id: os-linux-ubuntu-2204
       title: "22.04"
-    - id: os-linux-ubuntu-2004
-      title: "20.04"
-    - id: os-linux-ubuntu-1804
-      title: "18.04"
-    - id: os-linux-ubuntu-1604
-      title: "16.04"
-    - id: os-linux-ubuntu-other
-      title: "Other"
+    - id: os-linux-ubuntu-2510
+      title: "25.10"
+    - id: os-linux-ubuntu-2504
+      title: "25.04"
 - id: openai-library
   title: OpenAI Library
   prompt: Choose a host service for OpenAI
@@ -154,3 +162,25 @@ groups:
       title: OpenAI
     - id: azure-openai
       title: Azure OpenAI
+- id: meai-targets
+  title: MEAI targets
+  prompt: Choose a host service for your AI models
+  pivots:
+    - id: github-models
+      title: GitHub Models
+    - id: azure-openai
+      title: Azure OpenAI
+    - id: openai
+      title: OpenAI
+    - id: ollama
+      title: Ollama
+- id: code-editor-set-one
+  title: Code editor
+  prompt: Choose a code editor
+  pivots:
+    - id: visualstudio
+      title: Visual Studio
+    - id: vscode
+      title: Visual Studio Code
+    - id: codespaces
+      title: GitHub Codespaces

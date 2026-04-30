@@ -5,11 +5,12 @@ author: adegeo
 ms.date: 05/25/2023
 dev_langs: ["csharp", "vb"]
 no-loc: ["package.config", PackageReference]
+ms.custom: sfi-ropc-nochange
 ---
 
 # Modernize after upgrading to .NET from .NET Framework
 
-In this article, you'll learn about different ways you can modernize your app after it's been upgraded from .NET Framework to .NET. Use the [.NET Upgrade Assistant](upgrade-assistant-overview.md) tool to upgrade your app to .NET.
+In this article, you'll learn about different ways you can modernize your app after it's been upgraded from .NET Framework to .NET. Use the [GitHub Copilot modernization](github-copilot-app-modernization/overview.md) chat agent to upgrade your app to .NET.
 
 ## Missing APIs
 
@@ -17,7 +18,7 @@ When upgrading a .NET Framework app, you'll most likely have some incompatibilit
 
 ### Windows Compatibility Pack
 
-If after migration you have some dependencies on .NET Framework APIs that are not supported on your new version of .NET, you might find them in the [`Microsoft.Windows.Compatibility` NuGet package](https://www.nuget.org/packages/Microsoft.Windows.Compatibility). It adds around 20,000 APIs to your .NET project, significantly increasing the API set available to your project. These APIs include Windows-only APIs such as those related to Windows Management Instrumentation (WMI) and the Windows EventLog. For more information, see [Use the Windows Compatibility Pack to port code to .NET](windows-compat-pack.md)
+If after migration you have some dependencies on .NET Framework APIs that are not supported on your new version of .NET, you might find them in the [`Microsoft.Windows.Compatibility` NuGet package](https://www.nuget.org/packages/Microsoft.Windows.Compatibility). It adds around 20,000 APIs to your .NET project, significantly increasing the API set available to your project. These APIs include Windows-only APIs such as those related to Windows Management Instrumentation (WMI) and the Windows EventLog. For more information, see [Use the Windows Compatibility Pack to port code to .NET](windows-compat-pack.md).
 
 ## Web browser control
 
@@ -25,7 +26,7 @@ Projects that target a Windows desktop technology, such as Windows Presentation 
 
 ## App.config
 
-.NET Framework uses the _App.config_ file to load settings for your app, such as connection strings and log provider configuration. Modern .NET uses the _appsettings.json_ file for app settings. The CLI version of the Upgrade Assistant handles converting _App.config_ files to _appsettings.json_, but the Visual Studio extension doesn't.
+.NET Framework uses the _App.config_ file to load settings for your app, such as connection strings and log provider configuration. Modern .NET uses the _appsettings.json_ file for app settings.
 
 > [!TIP]
 > If you don't want to use the _appsettings.json_ file, you can add the `System.Configuration.ConfigurationManager` NuGet package to your app and your code will compile and use the _App.config_ file.

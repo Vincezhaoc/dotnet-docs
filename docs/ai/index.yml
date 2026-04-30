@@ -1,38 +1,42 @@
 ### YamlMime:Landing
 
-title: AI for .NET developers
-summary: Learn to use AI with .NET. Browse sample code, tutorials, quickstarts, conceptual articles, and more.
+title: AI apps for .NET developers
+summary: Learn to build AI apps with .NET. Browse sample code, tutorials, quickstarts, conceptual articles, and more.
 
 metadata:
-  title: AI for .NET Developers
-  description: Samples, tutorials, and education for using AI with .NET
-  ms.topic: hub-page
+  title: AI apps for .NET developers
+  description: Samples, tutorials, and education for building AI apps with .NET
+  ms.topic: landing-page
   ms.service: dotnet
-  ms.date: 05/13/2024
+  ms.date: 12/10/2025
   author: alexwolfmsft
   ms.author: alexwolf
 
-# linkListType: architecture | concept | deploy | download | get-started | how-to-guide | tutorial | overview | quickstart | reference | sample | tutorial | video | whats-new
+# linkListType: architecture | concept | deploy | download | get-started | how-to-guide | tutorial | overview | quickstart | reference | sample | training | tutorial | video | whats-new
 
 landingContent:
-# Cards and links should be based on top customer tasks or top subjects
-# Start card title with a verb
+  # Cards and links should be based on top customer tasks or top subjects
+  # Start card title with a verb
 
-  # Card 
+  # Card
   - title: Get started
     linkLists:
+      - linkListType: overview
+        links:
+          - text: Develop .NET apps with AI features
+            url: overview.md
+          - text: Microsoft Agent Framework
+            url: /agent-framework/overview/agent-framework-overview?toc=/dotnet/ai/toc.json&bc=/dotnet/ai/toc.json
+          - text: Microsoft.Extensions.AI libraries
+            url: microsoft-extensions-ai.md
       - linkListType: get-started
         links:
-          - text: Develop .NET applications
-            url: get-started/dotnet-ai-overview.md
-          - text: Learning resources and samples
-            url: azure-ai-for-dotnet-developers.md
-          - text: Build an Azure AI chat app with .NET
-            url: quickstarts/get-started-openai.md
-          - text: Summarize text using an Azure OpenAI chat app
-            url: quickstarts/quickstart-openai-summarize-text.md
-          - text: Generate images using Azure AI with .NET
-            url: quickstarts/quickstart-openai-generate-images.md
+          - text: Connect to and prompt an AI model
+            url: quickstarts/prompt-model.md
+          - text: Build an Azure AI chat app
+            url: quickstarts/build-chat-app.md
+          - text: Generate images from text
+            url: quickstarts/text-to-image.md
 
   # Card
   - title: Essential concepts
@@ -41,32 +45,44 @@ landingContent:
         links:
           - text: How generative AI and LLMs work
             url: conceptual/how-genai-and-llms-work.md
-          - text: Understand tokens
-            url: conceptual/understanding-tokens.md
+          - text: Build agents to automate workflows
+            url: conceptual/agents.md
           - text: Preserve semantic meaning with embeddings
             url: conceptual/embeddings.md
           - text: Semantic search with vector databases
-            url: conceptual/vector-databases.md
-          - text: Prompt engineering
-            url: conceptual/prompt-engineering-dotnet.md
+            url: vector-stores/overview.md
+          - text: Data ingestion
+            url: conceptual/data-ingestion.md
+          - text: Retrieval-augmented generation
+            url: conceptual/rag.md
 
-  # Card (Optional; Remove if not applicable.)
+  # Card
   - title: Common tasks
     linkLists:
       - linkListType: how-to-guide
         links:
           - text: Authenticate App Service to Azure OpenAI
             url: how-to/app-service-aoai-auth.md
-          - text: Authenticate App Service to a vector database
-            url: how-to/app-service-db-auth.md
-          - text: Use Redis with the Semantic Kernel SDK
-            url: how-to/use-redis-for-memory.md
-          - text: Use custom and local AI models with the Semantic Kernel SDK
-            url: how-to/work-with-local-models.md
-          - text: Work with content filtering
-            url: how-to/work-with-local-models.md
+          - text: Access data in AI functions
+            url: how-to/access-data-in-functions.md
+          - text: Use Microsoft.ML.Tokenizers for text tokenization
+            url: how-to/use-tokenizers.md
 
-  # Card (Optional; Remove if not applicable.)
+  # Card
+  - title: Training
+    linkLists:
+      - linkListType: tutorial
+        links:
+          - text: Develop an AI agent with Microsoft Agent Framework
+            url: /training/modules/develop-ai-agent-with-semantic-kernel/
+          - text: Plan and prepare to develop AI solutions on Azure
+            url: /training/modules/prepare-azure-ai-development/
+          - text: Generate conversations Azure OpenAI completions
+            url: /training/modules/open-ai-dotnet-text-completions
+          - text: .NET enterprise chat sample using RAG
+            url: get-started-app-chat-template.md
+
+  # Card
   - title: Tutorials
     linkLists:
       - linkListType: tutorial
@@ -77,17 +93,17 @@ landingContent:
             url: get-started-app-chat-template.md
           - text: Implement RAG using vector search
             url: tutorials/tutorial-ai-vector-search.md
+          - text: Evaluate a model's response
+            url: tutorials/evaluate-with-reporting.md
 
-  # Card (Optional; Remove if not applicable.)
-  - title: Training
+  # Card
+  - title: External resources
     linkLists:
-      - linkListType: tutorial
+      - linkListType: sample
         links:
-          - text: Fundamentals of Azure OpenAI Service
-            url: /training/modules/explore-azure-openai
-          - text: Generate conversations Azure OpenAI completions
-            url: /training/modules/open-ai-dotnet-text-completions
-          - text: .NET enterprise chat sample using RAG
-            url: get-started-app-chat-template.md
-          - text: Develop AI agents using Azure OpenAI
-            url: /training/paths/develop-ai-agents-azure-open-ai-semantic-kernel-sdk
+          - text: Get started resources
+            url: resources/get-started.md
+          - text: Azure AI resources
+            url: resources/azure-ai.md
+          - text: MCP server resources
+            url: resources/mcp-servers.md

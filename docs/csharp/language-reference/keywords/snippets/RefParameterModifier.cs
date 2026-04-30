@@ -9,8 +9,6 @@ namespace InRefOutModifier
         public static void Examples()
         {
             FirstRefExample();
-            ModifyProductsByReference();
-
             // call By Ref examples:
 
             var options = new OptionStruct();
@@ -37,44 +35,6 @@ namespace InRefOutModifier
             // Output: 45
             // </Snippet1>
         }
-
-        //<Snippet3>
-        class Product
-        {
-            public Product(string name, int newID)
-            {
-                ItemName = name;
-                ItemID = newID;
-            }
-
-            public string ItemName { get; set; }
-            public int ItemID { get; set; }
-        }
-
-        private static void ChangeByReference(ref Product itemRef)
-        {
-            // Change the address that is stored in the itemRef parameter.
-            itemRef = new Product("Stapler", 12345);
-        }
-
-        private static void ModifyProductsByReference()
-        {
-            // Declare an instance of Product and display its initial values.
-            Product item = new Product("Fasteners", 54321);
-            System.Console.WriteLine("Original values in Main.  Name: {0}, ID: {1}\n",
-                item.ItemName, item.ItemID);
-
-            // Pass the product instance to ChangeByReference.
-            ChangeByReference(ref item);
-            System.Console.WriteLine("Calling method.  Name: {0}, ID: {1}\n",
-                item.ItemName, item.ItemID);
-        }
-
-        // This method displays the following output:
-        // Original values in Main.  Name: Fasteners, ID: 54321
-        // Calling method.  Name: Stapler, ID: 12345
-
-        // </Snippet3>
 
         private static void BookCollectionExample()
         {
@@ -126,14 +86,32 @@ namespace InRefOutModifier
         private static void FirstInExample()
         {
             // <InParameterModifier>
-            int readonlyArgument = 44;
-            InArgExample(readonlyArgument);
-            Console.WriteLine(readonlyArgument);     // value is still 44
+            var largeStruct = new LargeStruct { Value1 = 42, Value2 = 3.14, Value3 = "Hello" };
+            
+            // Using 'in' avoids copying the large struct and prevents modification
+            ProcessLargeStruct(in largeStruct);
+            Console.WriteLine($"Original value unchanged: {largeStruct.Value1}");
+            
+            // Without 'in', the struct would be copied (less efficient for large structs)
+            ProcessLargeStructByValue(largeStruct);
+            Console.WriteLine($"Original value still unchanged: {largeStruct.Value1}");
 
-            void InArgExample(in int number)
+            void ProcessLargeStruct(in LargeStruct data)
             {
+                // Can read the values
+                Console.WriteLine($"Processing: {data.Value1}, {data.Value2}, {data.Value3}");
+                
                 // Uncomment the following line to see error CS8331
-                //number = 19;
+                // data.Value1 = 99; // Compilation error: cannot assign to 'in' parameter
+            }
+            
+            void ProcessLargeStructByValue(LargeStruct data)
+            {
+                // This method receives a copy of the struct
+                Console.WriteLine($"Processing copy: {data.Value1}, {data.Value2}, {data.Value3}");
+                
+                // Modifying the copy doesn't affect the original
+                data.Value1 = 99;
             }
             // </InParameterModifier>
         }
@@ -150,6 +128,15 @@ namespace InRefOutModifier
     public struct OptionStruct
     {
         // taking the place of lots of fields
+    }
+
+    public struct LargeStruct
+    {
+        public int Value1;
+        public double Value2;
+        public string Value3;
+        // In a real scenario, this struct might have many more fields
+        // making copying expensive
     }
     // <Snippet4>
 

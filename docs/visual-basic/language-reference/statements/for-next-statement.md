@@ -27,7 +27,7 @@ ms.assetid: f5fc0d51-67ce-4c36-9f09-31c9a91c94e9
 ---
 # For...Next Statement (Visual Basic)
 
-Repeats a group of statements a specified number of times.
+Repeats a group of statements while the loop counter approaches its final value.
 
 ## Syntax
 
@@ -179,7 +179,7 @@ In the following example, the statement parameters use a class that has operator
 
 ## See also
 
-- <xref:System.Collections.Generic.List%601>
+- <xref:System.Collections.Generic.List`1>
 - [Loop Structures](../../programming-guide/language-features/control-flow/loop-structures.md)
 - [While...End While Statement](while-end-while-statement.md)
 - [Do...Loop Statement](do-loop-statement.md)

@@ -1,8 +1,4 @@
-﻿// A skeleton of a C# program
-using System;
-
-// Your program starts here:
-Console.WriteLine("Hello world!");
+﻿Console.WriteLine("Hello, World!");
 
 namespace YourNamespace
 {
@@ -22,12 +18,5 @@ namespace YourNamespace
 
     enum YourEnum
     {
-    }
-
-    namespace YourNestedNamespace
-    {
-        struct YourStruct
-        {
-        }
     }
 }

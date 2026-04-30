@@ -1,6 +1,6 @@
 ---
-description: "Learn more about: Data Contract Schema Reference"
 title: "Data Contract Schema Reference"
+description: "Learn more about: Data Contract Schema Reference"
 ms.date: "03/30/2017"
 helpviewer_keywords:
   - "data contracts [WCF], schema reference"
@@ -139,7 +139,7 @@ Each complex type \<xs:complexType> maps to a data contract.
 |`form`|Must be qualified. This attribute can be set through `elementFormDefault` on `xs:schema`.|
 |`id`|Ignored.|
 |`maxOccurs`|1|
-|`minOccurs`|Maps to the <xref:System.Runtime.Serialization.DataMemberAttribute.IsRequired%2A> property of a data member (`IsRequired` is true when `minOccurs` is 1).|
+|`minOccurs`|Maps to the <xref:System.Runtime.Serialization.DataMemberAttribute.IsRequired> property of a data member (`IsRequired` is true when `minOccurs` is 1).|
 |`nillable`|Affects type mapping. See Type/primitive mapping.|
 
 ### \<xs:element> with maxOccurs>1 within an \<xs:sequence> (Collections)
@@ -160,7 +160,7 @@ The rules for the `ref`, `block`, `default`, `fixed`, `form`, and `id` attribute
 
 |Attribute|Schema|
 |---------------|------------|
-|`name`|Supported, maps to the <xref:System.Runtime.Serialization.CollectionDataContractAttribute.ItemName%2A> property in the `CollectionDataContractAttribute` attribute.|
+|`name`|Supported, maps to the <xref:System.Runtime.Serialization.CollectionDataContractAttribute.ItemName> property in the `CollectionDataContractAttribute` attribute.|
 |`type`|Supported, maps to the type stored in the collection.|
 |`maxOccurs`|Greater than 1 or "unbounded". The DC schema should use "unbounded".|
 |`minOccurs`|Ignored.|
@@ -200,7 +200,7 @@ The rules for the `ref`, `block`, `default`, `fixed`, `form`, and `id` attribute
 |`keyref`|Ignored.|
 |(blank)|Supported.|
 
-\* When using the `simpleType` and `complexType,` mapping for anonymous types is the same as for non-anonymous types, except that there is no anonymous data contracts, and so a named data contract is created, with a generated name derived from the element name. The rules for anonymous types are in the following list:
+\* When using the `simpleType` and `complexType`, mapping for anonymous types is the same as for non-anonymous types, except that there is no anonymous data contracts, and so a named data contract is created, with a generated name derived from the element name. The rules for anonymous types are in the following list:
 
 - WCF implementation detail: If the `xs:element` name does not contain periods, the anonymous type maps to an inner type of the outer data contract type. If the name contains periods, the resulting data contract type is independent (not an inner type).
 
@@ -619,7 +619,7 @@ The following should be noted:
 
 ## Importing non-DataContract schemas
 
-`DataContractSerializer` has the `ImportXmlTypes` option to allow import of schemas that do not conform to the `DataContractSerializer` XSD profile (see the <xref:System.Runtime.Serialization.XsdDataContractImporter.Options%2A> property). Setting this option to `true` enables acceptance of non-conforming schema types and mapping them to the following implementation, <xref:System.Xml.Serialization.IXmlSerializable> wrapping an array of <xref:System.Xml.XmlNode> (only the class name differs).
+`DataContractSerializer` has the `ImportXmlTypes` option to allow import of schemas that do not conform to the `DataContractSerializer` XSD profile (see the <xref:System.Runtime.Serialization.XsdDataContractImporter.Options> property). Setting this option to `true` enables acceptance of non-conforming schema types and mapping them to the following implementation, <xref:System.Xml.Serialization.IXmlSerializable> wrapping an array of <xref:System.Xml.XmlNode> (only the class name differs).
 
 ```csharp
 [GeneratedCodeAttribute("System.Runtime.Serialization", "3.0.0.0")]

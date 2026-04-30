@@ -7,7 +7,7 @@ ms.date: 10/27/2021
 
 # Collect metrics
 
-**This article applies to: ✔️** .NET Core 3.1 and later **✔️** .NET Framework 4.6.1 and later
+**This article applies to: ✔️** .NET 6.0 and later **✔️** .NET Framework 4.6.1 and later
 
 Instrumented code can record numeric measurements, but the measurements usually need to be aggregated, transmitted, and stored to create useful metrics for monitoring. The process of aggregating, transmitting, and storing data is called collection. This tutorial shows several examples of collecting metrics:
 
@@ -19,7 +19,7 @@ For more information on custom metric instrumentation and options, see [Compare 
 
 ## Prerequisites
 
-- [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download/dotnet) or a later
+- [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet) or a later
 
 ## Create an example app
 
@@ -47,6 +47,8 @@ If the [dotnet-counters](dotnet-counters.md) tool isn't installed, run the follo
 dotnet tool update -g dotnet-counters
 ```
 
+If your app is running a version of .NET older than .NET 9, the output UI of dotnet-counters will look slightly different than below; see [dotnet-counters](dotnet-counters.md) for details.
+
 While the example app is running, launch [dotnet-counters](dotnet-counters.md). The following command shows an example of `dotnet-counters` monitoring all metrics from the `HatCo.HatStore` meter. The meter name is case-sensitive. Our sample app was metric-instr.exe, substitute this with the name of your sample app.
 
 ```dotnetcli
@@ -72,29 +74,52 @@ dotnet-counters monitor -n metric-instr
 Output similar to the following is displayed:
 
 ```dotnetcli
-Press p to pause, r to resume, q to quit.
-    Status: Running
-
-[System.Runtime]
-    % Time in GC since last GC (%)                                 0
-    Allocation Rate (B / 1 sec)                                8,168
-    CPU Usage (%)                                                  0
-    Exception Count (Count / 1 sec)                                0
-    GC Heap Size (MB)                                              2
-    Gen 0 GC Count (Count / 1 sec)                                 0
-    Gen 0 Size (B)                                         2,216,256
-    Gen 1 GC Count (Count / 1 sec)                                 0
-    Gen 1 Size (B)                                           423,392
-    Gen 2 GC Count (Count / 1 sec)                                 0
-    Gen 2 Size (B)                                           203,248
-    LOH Size (B)                                             933,216
-    Monitor Lock Contention Count (Count / 1 sec)                  0
-    Number of Active Timers                                        1
-    Number of Assemblies Loaded                                   39
-    ThreadPool Completed Work Item Count (Count / 1 sec)           0
-    ThreadPool Queue Length                                        0
-    ThreadPool Thread Count                                        3
-    Working Set (MB)                                              30
+System.Runtime
+  Press p to pause, r to resume, q to quit.
+      Status: Running
+  Name                                              Current Value
+  [System.Runtime]
+  dotnet.assembly.count ({assembly})                    11
+  dotnet.gc.collections ({collection})
+    gc.heap.generation
+    ------------------
+      gen0                                              0
+      gen1                                              0
+      gen2                                              0
+  dotnet.gc.heap.total_allocated (By)                   1,376,024
+  dotnet.gc.last_collection.heap.fragmentation.size (By)
+    gc.heap.generation
+    ------------------
+      gen0                                              0
+      gen1                                              0
+      gen2                                              0
+      loh                                               0
+      poh                                               0
+  dotnet.gc.last_collection.heap.size (By)
+    gc.heap.generation
+    ------------------
+      gen0                                              0
+      gen1                                              0
+      gen2                                              0
+      loh                                               0
+      poh                                               0
+  dotnet.gc.last_collection.memory.committed_size (By)   0
+  dotnet.gc.pause.time (s)                              0
+  dotnet.jit.compilation.time (s)                       0.253
+  dotnet.jit.compiled_il.size (By)                      79,536
+  dotnet.jit.compiled_methods ({method})                743
+  dotnet.monitor.lock_contentions ({contention})        0
+  dotnet.process.cpu.count ({cpu})                      22
+  dotnet.process.cpu.time (s)
+    cpu.mode
+    --------
+      system                                            0.125
+      user                                              46.453
+  dotnet.process.memory.working_set (By)                34,447,360
+  dotnet.thread_pool.queue.length ({work_item})         0
+  dotnet.thread_pool.thread.count ({thread})            0
+  dotnet.thread_pool.work_item.count ({work_item})      0
+  dotnet.timer.count ({timer})                          0
 ```
 
 For more information, see [dotnet-counters](dotnet-counters.md). To learn more about metrics in .NET, see [built-in metrics](built-in-metrics.md).
@@ -214,7 +239,7 @@ hats-sold recorded measurement 912
 ...
 ```
 
-### Explaining the sample code
+### Sample code explanation
 
 The code snippets in this section come from the preceding sample.
 
@@ -226,12 +251,12 @@ The following highlighted code configures which instruments the listener receive
 
 :::code language="csharp" source="snippets/Metrics/Program.cs" id="snippet_uml" highlight="2-99":::
 
-The delegate can examine the instrument to decide whether to subscribe. For example, the delegate can check the name, the Meter, or any other public property. <xref:System.Diagnostics.Metrics.MeterListener.EnableMeasurementEvents%2A> enables receiving measurements from the specified instrument. Code that obtains a reference to an instrument by another approach:
+The delegate can examine the instrument to decide whether to subscribe. For example, the delegate can check the name, the Meter, or any other public property. <xref:System.Diagnostics.Metrics.MeterListener.EnableMeasurementEvents*> enables receiving measurements from the specified instrument. Code that obtains a reference to an instrument by another approach:
 
 - Is not typically done.
 - Can invoke `EnableMeasurementEvents()` at any time with the reference.
 
-The delegate that is invoked when measurements are received from an instrument is configured by calling <xref:System.Diagnostics.Metrics.MeterListener.SetMeasurementEventCallback%2A>:
+The delegate that is invoked when measurements are received from an instrument is configured by calling <xref:System.Diagnostics.Metrics.MeterListener.SetMeasurementEventCallback*>:
 
 :::code language="csharp" source="snippets/Metrics/Program.cs" id="snippet_sme" highlight="1,15-99":::
 

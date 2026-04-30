@@ -27,7 +27,7 @@ public class Adult : Person
 
    static Adult()
    {
-      minimumAge = 18;
+       minimumAge = 18;
    }
 
    // Remaining implementation of Adult class.
@@ -62,4 +62,33 @@ public class Location
    }
 }
 // </ExpressionBodiedCtor>
+
+// <PrimaryCtor>
+public class LabelledContainer<T>(string label)
+{
+   public string Label { get; } = label;
+   public required T Contents 
+   { 
+      get;
+      init;
+   }
+}
+// </PrimaryCtor>
+
+// <DualConstructor>
+public class Example
+{
+    static Example()
+    {
+        Console.WriteLine("Static constructor called.");
+    }
+    
+    public Example()
+    {
+        Console.WriteLine("Instance constructor called.");
+    }
+
+    // Remaining implementation of Child class.
+}
+// </DualConstructor>
 

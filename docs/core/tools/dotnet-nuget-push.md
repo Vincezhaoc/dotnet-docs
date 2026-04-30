@@ -2,11 +2,11 @@
 title: dotnet nuget push command
 description: The dotnet nuget push command pushes a package to the server and publishes it.
 author: karann-msft
-ms.date: 02/14/2020
+ms.date: 10/28/2025
 ---
 # dotnet nuget push
 
-**This article applies to:** ✔️ .NET Core 3.1 SDK and later versions
+**This article applies to:** ✔️ .NET 6 SDK and later versions
 
 ## Name
 
@@ -15,11 +15,12 @@ ms.date: 02/14/2020
 ## Synopsis
 
 ```dotnetcli
-dotnet nuget push [<ROOT>] [-d|--disable-buffering] [--force-english-output]
+dotnet nuget push [<ROOT>] [--allow-insecure-connections] [-d|--disable-buffering] [--force-english-output]
     [--interactive] [-k|--api-key <API_KEY>] [-n|--no-symbols]
     [--no-service-endpoint] [-s|--source <SOURCE>] [--skip-duplicate]
     [-sk|--symbol-api-key <API_KEY>] [-ss|--symbol-source <SOURCE>]
     [-t|--timeout <TIMEOUT>]
+    [--configfile <FILE>]
 
 dotnet nuget push -h|--help
 ```
@@ -49,6 +50,10 @@ Alternatively, use the NuGet CLI for the first package, then you can use `dotnet
 
 ## Options
 
+- **`--allow-insecure-connections`**
+  
+  Allows pushing to HTTP sources (insecure). Available since .NET 10 SDK.
+
 - **`-d|--disable-buffering`**
 
   Disables buffering when pushing to an HTTP(S) server to reduce memory usage.
@@ -57,9 +62,9 @@ Alternatively, use the NuGet CLI for the first package, then you can use `dotnet
 
   Forces the application to run using an invariant, English-based culture.
 
-[!INCLUDE [help](../../../includes/cli-help.md)]
+- [!INCLUDE [help](includes/cli-help.md)]
 
-[!INCLUDE [interactive](../../../includes/cli-interactive-3-0.md)]
+- [!INCLUDE [interactive](includes/cli-interactive.md)]
 
 - **`-k|--api-key <API_KEY>`**
 
@@ -93,6 +98,10 @@ Alternatively, use the NuGet CLI for the first package, then you can use `dotnet
 - **`-t|--timeout <TIMEOUT>`**
 
   Specifies the timeout for pushing to a server in seconds. Defaults to 300 seconds (5 minutes). Specifying 0 applies the default value.
+
+- **`--configfile`**
+
+  The NuGet configuration file (*nuget.config*) to use. If specified, only the settings from this file will be used. If not specified, the hierarchy of configuration files from the current directory will be used. For more information, see [Common NuGet Configurations](/nuget/consume-packages/configuring-nuget-behavior). Available since .NET 9 SDK.
 
 ## Examples
 
@@ -137,14 +146,6 @@ Alternatively, use the NuGet CLI for the first package, then you can use `dotnet
   ```dotnetcli
   dotnet nuget push "*.nupkg"
   ```
-
-  > [!NOTE]
-  > If this command doesn't work, it might be due to a bug that existed in older versions of the SDK (.NET Core 2.1 SDK and earlier versions).
-  > To fix this, upgrade your SDK version or run the following command instead:
-  > `dotnet nuget push "**/*.nupkg"`
-  
-  > [!NOTE]
-  > The enclosing quotes are required for shells such as bash that perform file globbing. For more information, see [NuGet/Home#4393](https://github.com/NuGet/Home/issues/4393#issuecomment-667618120).
 
 - Push all *.nupkg* files to the default push source specified in the NuGet config file, even if a 409 Conflict response is returned by an HTTP(S) server:
 

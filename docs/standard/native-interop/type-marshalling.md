@@ -12,7 +12,7 @@ Marshalling is needed because the types in the managed and unmanaged code are di
 
 ```csharp
 [LibraryImport("somenativelibrary.dll")]
-static extern int MethodA([MarshalAs(UnmanagedType.LPStr)] string parameter);
+static extern int MethodA([MarshalAs(UnmanagedType.LPUTF8Str)] string parameter);
 
 // or
 
@@ -26,7 +26,16 @@ If you apply the [`System.Runtime.CompilerServices.DisableRuntimeMarshallingAttr
 
 Generally, the runtime tries to do the "right thing" when marshalling to require the least amount of work from you. The following tables describe how each type is marshalled by default when used in a parameter or field. The C99/C++11 fixed-width integer and character types are used to ensure that the following table is correct for all platforms. You can use any native type that has the same alignment and size requirements as these types.
 
-This first table describes the mappings for various types for whom the marshalling is the same for both P/Invoke and field marshalling.
+This first table describes the mappings for types for which the marshalling is the same for both P/Invoke and field marshalling.
+
+> [!IMPORTANT]
+> When calling a C function that uses `long`, use <xref:System.Runtime.InteropServices.CLong> or <xref:System.Runtime.InteropServices.CULong> (.NET 6+) instead of C# `long`. For details and workarounds for earlier .NET versions, see [Cross-platform data type considerations](best-practices.md#cross-platform-data-type-considerations).
+
+> [!NOTE]
+> The `wchar_t` type is UTF-16 (2 bytes) on Windows but is compiler-defined on other platforms—typically UTF-32 (4 bytes) on Linux and macOS. Because of this, `wchar_t*` is hard to use as a single cross-platform ABI. When you design a cross-platform native API, prefer `char*` with a clearly defined encoding contract (for example, UTF-8) instead of `wchar_t*`.
+>
+> [!NOTE]
+> Native `char*` strings use the encoding that the library or platform defines. When you call a C function that takes `char*`, match that expected encoding by choosing the correct string marshalling option, such as <xref:System.Runtime.InteropServices.StringMarshalling.Utf8?displayProperty=nameWithType> for UTF-8, <xref:System.Runtime.InteropServices.StringMarshalling.Utf16?displayProperty=nameWithType> for UTF-16, or <xref:System.Runtime.InteropServices.StringMarshalling.Custom?displayProperty=nameWithType> for other encodings.
 
 | C# keyword  | .NET Type        | Native Type             |
 |-------------|------------------|-------------------------|
@@ -99,31 +108,34 @@ When you are calling methods on COM objects in .NET, the .NET runtime changes th
 Another aspect of type marshalling is how to pass in a struct to an unmanaged method. For instance, some of the unmanaged methods require a struct as a parameter. In these cases, you need to create a corresponding struct or a class in managed part of the world to use it as a parameter. However, just defining the class isn't enough, you also need to instruct the marshaller how to map fields in the class to the unmanaged struct. Here the `StructLayout` attribute becomes useful.
 
 ```csharp
-[LibraryImport("kernel32.dll")]
-static partial void GetSystemTime(out SystemTime systemTime);
+using System;
+using System.Runtime.InteropServices;
 
-[StructLayout(LayoutKind.Sequential)]
-struct SystemTime
-{
-    public ushort Year;
-    public ushort Month;
-    public ushort DayOfWeek;
-    public ushort Day;
-    public ushort Hour;
-    public ushort Minute;
-    public ushort Second;
-    public ushort Millisecond;
-}
+Win32Interop.GetSystemTime(out Win32Interop.SystemTime systemTime);
 
-public static void Main(string[] args)
+Console.WriteLine(systemTime.Year);
+
+internal static partial class Win32Interop
 {
-    SystemTime st = new SystemTime();
-    GetSystemTime(st);
-    Console.WriteLine(st.Year);
+    [LibraryImport("kernel32.dll")]
+    internal static partial void GetSystemTime(out SystemTime systemTime);
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal ref struct SystemTime
+    {
+        public ushort Year;
+        public ushort Month;
+        public ushort DayOfWeek;
+        public ushort Day;
+        public ushort Hour;
+        public ushort Minute;
+        public ushort Second;
+        public ushort Millisecond;
+    }
 }
 ```
 
-The previous code shows a simple example of calling into `GetSystemTime()` function. The interesting bit is on line 4. The attribute specifies that the fields of the class should be mapped sequentially to the struct on the other (unmanaged) side. This means that the naming of the fields isn't important, only their order is important, as it needs to correspond to the unmanaged struct, shown in the following example:
+The previous code shows a simple example of calling into `GetSystemTime()` function. The interesting bit is on line 13. The attribute specifies that the fields of the class should be mapped sequentially to the struct on the other (unmanaged) side. This means that the naming of the fields isn't important, only their order is important, as it needs to correspond to the unmanaged struct, shown in the following example:
 
 ```c
 typedef struct _SYSTEMTIME {
@@ -135,7 +147,7 @@ typedef struct _SYSTEMTIME {
   WORD wMinute;
   WORD wSecond;
   WORD wMilliseconds;
-} SYSTEMTIME, *PSYSTEMTIME;
+} SYSTEMTIME, *PSYSTEMTIME, *LPSYSTEMTIME;
 ```
 
 Sometimes the default marshalling for your structure doesn't do what you need. The [Customizing structure marshalling](customize-struct-marshalling.md) article teaches you how to customize how your structure is marshalled.

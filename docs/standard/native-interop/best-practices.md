@@ -1,7 +1,8 @@
 ---
 title: Native interoperability best practices - .NET
 description: Learn the best practices for interfacing with native components in .NET.
-ms.date: 04/08/2024
+ms.date: 03/26/2026
+ai-usage: ai-assisted
 ---
 # Native interoperability best practices
 
@@ -15,12 +16,13 @@ The guidance in this section applies to all interop scenarios.
   - There are cases when using `[DllImport]` is appropriate. A code analyzer with ID [SYSLIB1054](../../fundamentals/syslib-diagnostics/syslib1050-1069.md) tells you when that's the case.
 - ✔️ DO use the same naming and capitalization for your methods and parameters as the native method you want to call.
 - ✔️ CONSIDER using the same naming and capitalization for constant values.
+- ✔️ DO define P/Invoke and function pointer signatures that match the C function's arguments.
 - ✔️ DO use .NET types that map closest to the native type. For example, in C#, use `uint` when the native type is `unsigned int`.
 - ✔️ DO prefer expressing higher level native types using .NET structs rather than classes.
-- ✔️ DO prefer using function pointers, as opposed to `Delegate` types, when passing callbacks to unmanaged functions in C#.
+- ✔️ DO prefer using function pointers and <xref:System.Runtime.InteropServices.UnmanagedCallersOnlyAttribute> as opposed to `Delegate` types, when passing callbacks to unmanaged functions in C#. For more information, see <xref:System.Runtime.InteropServices.Marshal.GetFunctionPointerForDelegate(System.Delegate)>.
 - ✔️ DO use `[In]` and `[Out]` attributes on array parameters.
 - ✔️ DO only use `[In]` and `[Out]` attributes on other types when the behavior you want differs from the default behavior.
-- ✔️ CONSIDER using <xref:System.Buffers.ArrayPool%601?displayProperty=nameWithType> to pool your native array buffers.
+- ✔️ CONSIDER using <xref:System.Buffers.ArrayPool`1?displayProperty=nameWithType> to pool your native array buffers.
 - ✔️ CONSIDER wrapping your P/Invoke declarations in a class with the same name and capitalization as your native library.
   - This allows your `[LibraryImport]` or `[DllImport]` attributes to use the C# `nameof` language feature to pass in the name of the native library and ensure that you didn't misspell the name of the native library.
 - ✔️ DO use `SafeHandle` handles to manage lifetime of objects that encapsulate unmanaged resources. For more information, see [Cleaning up unmanaged resources](../garbage-collection/unmanaged.md).
@@ -47,7 +49,7 @@ A `string` is pinned and used directly by native code (rather than copied) when 
 - The argument is explicitly marked as `[MarshalAs(UnmanagedType.LPWSTR)]`.
 - <xref:System.Runtime.InteropServices.DllImportAttribute.CharSet?displayProperty=nameWithType> is <xref:System.Runtime.InteropServices.CharSet.Unicode>.
 
-❌ DON'T use `[Out] string` parameters. String parameters passed by value with the `[Out]` attribute can destabilize the runtime if the string is an interned string. See more information about string interning in the documentation for <xref:System.String.Intern%2A?displayProperty=nameWithType>.
+❌ DON'T use `[Out] string` parameters. String parameters passed by value with the `[Out]` attribute can destabilize the runtime if the string is an interned string. See more information about string interning in the documentation for <xref:System.String.Intern*?displayProperty=nameWithType>.
 
 ✔️ CONSIDER `char[]` or `byte[]` arrays from an `ArrayPool` when native code is expected to fill a character buffer. This requires passing the argument as `[Out]`.
 
@@ -105,7 +107,8 @@ Blittable types are types that have the same bit-level representation in managed
 
 **Blittable types:**
 
-- `byte`, `sbyte`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `single`, `double`
+- `byte`, `sbyte`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `single`, `double`, `nint`, `nuint`
+- unmanaged pointers (for example, `int*`)
 - structs with fixed layout that only have blittable value types for instance fields
   - fixed layout requires `[StructLayout(LayoutKind.Sequential)]` or `[StructLayout(LayoutKind.Explicit)]`
   - structs are `LayoutKind.Sequential` by default
@@ -400,6 +403,8 @@ Pointers to structs in definitions must either be passed by `ref` or use `unsafe
 
 ✔️ DO use the C# `sizeof()` instead of `Marshal.SizeOf<MyStruct>()` for blittable structures to improve performance.
 
+❌ DON'T depend on internal representation of struct types exposed by .NET runtime libraries unless it is explicitly documented.
+
 ❌ AVOID using classes to express complex native types through inheritance.
 
 ❌ AVOID using `System.Delegate` or `System.MulticastDelegate` fields to represent function pointer fields in structures.
@@ -417,7 +422,7 @@ typedef struct _SYSTEM_PROCESS_INFORMATION {
     BYTE Reserved1[48];
     UNICODE_STRING ImageName;
 ...
-} SYSTEM_PROCESS_INFORMATION
+} SYSTEM_PROCESS_INFORMATION;
 ```
 
 In C#, we can write it like this:
@@ -434,3 +439,40 @@ internal unsafe struct SYSTEM_PROCESS_INFORMATION
 ```
 
 However, there are some gotchas with fixed buffers. Fixed buffers of non-blittable types won't be correctly marshalled, so the in-place array needs to be expanded out to multiple individual fields. Additionally, in .NET Framework and .NET Core before 3.0, if a struct containing a fixed buffer field is nested within a non-blittable struct, the fixed buffer field won't be correctly marshalled to native code.
+
+## Troubleshoot P/Invoke failures
+
+The following table maps common symptoms to their likely cause and recommended fix.
+
+| Symptom | Likely cause | Fix |
+|---------|-------------|-----|
+| <xref:System.DllNotFoundException> | Library not found at runtime | Check library name, path, and platform. Use <xref:System.Runtime.InteropServices.NativeLibrary.TryLoad*> to test loading. On Linux, verify `LD_LIBRARY_PATH` or `rpath`. |
+| <xref:System.EntryPointNotFoundException> | Export name mismatch | Inspect native exports (`dumpbin /exports` on Windows, `nm -D` on Linux). Check for C++ name mangling (missing `extern "C"`). Set `EntryPoint` explicitly. |
+| <xref:System.AccessViolationException> | Signature mismatch, use-after-free, or missing pinning | Compare managed and native signatures. Check struct sizes with `Marshal.SizeOf<T>()` vs native `sizeof`. Verify memory lifetime. Use a blittable signature to troubleshoot marshalling issue  |
+| Silent data corruption | Wrong type size or encoding | Add boundary logging. Compare `Marshal.SizeOf<T>()` to native `sizeof`. Test with known input/output pairs. |
+| Intermittent crashes | GC moved an unpinned object or collected a delegate | Root callback delegates for their full lifetime. Use `GCHandle` or `fixed` for pointers held across calls. |
+| Heap corruption on free | Wrong allocator | Match the allocator: never mix `malloc`/`free` with `CoTaskMemAlloc`/`CoTaskMemFree` or `Marshal.FreeHGlobal`. Use the library's own free function. |
+
+## Prevent delegate collection with `GC.KeepAlive`
+
+When you use <xref:System.Runtime.InteropServices.Marshal.GetFunctionPointerForDelegate*> to convert a delegate to a function pointer, the garbage collector does **not** track the relationship between the returned pointer and the source delegate. If the delegate is eligible for collection before the native code finishes using the pointer, the application will crash.
+
+Use <xref:System.GC.KeepAlive*> to prevent collection:
+
+```csharp
+var callback = new MyDelegate((level, msgPtr) =>
+{
+    string msg = Marshal.PtrToStringUTF8(msgPtr) ?? string.Empty;
+    Console.WriteLine($"[{level}] {msg}");
+});
+
+IntPtr fnPtr = Marshal.GetFunctionPointerForDelegate(callback);
+NativeUsesCallback(fnPtr);
+GC.KeepAlive(callback); // Prevent collection — fnPtr does not root the delegate
+```
+
+If native code stores the function pointer beyond the call (for example, as a persistent callback), the delegate must be rooted for its entire lifetime — typically by storing it in a `static` field.
+
+## Resolve conflicts between documentation and native headers
+
+When writing P/Invoke signatures, it's possible to encounter discrepancies between online API documentation and the actual native header files. Header files are the authoritative source for function signatures, struct layouts, type sizes, and calling conventions. When in doubt, verify your P/Invoke signatures against the header rather than relying solely on documentation.

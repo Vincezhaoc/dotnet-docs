@@ -24,7 +24,7 @@ In this tutorial, you learn how to:
 
 ## Prerequisites
 
-- [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/).
+- [Visual Studio 2022 or later](https://visualstudio.microsoft.com/downloads/).
 
 ## Understand the problem
 
@@ -38,17 +38,17 @@ As you don't know to which group each flower belongs to, you choose the [unsuper
 
 1. Create a C# **Console Application** called "IrisFlowerClustering". Click the **Next** button.
 
-1. Choose .NET 6 as the framework to use. Click the **Create** button.
+1. Choose .NET 8 as the framework to use. Click the **Create** button.
 
 1. Create a directory named *Data* in your project to store the data set and model files:
 
-    In **Solution Explorer**, right-click the project and select **Add** > **New Folder**. Type "Data" and hit Enter.
+    In **Solution Explorer**, right-click the project and select **Add** > **New Folder**. Type "Data" and select <kbd>Enter</kbd>.
 
 1. Install the **Microsoft.ML** NuGet package:
 
     [!INCLUDE [mlnet-current-nuget-version](../../../includes/mlnet-current-nuget-version.md)]
 
-    In **Solution Explorer**, right-click the project and select **Manage NuGet Packages**. Choose "nuget.org" as the Package source, select the **Browse** tab, search for **Microsoft.ML** and select the **Install** button. Select the **OK** button on the **Preview Changes** dialog and then select the **I Accept** button on the **License Acceptance** dialog if you agree with the license terms for the packages listed.
+    In **Solution Explorer**, right-click the project and select **Manage NuGet Packages**. Choose "nuget.org" as the Package source, select the **Browse** tab, search for **Microsoft.ML** and select **Install**. Select the **OK** button on the **Preview Changes** dialog and then select the **I Accept** button on the **License Acceptance** dialog if you agree with the license terms for the packages listed.
 
 ## Prepare the data
 
@@ -71,7 +71,7 @@ For the sake of the clustering example, this tutorial ignores the last column.
 Create classes for the input data and the predictions:
 
 1. In **Solution Explorer**, right-click the project, and then select **Add** > **New Item**.
-1. In the **Add New Item** dialog box, select **Class** and change the **Name** field to *IrisData.cs*. Then, select the **Add** button.
+1. In the **Add New Item** dialog box, select **Class** and change the **Name** field to *IrisData.cs*. Then, select **Add**.
 1. Add the following `using` directive to the new file:
 
    [!code-csharp[Add necessary usings](./snippets/iris-clustering/csharp/IrisData.cs#Usings)]
@@ -119,7 +119,7 @@ Add the following code below the `MLContext` to set up the way to load data:
 
 [!code-csharp[Create text loader](./snippets/iris-clustering/csharp/Program.cs#CreateDataView)]
 
-The generic [`MLContext.Data.LoadFromTextFile` extension method](xref:Microsoft.ML.TextLoaderSaverCatalog.LoadFromTextFile%60%601%28Microsoft.ML.DataOperationsCatalog,System.String,System.Char,System.Boolean,System.Boolean,System.Boolean,System.Boolean%29) infers the data set schema from the provided `IrisData` type and returns <xref:Microsoft.ML.IDataView> which can be used as input for transformers.
+The generic [`MLContext.Data.LoadFromTextFile` extension method](xref:Microsoft.ML.TextLoaderSaverCatalog.LoadFromTextFile``1%28Microsoft.ML.DataOperationsCatalog,System.String,System.Char,System.Boolean,System.Boolean,System.Boolean,System.Boolean%29) infers the data set schema from the provided `IrisData` type and returns <xref:Microsoft.ML.IDataView> which can be used as input for transformers.
 
 ## Create a learning pipeline
 
@@ -148,11 +148,11 @@ At this point, you have a model that can be integrated into any of your existing
 
 ## Use the model for predictions
 
-To make predictions, use the <xref:Microsoft.ML.PredictionEngine%602> class that takes instances of the input type through the transformer pipeline and produces instances of the output type. Add the following line to create an instance of that class:
+To make predictions, use the <xref:Microsoft.ML.PredictionEngine`2> class that takes instances of the input type through the transformer pipeline and produces instances of the output type. Add the following line to create an instance of that class:
 
 [!code-csharp[Create predictor](./snippets/iris-clustering/csharp/Program.cs#Predictor)]
 
-The [PredictionEngine](xref:Microsoft.ML.PredictionEngine%602) is a convenience API, which allows you to perform a prediction on a single instance of data. [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine%602) is not thread-safe. It's acceptable to use in single-threaded or prototype environments. For improved performance and thread safety in production environments, use the `PredictionEnginePool` service, which creates an [`ObjectPool`](xref:Microsoft.Extensions.ObjectPool.ObjectPool%601) of [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine%602) objects for use throughout your application. See this guide on how to [use `PredictionEnginePool` in an ASP.NET Core Web API](../how-to-guides/serve-model-web-api-ml-net.md#register-predictionenginepool-for-use-in-the-application).
+The [PredictionEngine](xref:Microsoft.ML.PredictionEngine`2) is a convenience API, which allows you to perform a prediction on a single instance of data. [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine`2) is not thread-safe. It's acceptable to use in single-threaded or prototype environments. For improved performance and thread safety in production environments, use the `PredictionEnginePool` service, which creates an [`ObjectPool`](xref:Microsoft.Extensions.ObjectPool.ObjectPool`1) of [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine`2) objects for use throughout your application. See this guide on how to [use `PredictionEnginePool` in an ASP.NET Core Web API](../how-to-guides/serve-model-web-api-ml-net.md#register-predictionenginepool-for-use-in-the-application).
 
 > [!NOTE]
 > `PredictionEnginePool` service extension is currently in preview.
@@ -160,7 +160,7 @@ The [PredictionEngine](xref:Microsoft.ML.PredictionEngine%602) is a convenience 
 Create the `TestIrisData` class to house test data instances:
 
 1. In **Solution Explorer**, right-click the project, and then select **Add** > **New Item**.
-1. In the **Add New Item** dialog box, select **Class** and change the **Name** field to *TestIrisData.cs*. Then, select the **Add** button.
+1. In the **Add New Item** dialog box, select **Class** and change the **Name** field to *TestIrisData.cs*. Then, select **Add**.
 1. Modify the class to be static like in the following example:
 
    [!code-csharp[Make class static](./snippets/iris-clustering/csharp/TestIrisData.cs#Static)]
@@ -195,6 +195,6 @@ In this tutorial, you learned how to:
 > - Train the model
 > - Use the model for predictions
 
-Check out our GitHub repository to continue learning and find more samples.
+Check out the dotnet/machinelearning GitHub repository to continue learning and find more samples.
 > [!div class="nextstepaction"]
 > [dotnet/machinelearning GitHub repository](https://github.com/dotnet/machinelearning/)

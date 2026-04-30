@@ -69,7 +69,7 @@ If you're trying to run a .NET tool that was installed with a specified path, yo
 
 ### Runtime not found
 
-.NET tools are [framework-dependent applications](../deploying/index.md#publish-framework-dependent), which means they rely on a .NET runtime installed on your machine. If the expected runtime isn't found, they follow normal .NET runtime roll-forward rules such as:
+.NET tools are [framework-dependent applications](../deploying/index.md#framework-dependent-deployment), which means they rely on a .NET runtime installed on your machine. If the expected runtime isn't found, they follow normal .NET runtime roll-forward rules such as:
 
 - An application rolls forward to the highest patch release of the specified major and minor version.
 - If there's no matching runtime with a matching major and minor version number, the next higher minor version is used.
@@ -199,7 +199,7 @@ Most likely you've specified an alternative NuGet feed, and that feed requires a
   </configuration>
   ```
 
-  For more information, see [nuget.config reference](/nuget/reference/nuget-config-file)
+  For more information, see [nuget.config reference](/nuget/reference/nuget-config-file).
 
 - Add the required credentials to the config file.
 

@@ -34,7 +34,7 @@ You will use the following steps to accomplish your task, as well as any other M
 
 ## Prerequisites
 
-* [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/).
+* [Visual Studio 2022 or later](https://visualstudio.microsoft.com/downloads/).
 
 ## Select the appropriate machine learning task
 
@@ -46,17 +46,17 @@ There are several ways to approach recommendation problems, such as recommending
 
 1. Create a C# **Console Application** called "MovieRecommender". Click the **Next** button.
 
-2. Choose .NET 6 as the framework to use. Click the **Create** button.
+2. Choose .NET 8 as the framework to use. Click the **Create** button.
 
 3. Create a directory named *Data* in your project to store the data set:
 
-    In **Solution Explorer**, right-click the project and select **Add** > **New Folder**. Type "Data" and hit Enter.
+    In **Solution Explorer**, right-click the project and select **Add** > **New Folder**. Type "Data" and select <kbd>Enter</kbd>.
 
 4. Install the **Microsoft.ML** and **Microsoft.ML.Recommender** NuGet Packages:
 
     [!INCLUDE [mlnet-current-nuget-version](../../../includes/mlnet-current-nuget-version.md)]
 
-    In **Solution Explorer**, right-click the project and select **Manage NuGet Packages**. Choose "nuget.org" as the Package source, select the **Browse** tab, search for **Microsoft.ML**, select the package in the list, and select the **Install** button. Select the **OK** button on the **Preview Changes** dialog and then select the **I Accept** button on the **License Acceptance** dialog if you agree with the license terms for the packages listed. Repeat these steps for **Microsoft.ML.Recommender**.
+    In **Solution Explorer**, right-click the project and select **Manage NuGet Packages**. Choose "nuget.org" as the Package source, select the **Browse** tab, search for **Microsoft.ML**, select the package in the list, and select **Install**. Select the **OK** button on the **Preview Changes** dialog and then select the **I Accept** button on the **License Acceptance** dialog if you agree with the license terms for the packages listed. Repeat these steps for **Microsoft.ML.Recommender**.
 
 5. Add the following `using` directives at the top of your *Program.cs* file:
 
@@ -117,7 +117,7 @@ Add a new class to your project:
 
 1. In **Solution Explorer**, right-click the project, and then select **Add > New Item**.
 
-2. In the **Add New Item dialog box**, select **Class** and change the **Name** field to *MovieRatingData.cs*. Then, select the **Add** button.
+2. In the **Add New Item dialog box**, select **Class** and change the **Name** field to *MovieRatingData.cs*. Then, select **Add**.
 
 The *MovieRatingData.cs* file opens in the code editor. Add the following `using` directive to the top of *MovieRatingData.cs*:
 
@@ -159,7 +159,7 @@ Initialize your data path variables, load the data from the \*.csv files, and re
 
 Data in ML.NET is represented as an [IDataView interface](xref:Microsoft.ML.IDataView). `IDataView` is a flexible, efficient way of describing tabular data (numeric and text). Data can be loaded from a text file or in real time (for example, SQL database or log files) to an `IDataView` object.
 
-The [LoadFromTextFile()](xref:Microsoft.ML.TextLoaderSaverCatalog.LoadFromTextFile%60%601%28Microsoft.ML.DataOperationsCatalog,System.String,System.Char,System.Boolean,System.Boolean,System.Boolean,System.Boolean%29) defines the data schema and reads in the file. It takes in the data path variables and returns an `IDataView`. In this case, you provide the path for your `Test` and `Train` files and indicate both the text file header (so it can use the column names properly) and the comma character data separator (the default separator is a tab).
+The [LoadFromTextFile()](xref:Microsoft.ML.TextLoaderSaverCatalog.LoadFromTextFile``1%28Microsoft.ML.DataOperationsCatalog,System.String,System.Char,System.Boolean,System.Boolean,System.Boolean,System.Boolean%29) defines the data schema and reads in the file. It takes in the data path variables and returns an `IDataView`. In this case, you provide the path for your `Test` and `Train` files and indicate both the text file header (so it can use the column names properly) and the comma character data separator (the default separator is a tab).
 
 Add the following code to call your `LoadData()` method and return the `Train` and `Test` data:
 
@@ -214,7 +214,7 @@ Fit the model to the `Train` data and return the trained model by adding the fol
 
 The [Fit()](xref:Microsoft.ML.Trainers.MatrixFactorizationTrainer.Fit%28Microsoft.ML.IDataView,Microsoft.ML.IDataView%29) method trains your model with the provided training dataset. Technically, it executes the `Estimator` definitions by transforming the data and applying the training, and it returns back the trained model, which is a `Transformer`.
 
-For more information on the model training workflow in ML.NET, see [What is ML.NET and how does it work?](../how-does-mldotnet-work.md#code-workflow).
+For more information on the model training workflow in ML.NET, see [What is ML.NET and how does it work?](../mldotnet-api.md#code-workflow).
 
 Add the following as the next line of code below the call to the `LoadData()` method to call your `BuildAndTrainModel()` method and return the trained model:
 
@@ -308,7 +308,7 @@ Use the `PredictionEngine` to predict the rating by adding the following code to
 
 [!code-csharp[PredictionEngine](./snippets/movie-recommendation/csharp/Program.cs#PredictionEngine "Create Prediction Engine")]
 
-The [PredictionEngine](xref:Microsoft.ML.PredictionEngine%602) is a convenience API, which allows you to perform a prediction on a single instance of data. [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine%602) is not thread-safe. It's acceptable to use in single-threaded or prototype environments. For improved performance and thread safety in production environments, use the `PredictionEnginePool` service, which creates an [`ObjectPool`](xref:Microsoft.Extensions.ObjectPool.ObjectPool%601) of [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine%602) objects for use throughout your application. See this guide on how to [use `PredictionEnginePool` in an ASP.NET Core Web API](../how-to-guides/serve-model-web-api-ml-net.md#register-predictionenginepool-for-use-in-the-application).
+The [PredictionEngine](xref:Microsoft.ML.PredictionEngine`2) is a convenience API, which allows you to perform a prediction on a single instance of data. [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine`2) is not thread-safe. It's acceptable to use in single-threaded or prototype environments. For improved performance and thread safety in production environments, use the `PredictionEnginePool` service, which creates an [`ObjectPool`](xref:Microsoft.Extensions.ObjectPool.ObjectPool`1) of [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine`2) objects for use throughout your application. See this guide on how to [use `PredictionEnginePool` in an ASP.NET Core Web API](../how-to-guides/serve-model-web-api-ml-net.md#register-predictionenginepool-for-use-in-the-application).
 
 > [!NOTE]
 > `PredictionEnginePool` service extension is currently in preview.
@@ -317,7 +317,7 @@ Create an instance of `MovieRating` called `testInput` and pass it to the Predic
 
 [!code-csharp[MakeSinglePrediction](./snippets/movie-recommendation/csharp/Program.cs#MakeSinglePrediction "Make a single prediction with the Prediction Engine")]
 
-The [Predict()](xref:Microsoft.ML.PredictionEngine%602.Predict%2A) function makes a prediction on a single column of data.
+The [Predict()](xref:Microsoft.ML.PredictionEngine`2.Predict%2A) function makes a prediction on a single column of data.
 
 You can then use the `Score`, or the predicted rating, to determine whether you want to recommend the movie with movieId 10 to user 6. The higher the `Score`, the higher the likelihood of a user liking a particular movie. In this case, let’s say that you recommend movies with a predicted rating of > 3.5.
 
@@ -406,7 +406,7 @@ There are several ways that you can improve the performance of your model so tha
 
 ### Data
 
-Adding more training data that has enough samples for each user and movie id can help improve the quality of the recommendation model.
+Adding more training data that has enough samples for each user and movie ID can help improve the quality of the recommendation model.
 
 [Cross validation](../how-to-guides/train-machine-learning-model-cross-validation-ml-net.md) is a technique for evaluating models that randomly splits up data into subsets (instead of extracting out test data from the dataset like you did in this tutorial) and takes some of the groups as train data and some of the groups as test data. This method outperforms making a train-test split in terms of model quality.
 

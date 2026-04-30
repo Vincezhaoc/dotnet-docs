@@ -5,7 +5,6 @@ ms.date: "03/30/2017"
 dev_langs:
   - "csharp"
   - "vb"
-  - "cpp"
 helpviewer_keywords:
   - "asynchronous programming, delegates"
   - "asynchronous delegates"
@@ -19,7 +18,6 @@ helpviewer_keywords:
   - "synchronous calling in asynchronous manner"
   - "waiting for asynchronous calls"
   - "status information [.NET], asynchronous operations"
-ms.assetid: 41972034-92ed-450a-9664-ab93fcc6f1fb
 ---
 # Calling Synchronous Methods Asynchronously
 
@@ -39,7 +37,7 @@ The code examples in this topic demonstrate four common ways to use `BeginInvoke
 
 - Do some work and then call `EndInvoke` to block until the call completes.
 
-- Obtain a <xref:System.Threading.WaitHandle> using the <xref:System.IAsyncResult.AsyncWaitHandle%2A?displayProperty=nameWithType> property, use its <xref:System.Threading.WaitHandle.WaitOne%2A> method to block execution until the <xref:System.Threading.WaitHandle> is signaled, and then call `EndInvoke`.
+- Obtain a <xref:System.Threading.WaitHandle> using the <xref:System.IAsyncResult.AsyncWaitHandle?displayProperty=nameWithType> property, use its <xref:System.Threading.WaitHandle.WaitOne*> method to block execution until the <xref:System.Threading.WaitHandle> is signaled, and then call `EndInvoke`.
 
 - Poll the <xref:System.IAsyncResult> returned by `BeginInvoke` to determine when the asynchronous call has completed, and then call `EndInvoke`.
 
@@ -54,7 +52,6 @@ The code examples in this topic demonstrate four common ways to use `BeginInvoke
 
  The following code example shows the definition of `TestMethod` and the delegate named `AsyncMethodCaller` that can be used to call `TestMethod` asynchronously. To compile the code examples, you must include the definitions for `TestMethod` and the `AsyncMethodCaller` delegate.
 
- [!code-cpp[AsyncDelegateExamples#1](../../../samples/snippets/cpp/VS_Snippets_CLR/AsyncDelegateExamples/cpp/TestMethod.cpp#1)]
  [!code-csharp[AsyncDelegateExamples#1](../../../samples/snippets/csharp/VS_Snippets_CLR/AsyncDelegateExamples/CS/TestMethod.cs#1)]
  [!code-vb[AsyncDelegateExamples#1](../../../samples/snippets/visualbasic/VS_Snippets_CLR/AsyncDelegateExamples/VB/TestMethod.vb#1)]
 
@@ -65,28 +62,25 @@ The code examples in this topic demonstrate four common ways to use `BeginInvoke
 > [!IMPORTANT]
 > Because `EndInvoke` might block, you should never call it from threads that service the user interface.
 
- [!code-cpp[AsyncDelegateExamples#2](../../../samples/snippets/cpp/VS_Snippets_CLR/AsyncDelegateExamples/cpp/EndInvoke.cpp#2)]
  [!code-csharp[AsyncDelegateExamples#2](../../../samples/snippets/csharp/VS_Snippets_CLR/AsyncDelegateExamples/CS/EndInvoke.cs#2)]
  [!code-vb[AsyncDelegateExamples#2](../../../samples/snippets/visualbasic/VS_Snippets_CLR/AsyncDelegateExamples/VB/EndInvoke.vb#2)]
 
 ## Waiting for an Asynchronous Call with WaitHandle
 
- You can obtain a <xref:System.Threading.WaitHandle> by using the <xref:System.IAsyncResult.AsyncWaitHandle%2A> property of the <xref:System.IAsyncResult> returned by `BeginInvoke`. The <xref:System.Threading.WaitHandle> is signaled when the asynchronous call completes, and you can wait for it by calling the <xref:System.Threading.WaitHandle.WaitOne%2A> method.
+ You can obtain a <xref:System.Threading.WaitHandle> by using the <xref:System.IAsyncResult.AsyncWaitHandle> property of the <xref:System.IAsyncResult> returned by `BeginInvoke`. The <xref:System.Threading.WaitHandle> is signaled when the asynchronous call completes, and you can wait for it by calling the <xref:System.Threading.WaitHandle.WaitOne*> method.
 
  If you use a <xref:System.Threading.WaitHandle>, you can perform additional processing before or after the asynchronous call completes, but before calling `EndInvoke` to retrieve the results.
 
 > [!NOTE]
-> The wait handle is not closed automatically when you call `EndInvoke`. If you release all references to the wait handle, system resources are freed when garbage collection reclaims the wait handle. To free the system resources as soon as you are finished using the wait handle, dispose of it by calling the <xref:System.Threading.WaitHandle.Close%2A?displayProperty=nameWithType> method. Garbage collection works more efficiently when disposable objects are explicitly disposed.
+> The wait handle is not closed automatically when you call `EndInvoke`. If you release all references to the wait handle, system resources are freed when garbage collection reclaims the wait handle. To free the system resources as soon as you are finished using the wait handle, dispose of it by calling the <xref:System.Threading.WaitHandle.Close*?displayProperty=nameWithType> method. Garbage collection works more efficiently when disposable objects are explicitly disposed.
 
- [!code-cpp[AsyncDelegateExamples#3](../../../samples/snippets/cpp/VS_Snippets_CLR/AsyncDelegateExamples/cpp/waithandle.cpp#3)]
  [!code-csharp[AsyncDelegateExamples#3](../../../samples/snippets/csharp/VS_Snippets_CLR/AsyncDelegateExamples/CS/waithandle.cs#3)]
  [!code-vb[AsyncDelegateExamples#3](../../../samples/snippets/visualbasic/VS_Snippets_CLR/AsyncDelegateExamples/VB/WaitHandle.vb#3)]
 
 ## Polling for Asynchronous Call Completion
 
- You can use the <xref:System.IAsyncResult.IsCompleted%2A> property of the <xref:System.IAsyncResult> returned by `BeginInvoke` to discover when the asynchronous call completes. You might do this when making the asynchronous call from a thread that services the user interface. Polling for completion allows the calling thread to continue executing while the asynchronous call executes on a <xref:System.Threading.ThreadPool> thread.
+ You can use the <xref:System.IAsyncResult.IsCompleted> property of the <xref:System.IAsyncResult> returned by `BeginInvoke` to discover when the asynchronous call completes. You might do this when making the asynchronous call from a thread that services the user interface. Polling for completion allows the calling thread to continue executing while the asynchronous call executes on a <xref:System.Threading.ThreadPool> thread.
 
- [!code-cpp[AsyncDelegateExamples#4](../../../samples/snippets/cpp/VS_Snippets_CLR/AsyncDelegateExamples/cpp/polling.cpp#4)]
  [!code-csharp[AsyncDelegateExamples#4](../../../samples/snippets/csharp/VS_Snippets_CLR/AsyncDelegateExamples/CS/polling.cs#4)]
  [!code-vb[AsyncDelegateExamples#4](../../../samples/snippets/visualbasic/VS_Snippets_CLR/AsyncDelegateExamples/VB/polling.vb#4)]
 
@@ -94,7 +88,7 @@ The code examples in this topic demonstrate four common ways to use `BeginInvoke
 
  If the thread that initiates the asynchronous call does not need to be the thread that processes the results, you can execute a callback method when the call completes. The callback method is executed on a <xref:System.Threading.ThreadPool> thread.
 
- To use a callback method, you must pass `BeginInvoke` an <xref:System.AsyncCallback> delegate that represents the callback method. You can also pass an object that contains information to be used by the callback method. In the callback method, you can cast the <xref:System.IAsyncResult>, which is the only parameter of the callback method, to an <xref:System.Runtime.Remoting.Messaging.AsyncResult> object. You can then use the <xref:System.Runtime.Remoting.Messaging.AsyncResult.AsyncDelegate%2A?displayProperty=nameWithType> property to get the delegate that was used to initiate the call so that you can call `EndInvoke`.
+ To use a callback method, you must pass `BeginInvoke` an <xref:System.AsyncCallback> delegate that represents the callback method. You can also pass an object that contains information to be used by the callback method. In the callback method, you can cast the <xref:System.IAsyncResult>, which is the only parameter of the callback method, to an <xref:System.Runtime.Remoting.Messaging.AsyncResult> object. You can then use the <xref:System.Runtime.Remoting.Messaging.AsyncResult.AsyncDelegate?displayProperty=nameWithType> property to get the delegate that was used to initiate the call so that you can call `EndInvoke`.
 
  Notes on the example:
 
@@ -104,7 +98,6 @@ The code examples in this topic demonstrate four common ways to use `BeginInvoke
 
 - The callback is made on a <xref:System.Threading.ThreadPool> thread. <xref:System.Threading.ThreadPool> threads are background threads, which do not keep the application running if the main thread ends, so the main thread of the example has to sleep long enough for the callback to finish.
 
- [!code-cpp[AsyncDelegateExamples#5](../../../samples/snippets/cpp/VS_Snippets_CLR/AsyncDelegateExamples/cpp/callback.cpp#5)]
  [!code-csharp[AsyncDelegateExamples#5](../../../samples/snippets/csharp/VS_Snippets_CLR/AsyncDelegateExamples/CS/callback.cs#5)]
  [!code-vb[AsyncDelegateExamples#5](../../../samples/snippets/visualbasic/VS_Snippets_CLR/AsyncDelegateExamples/VB/callback.vb#5)]
 

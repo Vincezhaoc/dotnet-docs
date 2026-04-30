@@ -3,6 +3,7 @@ description: "Learn more about: Token Provider"
 title: "Token Provider"
 ms.date: "03/30/2017"
 ms.assetid: 947986cf-9946-4987-84e5-a14678d96edb
+ms.custom: sfi-ropc-nochange
 ---
 # Token Provider
 
@@ -198,7 +199,7 @@ The following steps show how to develop a custom token provider and integrate it
     }
     ```
 
-On the service, to display the caller's information, use the <xref:System.ServiceModel.ServiceSecurityContext.PrimaryIdentity%2A> as shown in the following code example. The <xref:System.ServiceModel.ServiceSecurityContext.Current%2A> contains claims information about the current caller.
+On the service, to display the caller's information, use the <xref:System.ServiceModel.ServiceSecurityContext.PrimaryIdentity*> as shown in the following code example. The <xref:System.ServiceModel.ServiceSecurityContext.Current*> contains claims information about the current caller.
 
 ```csharp
 static void DisplayIdentityInformation()

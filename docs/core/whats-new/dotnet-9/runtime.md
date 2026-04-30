@@ -2,12 +2,12 @@
 title: What's new in .NET 9 runtime
 description: Learn about the new .NET features introduced in the .NET 9 runtime.
 titleSuffix: ""
-ms.date: 09/09/2024
-ms.topic: whats-new
+ms.date: 11/11/2024
+ms.update-cycle: 3650-days
 ---
 # What's new in the .NET 9 runtime
 
-This article describes new features and performance improvements in the .NET runtime for .NET 9. It's been updated for .NET 9 Preview 7.
+This article describes new features and performance improvements in the .NET runtime for .NET 9.
 
 ## Attribute model for feature switches with trimming support
 
@@ -24,7 +24,7 @@ Two new attributes make it possible to define [feature switches](https://github.
       [FeatureSwitchDefinition("Feature.IsSupported")]
       internal static bool IsSupported => AppContext.TryGetSwitch("Feature.IsSupported", out bool isEnabled) ? isEnabled : true;
 
-      internal static Implementation() => ...;
+      internal static void Implementation() => ...;
   }
   ```
 
@@ -48,7 +48,7 @@ Two new attributes make it possible to define [feature switches](https://github.
       internal static bool IsSupported => RuntimeFeature.IsDynamicCodeSupported;
 
       [RequiresDynamicCode("Feature requires dynamic code support.")]
-      internal static Implementation() => ...; // Uses dynamic code
+      internal static void Implementation() => ...; // Uses dynamic code
   }
   ```
 
@@ -65,6 +65,16 @@ The <xref:System.Runtime.CompilerServices.UnsafeAccessorAttribute> feature allow
 Dynamic adaptation to application sizes (DATAS) is now enabled by default. It aims to adapt to application memory requirements, meaning the application heap size should be roughly proportional to the long-lived data size. DATAS was introduced as an opt-in feature in .NET 8 and has been significantly updated and improved in .NET 9.
 
 For more information, see [Dynamic adaptation to application sizes (DATAS)](../../../standard/garbage-collection/datas.md).
+
+## Control-flow enforcement technology
+
+[Control-flow enforcement technology (CET)](/cpp/build/reference/cetcompat) is [enabled by default](../../compatibility/interop/9.0/cet-support.md) for apps on Windows. It significantly improves security by adding hardware-enforced stack protection against return-oriented programming (ROP) exploits. It's the latest [.NET Runtime Security Mitigation](https://github.com/dotnet/designs/blob/main/accepted/2021/runtime-security-mitigations.md).
+
+CET imposes some limitations on CET-enabled processes and can result in a small performance regression. There are various controls to opt-out of CET.
+
+## .NET install search behavior
+
+.NET apps can now be configured for how they should [search for the .NET runtime](../../deploying/index.md#configure-net-install-search-behavior). This capability can be used with private runtime installations or to more strongly control the execution environment.
 
 ## Performance improvements
 
@@ -165,7 +175,7 @@ In .NET 9, the JIT compiler *automatically* transforms the first indexing patter
 
 #### Loop counter variable direction
 
-The 64-bit compiler now recognizes when the direction of a loop's counter variable can be flipped without affecting the program's behavior, and then performs the transformation.
+The 64-bit compiler now recognizes when a loop's counter variable is used only to control the number of iterations, and transforms the loop to count down instead of up.
 
 In the idiomatic `for (int i = ...)` pattern, the counter variable typically increases. Consider the following example:
 
@@ -193,7 +203,7 @@ The code size reduction is small, but if the loop runs for a nontrivial number o
 
 One of .NET's goals for the JIT compiler's inliner is to remove as many restrictions that block a method from being inlined as possible. .NET 9 enables inlining of:
 
-- Shared generics that require run-time lookups.
+- Shared generics that require runtime lookups.
 
   As an example, consider the following methods:
 
@@ -202,9 +212,9 @@ One of .NET's goals for the JIT compiler's inliner is to remove as many restrict
   static bool Callee<T>() => typeof(T) == typeof(int);
   ```
 
-  When `T` is a reference type like `string`, the runtime creates *shared generics*, which are special instantiations of `Test` and `Callee` that are shared by all ref-type `T` types. To make this work, the runtime builds dictionaries that map generic types to internal types. These dictionaries are specialized per generic type (or per generic method), and are accessed at run time to obtain information about `T` and types that depend on `T`. Historically, code compiled just-in-time was only capable of performing these run-time lookups against the root method's dictionary. This meant the JIT compiler couldn't inline `Callee` into `Test`&mdash;there was no way for the inlined code from `Callee` to access the proper dictionary, even though both methods were instantiated over the same type.
+  When `T` is a reference type like `string`, the runtime creates *shared generics*, which are special instantiations of `Test` and `Callee` that are shared by all ref-type `T` types. To make this work, the runtime builds dictionaries that map generic types to internal types. These dictionaries are specialized per generic type (or per generic method), and are accessed at runtime to obtain information about `T` and types that depend on `T`. Historically, code compiled just-in-time was only capable of performing these runtime lookups against the root method's dictionary. This meant the JIT compiler couldn't inline `Callee` into `Test`&mdash;there was no way for the inlined code from `Callee` to access the proper dictionary, even though both methods were instantiated over the same type.
 
-  .NET 9 has lifted this restriction by freely enabling run-time type lookups in callees, meaning the JIT compiler can now inline methods like `Callee` into `Test`.
+  .NET 9 has lifted this restriction by freely enabling runtime type lookups in callees, meaning the JIT compiler can now inline methods like `Callee` into `Test`.
 
   Suppose we call `Test<string>` in another method. In pseudocode, the inlining looks like this:
 
@@ -228,7 +238,7 @@ One of .NET's goals for the JIT compiler's inliner is to remove as many restrict
 
 ### PGO improvements: Type checks and casts
 
-.NET 8 enabled [dynamic profile-guided optimization (PGO)](../../runtime-config/compilation.md#profile-guided-optimization) by default. NET 9 expands the JIT compiler's PGO implementation to profile more code patterns. When tiered compilation is enabled, the JIT compiler already inserts instrumentation into your program to profile its behavior. When it recompiles with optimizations, the compiler leverages the profile it built at run time to make decisions specific to the current run of your program. In .NET 9, the JIT compiler uses PGO data to improve the performance of *type checks*.
+.NET 8 enabled [dynamic profile-guided optimization (PGO)](../../runtime-config/compilation.md#profile-guided-optimization) by default. NET 9 expands the JIT compiler's PGO implementation to profile more code patterns. When tiered compilation is enabled, the JIT compiler already inserts instrumentation into your program to profile its behavior. When it recompiles with optimizations, the compiler leverages the profile it built at runtime to make decisions specific to the current run of your program. In .NET 9, the JIT compiler uses PGO data to improve the performance of *type checks*.
 
 Determining the type of an object requires a call into the runtime, which comes with a performance penalty. When the type of an object needs to be checked, the JIT compiler emits this call for the sake of correctness (compilers usually cannot rule out any possibilities, even if they seem improbable). However, if PGO data suggests an object is likely to be a specific type, the JIT compiler now emits a *fast path* that cheaply checks for that type, and falls back on the slow path of calling into the runtime only if necessary.
 
@@ -297,7 +307,7 @@ The use of `size` in the call to `Sse2.ShiftRightLogical128BitLane` can be subst
 
 ### Constant folding for floating point and SIMD operations
 
-*Constant folding* is an existing optimization in the JIT compiler. *Constant folding* refers to the replacement of expressions that can be computed at compile time with the constants they evaluate to, thus eliminating computations at run time. .NET 9 adds new constant-folding capabilities:
+*Constant folding* is an existing optimization in the JIT compiler. *Constant folding* refers to the replacement of expressions that can be computed at compile time with the constants they evaluate to, thus eliminating computations at runtime. .NET 9 adds new constant-folding capabilities:
 
 - For floating-point binary operations, where one of the operands is a constant:
   - `x + NaN` is now folded into `NaN`.
@@ -310,7 +320,7 @@ The use of `size` in the call to `Sse2.ShiftRightLogical128BitLane` can be subst
 
 ### Arm64 SVE support
 
-.NET 9 introduces experimental support for the [Scalable Vector Extension (SVE)](https://en.wikipedia.org/wiki/AArch64#Scalable_Vector_Extension_(SVE)), a SIMD instruction set for ARM64 CPUs. .NET already supported the NEON instruction set, so on [NEON](https://en.wikipedia.org/wiki/ARM_architecture_family#Advanced_SIMD_(Neon))-capable hardware, your applications can leverage 128-bit vector registers. SVE supports flexible vector lengths all the way up to 2048 bits, unlocking more data processing per instruction. In .NET 9, <xref:System.Numerics.Vector%601> is 128 bits wide when targeting SVE, and future work will enable scaling of its width to match the target machine's vector register size. You can accelerate your .NET applications on SVE-capable hardware using the new <xref:System.Runtime.Intrinsics.Arm.Sve?displayProperty=fullName> APIs.
+.NET 9 introduces experimental support for the [Scalable Vector Extension (SVE)](https://en.wikipedia.org/wiki/AArch64#Scalable_Vector_Extension_(SVE)), a SIMD instruction set for ARM64 CPUs. .NET already supported the NEON instruction set, so on [NEON](https://en.wikipedia.org/wiki/ARM_architecture_family#Advanced_SIMD_(Neon))-capable hardware, your applications can leverage 128-bit vector registers. SVE supports flexible vector lengths all the way up to 2048 bits, unlocking more data processing per instruction. In .NET 9, <xref:System.Numerics.Vector`1> is 128 bits wide when targeting SVE, and future work will enable scaling of its width to match the target machine's vector register size. You can accelerate your .NET applications on SVE-capable hardware using the new <xref:System.Runtime.Intrinsics.Arm.Sve?displayProperty=fullName> APIs.
 
 > [!NOTE]
 > SVE support in .NET 9 is experimental. The APIs under `System.Runtime.Intrinsics.Arm.Sve` are marked with <xref:System.Diagnostics.CodeAnalysis.ExperimentalAttribute>, which means they're subject to change in future releases. Additionally, debugger stepping and breakpoints through SVE-generated code might not function properly, resulting in application crashes or corruption of data.
@@ -325,7 +335,7 @@ Consider the following snippet:
 
 `Compare` is conveniently written such that if you wanted to compare other types, like strings or `double` values, you could reuse the same implementation. But in this example, it also has the performance drawback of requiring any value types that are passed to it to be *boxed*.
 
-The x64 assembly code generated for `Main` is as follows:
+The x64 assembly code generated for `RunIt` is as follows:
 
 ```al
 push     rbx
@@ -352,9 +362,9 @@ pop      rbx
 ret
 ```
 
-The calls to `CORINFO_HELP_NEWSFAST` are the heap allocations for the boxed integer arguments. Also, notice that there isn't any call to `Compare`; the compiler decided to inline it into `Main`. This inlining means the boxes never "escape." In other words, throughout the execution of `Compare`, it knows `x` and `y` are actually integers, and they can be safely unboxed them without affecting the comparison logic.
+The calls to `CORINFO_HELP_NEWSFAST` are the heap allocations for the boxed integer arguments. Also, notice that there isn't any call to `Compare`; the compiler decided to inline it into `RunIt`. This inlining means the boxes never "escape." In other words, throughout the execution of `Compare`, it knows `x` and `y` are actually integers, and they can be safely unboxed them without affecting the comparison logic.
 
-Starting in .NET 9, the 64-bit compiler allocates unescaped boxes on the stack, which unlocks several other optimizations. In this example, not only does the compiler avoid the heap allocations, but it also evaluates the expressions `x.Equals(y)` and `result ? 0 : 100` at compile time. Here's the updated assembly:
+Starting in .NET 9, the 64-bit compiler allocates unescaped boxes on the stack, which unlocks several other optimizations. In this example, the compiler now omits the heap allocations, but because it knows `x` and `y` are 3 and 4, it can also omit the body of `Compare`; the compiler can determine `x.Equals(y)` is false at compile time, so `RunIt` should always return 100. Here's the updated assembly:
 
 ```al
 mov      eax, 100

@@ -1,4 +1,4 @@
-﻿// <Snippet1>
+// <Snippet1>
 using System;
 
 class Point2
@@ -30,7 +30,7 @@ class Point2
 
     public override int GetHashCode()
     {
-        return (x << 2) ^ y;
+        return HashCode.Combine(x, y);
     }
 
     public override string ToString()
@@ -59,7 +59,7 @@ sealed class Point3D : Point2
 
     public override int GetHashCode()
     {
-        return (base.GetHashCode() << 2) ^ z;
+        return HashCode.Combine(base.GetHashCode(), z);
     }
 
     public override String ToString()
@@ -77,14 +77,10 @@ class Example7
         Point3D point3Db = new Point3D(5, 5, 2);
         Point3D point3Dc = new Point3D(5, 5, -1);
 
-        Console.WriteLine("{0} = {1}: {2}",
-                          point2D, point3Da, point2D.Equals(point3Da));
-        Console.WriteLine("{0} = {1}: {2}",
-                          point2D, point3Db, point2D.Equals(point3Db));
-        Console.WriteLine("{0} = {1}: {2}",
-                          point3Da, point3Db, point3Da.Equals(point3Db));
-        Console.WriteLine("{0} = {1}: {2}",
-                          point3Da, point3Dc, point3Da.Equals(point3Dc));
+        Console.WriteLine($"{point2D} = {point3Da}: {point2D.Equals(point3Da)}");
+        Console.WriteLine($"{point2D} = {point3Db}: {point2D.Equals(point3Db)}");
+        Console.WriteLine($"{point3Da} = {point3Db}: {point3Da.Equals(point3Db)}");
+        Console.WriteLine($"{point3Da} = {point3Dc}: {point3Da.Equals(point3Dc)}");
     }
 }
 // The example displays the following output:

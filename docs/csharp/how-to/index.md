@@ -1,7 +1,7 @@
 ---
 title: How to articles 
 description: A collection of quick tips and short, focused code samples
-ms.topic: conceptual
+ms.topic: article
 ms.date: 12/20/2017
 ---
 
@@ -15,14 +15,14 @@ There are several tips and tricks that are common C# developer practices:
 
 - [Initialize objects using an object initializer](../programming-guide/classes-and-structs/how-to-initialize-objects-by-using-an-object-initializer.md).
 - [Use operator overloading](../language-reference/operators/operator-overloading.md).
-- [Implement and call a custom extension method](../programming-guide/classes-and-structs/how-to-implement-and-call-a-custom-extension-method.md).
-- [Create a new method for an `enum` type using extension methods](../programming-guide/classes-and-structs/how-to-create-a-new-method-for-an-enumeration.md).
+- [Implement and call a custom extension member](../programming-guide/classes-and-structs/how-to-implement-and-call-a-custom-extension-method.md).
+- [Create a new method for an `enum` type using extension member](../programming-guide/classes-and-structs/how-to-create-a-new-method-for-an-enumeration.md).
 
 ### Class, record, and struct members
 
 You create classes, records, and structs to implement your program. These techniques are commonly used when writing classes, records, or structs.
 
-- [Declare auto implemented properties](../programming-guide/classes-and-structs/how-to-implement-a-lightweight-class-with-auto-implemented-properties.md).
+- [Declare automatically implemented properties](../programming-guide/classes-and-structs/how-to-implement-a-lightweight-class-with-auto-implemented-properties.md).
 - [Declare and use read/write properties](../programming-guide/classes-and-structs/how-to-declare-and-use-read-write-properties.md).
 - [Define constants](../programming-guide/classes-and-structs/how-to-define-constants.md).
 - [Override the `ToString` method to provide string output](../programming-guide/classes-and-structs/how-to-override-the-tostring-method.md).

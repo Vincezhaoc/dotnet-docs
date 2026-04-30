@@ -1,8 +1,9 @@
 ---
 title: "XML Schema Definition Tool (Xsd.exe)"
-description: The XML Serializer Generator creates an XML serialization assembly for types in a specified assembly, which improves the startup performance of XmlSerializer.
-ms.date: "03/30/2017"
+description: Use the XML Schema Definition tool (Xsd.exe) to generate XML schemas or common language runtime (CLR) classes from XDR, XML, and XSD files, or from types in compiled assemblies.
+ms.date: "03/06/2026"
 ms.assetid: a6e6e65c-347f-4494-9457-653bf29baac2
+ai-usage: ai-assisted
 ---
 # XML Schema Definition Tool (Xsd.exe)
 
@@ -24,7 +25,7 @@ xsd file.xsd {/classes | /dataset} [/element:element]
                           [/parameters:file.xml]
 xsd {file.dll | file.exe} [-outputdir:directory] [/type:typename [...]][/parameters:file.xml]
 ```
-  
+
 > [!TIP]
 > For .NET Framework tools to function properly, you must set your `Path`, `Include`, and `Lib` environment variables correctly. Set these environment variables by running SDKVars.bat, which is located in the \<SDK>\\\<version>\Bin directory. SDKVars.bat must be executed in every command shell.
 
@@ -49,8 +50,8 @@ xsd {file.dll | file.exe} [-outputdir:directory] [/type:typename [...]][/paramet
 
 |Option|Description|
 |------------|-----------------|
-|**/c\[lasses\]**|Generates classes that correspond to the specified schema. To read XML data into the object, use the <xref:System.Xml.Serialization.XmlSerializer.Deserialize%2A?displayProperty=nameWithType> method.|
-|**/d\[ataset\]**|Generates a class derived from <xref:System.Data.DataSet> that corresponds to the specified schema. To read XML data into the derived class, use the <xref:System.Data.DataSet.ReadXml%2A?displayProperty=nameWithType> method.|
+|**/c\[lasses\]**|Generates classes that correspond to the specified schema. To read XML data into the object, use the <xref:System.Xml.Serialization.XmlSerializer.Deserialize*?displayProperty=nameWithType> method.|
+|**/d\[ataset\]**|Generates a class derived from <xref:System.Data.DataSet> that corresponds to the specified schema. To read XML data into the derived class, use the <xref:System.Data.DataSet.ReadXml*?displayProperty=nameWithType> method.|
 
  You can also specify any of the following options for .xsd files.
 
@@ -58,7 +59,7 @@ xsd {file.dll | file.exe} [-outputdir:directory] [/type:typename [...]][/paramet
 |------------|-----------------|
 |**/e\[lement\]:**_element_|Specifies the element in the schema to generate code for. By default all elements are typed. You can specify this argument more than once.|
 |**/enableDataBinding**|Implements the <xref:System.ComponentModel.INotifyPropertyChanged> interface on all generated types to enable data binding. The short form is `/edb`.|
-|**/enableLinqDataSet**|(Short form: `/eld`.) Specifies that the generated DataSet can be queried against using LINQ to DataSet. This option is used when the /dataset option is also specified. For more information, see [LINQ to DataSet Overview](../../framework/data/adonet/linq-to-dataset-overview.md) and [Querying Typed DataSets](../../framework/data/adonet/querying-typed-datasets.md). For general information about using LINQ, see [Language-Integrated Query (LINQ) - C#](/dotnet/csharp/linq/) or [Language-Integrated Query (LINQ) - Visual Basic](../../visual-basic/programming-guide/concepts/linq/index.md).|
+|**/enableLinqDataSet**|(Short form: `/eld`.) Specifies that the generated DataSet can be queried against using LINQ to DataSet. This option is used when the /dataset option is also specified. For more information, see [LINQ to DataSet Overview](../../framework/data/adonet/linq-to-dataset-overview.md) and [Querying Typed DataSets](../../framework/data/adonet/querying-typed-datasets.md). For general information about using LINQ, see [Language-Integrated Query (LINQ) - C#](../../csharp/linq/index.md) or [Language-Integrated Query (LINQ) - Visual Basic](../../visual-basic/programming-guide/concepts/linq/index.md).|
 |**/f\[ields\]**|Generates fields only. By default, [properties with backing fields](../../csharp/programming-guide/classes-and-structs/properties.md#properties-with-backing-fields) are generated.|
 |**/l\[anguage\]:**_language_|Specifies the programming language to use. Choose from `CS` (C#, which is the default), `VB` (Visual Basic), `JS` (JScript), or `VJS` (Visual J#). You can also specify a fully qualified name for a class implementing <xref:System.CodeDom.Compiler.CodeDomProvider?displayProperty=nameWithType>|
 |**/n\[amespace\]:**_namespace_|Specifies the runtime namespace for the generated types. The default namespace is `Schemas`.|
@@ -148,7 +149,7 @@ To generate a code file, use the `<generateClasses>` element. The following exam
 |-------------|-----------------|
 |\<element>|Specifies an element in the .xsd file to generate code for.|
 |\<schemaImporterExtensions>|Specifies a type derived from the <xref:System.Xml.Serialization.Advanced.SchemaImporterExtension> class.|
-|\<schema>|Specifies a XML Schema file to generate code for. Multiple XML Schema files can be specified using multiple \<schema> elements.|
+|\<schema>|Specifies a XML Schema file to generate code for. Multiple XML Schema files can be specified using multiple `<schema>` elements.|
 
 The following table shows the attributes that can also be used with the `<generateClasses>` element.
 
@@ -171,7 +172,7 @@ Options you can set for the `<generateDataSet>` element include the following.
 
 |Element|Description|
 |-------------|-----------------|
-|\<schema>|Specifies an XML Schema file to generate code for. Multiple XML Schema files can be specified using multiple \<schema> elements.|
+|\<schema>|Specifies an XML Schema file to generate code for. Multiple XML Schema files can be specified using multiple `<schema>` elements.|
 
  The following table shows the attributes that can be used with the `<generateDataSet>` element.
 
@@ -233,5 +234,6 @@ xsd myAssembly.dll
 - [Developer command-line shells](/visualstudio/ide/reference/command-prompt-powershell)
 - [LINQ to DataSet Overview](../../framework/data/adonet/linq-to-dataset-overview.md)
 - [Querying Typed DataSets](../../framework/data/adonet/querying-typed-datasets.md)
-- [LINQ (Language-Integrated Query) (C#)](/dotnet/csharp/linq/)
+- [LINQ (Language-Integrated Query) (C#)](../../csharp/linq/index.md)
 - [LINQ (Language-Integrated Query) (Visual Basic)](../../visual-basic/programming-guide/concepts/linq/index.md)
+- [Xsd.exe source code (Reference Source)](https://github.com/microsoft/referencesource/blob/master/xsd/microsoft/devapps/xsd/xsd.cs)

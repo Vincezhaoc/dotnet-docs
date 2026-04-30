@@ -1,4 +1,4 @@
-﻿// <Snippet12>
+// <Snippet12>
 using System;
 
 public class Example3
@@ -10,10 +10,8 @@ public class Example3
         for (int ctr = 1; ctr <= 10; ctr++)
             one2 += .1;
 
-        Console.WriteLine("{0:R} = {1:R}: {2}", one1, one2, one1.Equals(one2));
-        Console.WriteLine("{0:R} is approximately equal to {1:R}: {2}",
-                          one1, one2,
-                          IsApproximatelyEqual(one1, one2, .000000001));
+        Console.WriteLine($"{one1} = {one2}: {one1.Equals(one2)}");
+        Console.WriteLine($"{one1} is approximately equal to {one2}: {IsApproximatelyEqual(one1, one2, .000000001)}");
     }
 
     static bool IsApproximatelyEqual(double value1, double value2, double epsilon)
@@ -36,6 +34,7 @@ public class Example3
         return Math.Abs((value1 - value2) / divisor) <= epsilon;
     }
 }
+
 // The example displays the following output:
 //       1 = 0.99999999999999989: False
 //       1 is approximately equal to 0.99999999999999989: True

@@ -2,8 +2,9 @@
 title: global.json overview
 description: Learn how to use the global.json file to set the .NET SDK version when running .NET CLI commands.
 ms.topic: how-to
-ms.date: 07/05/2024
+ms.date: 03/05/2026
 ms.custom: "updateeachrelease"
+ai-usage: ai-assisted
 ---
 # global.json overview
 
@@ -11,30 +12,33 @@ ms.custom: "updateeachrelease"
 
 The *global.json* file allows you to define which .NET SDK version is used when you run .NET CLI commands. Selecting the .NET SDK version is independent from specifying the runtime version a project targets. The .NET SDK version indicates which version of the .NET CLI is used. This article explains how to select the SDK version by using *global.json*.
 
-If you always want to use the latest SDK version that is installed on your machine, no *global.json* file is needed. In CI (continuous integration) scenarios, however, you typically want to specify an acceptable range for the SDK version that is used. The *global.json* file has a `rollForward` feature that provides flexible ways to specify an acceptable range of versions. For example, the following *global.json* file selects 8.0.300 or any later [feature band or patch](../releases-and-support.md) for 8.0 that is installed on the machine:
+If you always want to use the latest SDK version that is installed on your machine, no *global.json* file is needed. In CI (continuous integration) scenarios, however, you typically want to specify an acceptable range for the SDK version that is used. The *global.json* file has a `rollForward` feature that provides flexible ways to specify an acceptable range of versions. For example, the following *global.json* file selects 10.0.100 or any later [feature band or patch](../releases-and-support.md) for 10.0 that is installed on the machine:
 
 ```json
 {
   "sdk": {
-    "version": "8.0.300",
+    "version": "10.0.100",
     "rollForward": "latestFeature"
   }
 }
 ```
 
-The .NET SDK looks for a *global.json* file in the current working directory (which isn't necessarily the same as the project directory) or one of its parent directories.
+You rely on two components in the .NET SDK to search for a *global.json* file. Each component starts from a different location and searches up through ancestor directories:
+
+- **.NET SDK muxer** handles `dotnet` CLI commands. It starts from the current working directory, which isn't necessarily the same as the project directory.
+- **.NET MSBuild project SDK resolver** resolves project SDKs during builds. It starts from the directory that contains a solution file, if one exists. If no solution file exists, it starts from the directory that contains the current project file. If neither file exists, it uses the current working directory.
 
 For information about specifying the runtime version instead of the SDK version, see [Target frameworks](../../standard/frameworks.md).
 
 ## global.json schema
 
-### sdk
+### `sdk`
 
 Type: `object`
 
 Specifies information about the .NET SDK to select.
 
-#### version
+#### `version`
 
 - Type: `string`
 
@@ -42,10 +46,12 @@ The version of the .NET SDK to use.
 
 This field:
 
-- Doesn't have wildcard support; that is, you must specify the full version number.
+- Requires the full version number, such as 10.0.100.
+- Doesn't support version numbers like 10, 10.0, or 10.0.x.
+- Doesn't have wildcard support.
 - Doesn't support version ranges.
 
-#### allowPrerelease
+#### `allowPrerelease`
 
 - Type: `boolean`
 - Available since: .NET Core 3.0 SDK.
@@ -57,7 +63,7 @@ If you don't set this value explicitly, the default value depends on whether you
 - If you're **not** in Visual Studio, the default value is `true`.
 - If you're in Visual Studio, it uses the prerelease status requested. That is, if you're using a Preview version of Visual Studio or you set the **Use previews of the .NET SDK** option (under **Tools** > **Options** > **Environment** > **Preview Features**), the default value is `true`. Otherwise, the default value is `false`.
 
-#### rollForward
+#### `rollForward`
 
 - Type: `string`
 - Available since: .NET Core 3.0 SDK.
@@ -86,11 +92,44 @@ The following table shows the possible values for the `rollForward` key:
 | `latestMajor` | Uses the highest installed .NET SDK with a version that's greater than or equal to the specified value. <br> If not found, fail. |
 | `disable`     | Doesn't roll forward. An exact match is required. |
 
-### msbuild-sdks
+#### `paths`
+
+- Type: Array of `string`
+- Available since: .NET 10 SDK.
+
+Specifies the locations that should be considered when searching for a compatible .NET SDK. Paths can be absolute or relative to the location of the *global.json* file. The special value `$host$` represents the location corresponding to the running `dotnet` executable.
+
+These paths are searched in the order they're defined and the first [matching](#matching-rules) SDK is used.
+
+This feature enables using local SDK installations (such as SDKs relative to a repository root or placed in a custom folder) that aren't installed globally on the system.
+
+> The "paths" feature only works when using commands that engage the .NET SDK, such as `dotnet run`. It does NOT affect scenarios such as running the native apphost launcher (`app.exe`), running with `dotnet app.dll`, or running with `dotnet exec app.dll`. To use the "paths" feature, you must use SDK commands like `dotnet run`.
+
+#### `errorMessage`
+
+- Type: `string`
+- Available since: .NET 10 SDK.
+
+Specifies a custom error message displayed when the SDK resolver can't find a compatible .NET SDK.
+
+### `msbuild-sdks`
 
 Type: `object`
 
 Lets you control the project SDK version in one place rather than in each individual project. For more information, see [How project SDKs are resolved](/visualstudio/msbuild/how-to-use-project-sdk#how-project-sdks-are-resolved).
+
+### `test`
+
+- Type: `object`
+
+Specifies information about tests.
+
+#### `runner`
+
+- Type: `string`
+- Available since: .NET 10.0 SDK.
+
+The test runner to discover/run tests with.
 
 ### Comments in global.json
 
@@ -163,6 +202,39 @@ The following example shows how to use the highest patch version installed of a 
 }
 ```
 
+The following example shows how to specify additional SDK search paths and a custom error message:
+
+```json
+{
+  "sdk": {
+    "version": "10.0.100",
+    "paths": [ ".dotnet", "$host$" ],
+    "errorMessage": "The required .NET SDK wasn't found. Please run ./install.sh to install it."
+  }
+}
+```
+
+The following example shows an invalid version specified. The output of the command `dotnet --info` shows the error message: "Version '10.0' is not valid for the 'sdk/version' value."
+
+```json
+{
+  "sdk": {
+    "version": "10.0",
+    "rollForward": "latestFeature"
+  }
+}
+```
+
+The following example shows how to specify `Microsoft.Testing.Platform` (MTP) as the test runner:
+
+```json
+{
+    "test": {
+        "runner": "Microsoft.Testing.Platform"
+    }
+}
+```
+
 ## global.json and the .NET CLI
 
 To set an SDK version in the *global.json* file, it's helpful to know which SDK versions are installed on your machine. For information on how to do that, see [How to check that .NET is already installed](../install/how-to-detect-installed-versions.md#check-sdk-versions).
@@ -188,7 +260,7 @@ The following rules apply when determining which version of the SDK to use:
 - If a *global.json* file is found that doesn't specify an SDK version but it specifies an `allowPrerelease` value, the highest installed SDK version is used (equivalent to setting `rollForward` to `latestMajor`). Whether the latest SDK version can be release or prerelease depends on the value of `allowPrerelease`. `true` indicates prerelease versions are considered; `false` indicates that only release versions are considered.
 - If a *global.json* file is found and it specifies an SDK version:
 
-  - If no `rollForward` value is set, it uses `latestPatch` as the default `rollForward` policy. Otherwise, check each value and their behavior in the [rollForward](#rollforward) section.
+  - If no `rollForward` value is set, it uses `patch` as the default `rollForward` policy. Otherwise, check each value and their behavior in the [rollForward](#rollforward) section.
   - Whether prerelease versions are considered and what's the default behavior when `allowPrerelease` isn't set is described in the [allowPrerelease](#allowprerelease) section.
 
 ## Troubleshoot build warnings

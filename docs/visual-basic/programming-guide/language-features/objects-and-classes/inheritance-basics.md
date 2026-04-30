@@ -1,7 +1,8 @@
 ---
-description: "Learn more about: Inheritance Basics (Visual Basic)"
 title: "Inheritance Basics"
-ms.date: 07/20/2015
+description: "Learn more about: Inheritance Basics (Visual Basic)"
+ms.date: 03/11/2026
+ai-usage: ai-assisted
 helpviewer_keywords:
   - "derived classes [Visual Basic], inheritance"
   - "MyClass keyword [Visual Basic], using"
@@ -20,7 +21,6 @@ helpviewer_keywords:
   - "base classes [Visual Basic], inheritance"
   - "abstract classes [Visual Basic], inheritance"
   - "overriding, Overrides keyword"
-ms.assetid: dfc8deba-f5b3-4d1d-a937-7cb826446fc5
 ---
 # Inheritance Basics (Visual Basic)
 
@@ -58,7 +58,7 @@ Suppose you want to define classes to handle payroll. You could define a generic
 
 The `BonusPayroll` class can inherit, and override, the `PayEmployee` method defined in the base `Payroll` class.
 
-The following example defines a base class, `Payroll,` and a derived class, `BonusPayroll`, which overrides an inherited method, `PayEmployee`. A procedure, `RunPayroll`, creates and then passes a `Payroll` object and a `BonusPayroll` object to a function, `Pay`, that executes the `PayEmployee` method of both objects.
+The following example defines a base class, `Payroll`, and a derived class, `BonusPayroll`, which overrides an inherited method, `PayEmployee`. A procedure, `RunPayroll`, creates and then passes a `Payroll` object and a `BonusPayroll` object to a function, `Pay`, that executes the `PayEmployee` method of both objects.
 
 [!code-vb[VbVbalrOOP#28](~/samples/snippets/visualbasic/VS_Snippets_VBCSharp/VbVbalrOOP/VB/OOP.vb#28)]
 
@@ -146,3 +146,11 @@ Even though `derivedClass` overrides `testMethod`, the `MyClass` keyword in `use
 
 - [Inherits Statement](../../../language-reference/statements/inherits-statement.md)
 - [Me, My, MyBase, and MyClass](../../program-structure/me-my-mybase-and-myclass.md)
+- [Object-Oriented Programming (Visual Basic)](../../concepts/object-oriented-programming.md)
+- [Interfaces (Visual Basic)](../interfaces/index.md)
+- [Differences between shadowing and overriding](../declared-elements/differences-between-shadowing-and-overriding.md)
+- [Generic Types in Visual Basic](../data-types/generic-types.md)
+- [Covariance and Contravariance (Visual Basic)](../../concepts/covariance-contravariance/index.md)
+- [Variance in Generic Interfaces (Visual Basic)](../../concepts/covariance-contravariance/variance-in-generic-interfaces.md)
+- [Abstract class design](../../../../standard/design-guidelines/abstract-class.md)
+- [Base Classes for Implementing Abstractions](../../../../standard/design-guidelines/base-classes-for-implementing-abstractions.md)

@@ -27,7 +27,7 @@ A finalizer can also be implemented as an expression body definition, as the fol
 
 :::code language="csharp" source="snippets/finalizers/expr-bodied-finalizer.cs" ID="Snippet1":::
 
-The finalizer implicitly calls <xref:System.Object.Finalize%2A> on the base class of the object. Therefore, a call to a finalizer is implicitly translated to the following code:
+The finalizer implicitly calls <xref:System.Object.Finalize*> on the base class of the object. Therefore, a call to a finalizer is implicitly translated to the following code:
 
 ```csharp
 protected override void Finalize()
@@ -48,7 +48,7 @@ This design means that the `Finalize` method is called recursively for all insta
 > [!NOTE]
 > Empty finalizers should not be used. When a class contains a finalizer, an entry is created in the `Finalize` queue. This queue is processed by the garbage collector. When the GC processes the queue, it calls each finalizer. Unnecessary finalizers, including empty finalizers, finalizers that only call the base class finalizer, or finalizers that only call conditionally emitted methods, cause a needless loss of performance.
 
-The programmer has no control over when the finalizer is called; the garbage collector decides when to call it. The garbage collector checks for objects that are no longer being used by the application. If it considers an object eligible for finalization, it calls the finalizer (if any) and reclaims the memory used to store the object. It's possible to force garbage collection by calling <xref:System.GC.Collect%2A>, but most of the time, this call should be avoided because it may create performance issues.
+The programmer has no control over when the finalizer is called; the garbage collector decides when to call it. The garbage collector checks for objects that are no longer being used by the application. If it considers an object eligible for finalization, it calls the finalizer (if any) and reclaims the memory used to store the object. It's possible to force garbage collection by calling <xref:System.GC.Collect*>, but most of the time, this call should be avoided because it may create performance issues.
 
 > [!NOTE]
 > Whether or not finalizers are run as part of application termination is specific to each [implementation of .NET](../../../standard/glossary.md#implementation-of-net). When an application terminates, .NET Framework makes every reasonable effort to call finalizers for objects that haven't yet been garbage collected, unless such cleanup has been suppressed (by a call to the library method `GC.SuppressFinalize`, for example). .NET 5 (including .NET Core) and later versions don't call finalizers as part of application termination. For more information, see GitHub issue [dotnet/csharpstandard #291](https://github.com/dotnet/csharpstandard/issues/291).
@@ -58,6 +58,9 @@ The programmer has no control over when the finalizer is called; the garbage col
 ## Using finalizers to release resources
 
 In general, C# does not require as much memory management on the part of the developer as languages that don't target a runtime with garbage collection. This is because the .NET garbage collector implicitly manages the allocation and release of memory for your objects. However, when your application encapsulates unmanaged resources, such as windows, files, and network connections, you should use finalizers to free those resources. When the object is eligible for finalization, the garbage collector runs the `Finalize` method of the object.
+
+> [!WARNING]
+> Don't access managed object members from a finalizer. During finalization, managed objects might already be disposed, making them unavailable or in an invalid state. Only access unmanaged resources directly from finalizers.
 
 ## Explicit release of resources
 

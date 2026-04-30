@@ -3,8 +3,9 @@ title: .NET tools
 description: How to install, use, update, and remove .NET tools. Covers global tools, tool-path tools, and local tools. 
 author: KathleenDollard
 ms.topic: how-to
-ms.date: 07/25/2023
+ms.date: 10/22/2025
 ms.custom: devdivchpfy22
+ai-usage: ai-assisted
 ---
 # How to manage .NET tools
 
@@ -61,7 +62,7 @@ You can invoke the tool using the following command: dotnetsay
 Tool 'dotnetsay' (version '2.1.4') was successfully installed.
 ```
 
-[!INCLUDE[](~/includes/dotnet-tool-install-arch-options.md)]
+[!INCLUDE[](includes/dotnet-tool-install-arch-options.md)]
 
 The default location for a tool's binaries depends on the operating system:
 
@@ -107,6 +108,9 @@ dotnet new tool-manifest
 ```
 
 This command creates a manifest file named *dotnet-tools.json* under the *.config* directory. To add a local tool to the manifest file, use the [dotnet tool install](dotnet-tool-install.md) command and **omit** the `--global` and `--tool-path` options, as shown in the following example:
+
+> [!WARNING]
+> Make sure the tool manifest file is stored in a controlled location. The .NET CLI launches local tools with `dotnet tool run` based on the contents of the tool manifest. If the manifest is modified by an untrusted party, it could cause the CLI to run malicious code.
 
 ```dotnetcli
 dotnet tool install dotnetsay
@@ -296,3 +300,4 @@ dotnet <command> --help
 * [Tutorial: Create a .NET tool using the .NET CLI](global-tools-how-to-create.md)
 * [Tutorial: Install and use a .NET global tool using the .NET CLI](global-tools-how-to-use.md)
 * [Tutorial: Install and use a .NET local tool using the .NET CLI](local-tools-how-to-use.md)
+* [Create RID-specific and AOT .NET tools](rid-specific-tools.md)

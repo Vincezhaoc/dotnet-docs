@@ -1,23 +1,21 @@
 ---
 title: File globbing
-author: IEvangelist
 description: Learn how to use file globbing in .NET to match various files with the same partial names, extensions, or segments.
-ms.author: dapine
 ms.date: 03/13/2023
 ---
 
 # File globbing in .NET
 
-In this article, you'll learn how to use file globbing with the [`Microsoft.Extensions.FileSystemGlobbing`](https://www.nuget.org/packages/Microsoft.Extensions.FileSystemGlobbing) NuGet package. A *glob* is a term used to define patterns for matching file and directory names based on wildcards. Globbing is the act of defining one or more glob patterns, and yielding files from either inclusive or exclusive matches.
+In this article, you'll learn how to use file globbing with the [📦 `Microsoft.Extensions.FileSystemGlobbing`](https://www.nuget.org/packages/Microsoft.Extensions.FileSystemGlobbing) NuGet package. A *glob* is a term used to define patterns for matching file and directory names based on wildcards. Globbing is the act of defining one or more glob patterns, and yielding files from either inclusive or exclusive matches.
 
 ## Patterns
 
 To match files in the file system based on user-defined patterns, start by instantiating a <xref:Microsoft.Extensions.FileSystemGlobbing.Matcher> object. A `Matcher` can be instantiated with no parameters, or with a <xref:System.StringComparison?displayProperty=nameWithType> parameter, which is used internally for comparing patterns to file names. The `Matcher` exposes the following additive methods:
 
-- <xref:Microsoft.Extensions.FileSystemGlobbing.Matcher.AddExclude%2A?displayProperty=nameWithType>
-- <xref:Microsoft.Extensions.FileSystemGlobbing.Matcher.AddInclude%2A?displayProperty=nameWithType>
+- <xref:Microsoft.Extensions.FileSystemGlobbing.Matcher.AddExclude*?displayProperty=nameWithType>
+- <xref:Microsoft.Extensions.FileSystemGlobbing.Matcher.AddInclude*?displayProperty=nameWithType>
 
-Both `AddExclude` and `AddInclude` methods can be called any number of times, to add various file name patterns to either exclude or include from results. Once you've instantiated a `Matcher` and added patterns, it's then used to evaluate matches from a starting directory with the <xref:Microsoft.Extensions.FileSystemGlobbing.Matcher.Execute%2A?displayProperty=nameWithType> method.
+Both `AddExclude` and `AddInclude` methods can be called any number of times, to add various file name patterns to either exclude or include from results. Once you've instantiated a `Matcher` and added patterns, it's then used to evaluate matches from a starting directory with the <xref:Microsoft.Extensions.FileSystemGlobbing.Matcher.Execute*?displayProperty=nameWithType> method.
 
 ## Extension methods
 
@@ -41,7 +39,7 @@ Matcher matcher = new();
 matcher.AddExcludePatterns(new [] { "*.txt", "*.asciidoc", "*.md" });
 ```
 
-This extension method iterates over all of the provided patterns calling <xref:Microsoft.Extensions.FileSystemGlobbing.Matcher.AddExclude%2A> on your behalf.
+This extension method iterates over all of the provided patterns calling <xref:Microsoft.Extensions.FileSystemGlobbing.Matcher.AddExclude*> on your behalf.
 
 ### Multiple inclusions
 
@@ -61,7 +59,7 @@ Matcher matcher = new();
 matcher.AddIncludePatterns(new[] { "*.txt", "*.asciidoc", "*.md" });
 ```
 
-This extension method iterates over all of the provided patterns calling <xref:Microsoft.Extensions.FileSystemGlobbing.Matcher.AddInclude%2A> on your behalf.
+This extension method iterates over all of the provided patterns calling <xref:Microsoft.Extensions.FileSystemGlobbing.Matcher.AddInclude*> on your behalf.
 
 ### Get all matching files
 
@@ -140,6 +138,37 @@ The preceding C# code:
   - and `result.Files` would have one match.
 
 The additional `Match` overloads work in similar ways.
+
+### Ordered evaluation of include/exclude
+
+By default, the matcher evaluates **all** include patterns first, then applies **all** exclude patterns, regardless of the order in which you added them. This means you can't re-include files that were previously excluded.
+
+Starting in version 10 of the [📦 Microsoft.Extensions.FileSystemGlobbing package](https://www.nuget.org/packages/Microsoft.Extensions.FileSystemGlobbing), you can opt into *ordered* evaluation, where includes and excludes are processed exactly in the sequence they were added:
+
+```csharp
+using Microsoft.Extensions.FileSystemGlobbing;
+
+// Preserve the order of patterns when matching.
+Matcher matcher = new(preserveFilterOrder: true);
+
+matcher.AddInclude("**/*");                // include everything
+matcher.AddExclude("logs/**/*");           // exclude logs
+matcher.AddInclude("logs/important/**/*"); // re-include important logs
+
+var result = matcher.Execute(new DirectoryInfoWrapper(new DirectoryInfo(root)));
+foreach (var file in result.Files)
+{
+    Console.WriteLine(file.Path);
+}
+```
+
+In this mode, patterns are applied one after another:
+
+- `**/*` adds all files.
+- `logs/**/*` filters out anything in `logs/`.
+- `logs/important/**/*` adds back only files under `logs/important/`.
+
+Existing code that uses the default constructor will continue to run with the original "all includes, then all excludes" behavior.
 
 ## Pattern formats
 

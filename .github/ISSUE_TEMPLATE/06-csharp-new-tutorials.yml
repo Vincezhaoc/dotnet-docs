@@ -1,0 +1,57 @@
+name: "C# 15 - New feature - Additional tutorials"
+description: Create the issue for adding new tutorials for a new feature in C# 15 
+title: "[C# 15-Tutorials]: New Feature - "
+labels:
+  - ":checkered_flag: Release: .NET 11"
+  - dotnet-csharp/svc
+  - whats-new/subsvc
+assignees:
+ - billwagner
+body:
+  - type: dropdown
+    id: version
+    attributes:
+      label: .NET 11 Preview
+      description: Which .NET 11 Preview contains this feature?
+      options:
+        - ".NET 11 Preview 1"
+        - ".NET 11 Preview 2"
+        - ".NET 11 Preview 3"
+        - ".NET 11 Preview 4"
+        - ".NET 11 Preview 5"
+        - ".NET 11 Preview 6"
+        - ".NET 11 Preview 7"
+        - "other - specify below"
+  - type: input
+    id: Speclet
+    attributes:
+      label: Link to speclet
+      description: Insert the markdown format for a link to the speclet
+      value: "- [Speclet](https://github.com/dotnet/csharplang/blob/main/proposals/feature.md)"
+    validations:
+      required: true
+  - type: input
+    id: pullrequest
+    attributes:
+      label: Link to Pull request
+      description: Insert the markdown format for a link to the PR
+      value: "- [PR](https://github.com/dotnet/roslyn/pull/nnnnn)"
+    validations:
+      required: true
+  - type: textarea
+    id: new-behavior
+    attributes:
+      label: New behavior
+      description: Describe the new behavior. Include code snippets if applicable.
+    validations:
+      required: true
+  - type: textarea
+    id: tutorials
+    attributes:
+      label: New tutorials
+      description: Add a list of scenarios and tutorials related to the new feature. If this doesn't apply, don't submit the issue.
+      placeholder: |
+        - Detail scenarios that should be covered
+        - Classify tutorials as "fundamentals", "advanced", or targeted at subsets of C# developers (e.g. web, game, mobile)
+        - Consider use cases where the feature would be used in practice
+        - 

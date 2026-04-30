@@ -2,6 +2,7 @@
 description: "Learn more about required arguments and overload groups. You can configure an activity so that certain arguments are required for it to be valid for execution."
 title: "Required Arguments and Overload Groups"
 ms.date: "03/30/2017"
+ms.custom: sfi-ropc-nochange
 ---
 # Required arguments and overload groups
 
@@ -27,7 +28,7 @@ public sealed class Add : CodeActivity<int>
 }
 ```
 
- In XAML, required arguments are also indicated by using <xref:System.Activities.RequiredArgumentAttribute>. In this example the `Add` activity is defined by using three arguments and uses an <xref:System.Activities.Statements.Assign%601> activity to perform the add operation.
+ In XAML, required arguments are also indicated by using <xref:System.Activities.RequiredArgumentAttribute>. In this example the `Add` activity is defined by using three arguments and uses an <xref:System.Activities.Statements.Assign`1> activity to perform the add operation.
 
 ```xaml
 <Activity x:Class="ValidationDemo.Add" ...>

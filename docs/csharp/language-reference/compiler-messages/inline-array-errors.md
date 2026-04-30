@@ -2,6 +2,7 @@
 title: Resolve errors related to inline arrays
 description: These compiler errors and warnings are generated when you create an inline array struct that is invalid. This article helps you diagnose and fix those issues.
 f1_keywords:
+  - "CS9125"
   - "CS9164"
   - "CS9165"
   - "CS9166"
@@ -16,7 +17,9 @@ f1_keywords:
   - "CS9183"
   - "CS9184"
   - "CS9189"
+  - "CS9259"
 helpviewer_keywords:
+  - "CS9125"
   - "CS9164"
   - "CS9165"
   - "CS9166"
@@ -31,7 +34,8 @@ helpviewer_keywords:
   - "CS9183"
   - "CS9184"
   - "CS9189"
-ms.date: 11/02/2023
+  - "CS9259"
+ms.date: 11/06/2024
 ---
 # Resolve errors and warnings with inline array declarations
 
@@ -40,6 +44,7 @@ This article covers the following compiler errors and warnings:
 <!-- The text in this list generates issues for Acrolinx, because they don't use contractions.
 That's by design. The text closely matches the text of the compiler error / warning for SEO purposes.
  -->
+- [**CS9125**](#inline-array-declaration): *Attribute parameter 'SizeConst' must be specified.*
 - [**CS9164**](#conversions-to-span): *Cannot convert expression to `Span<T>` because it is not an assignable variable*
 - [**CS9165**](#conversions-to-span): *Cannot convert expression to `ReadOnlySpan<T>` because it may not be passed or returned by reference*
 - [**CS9166**](#element-access): *Index is outside the bounds of the inline array*
@@ -54,16 +59,19 @@ That's by design. The text closely matches the text of the compiler error / warn
 - [**CS9183**](#conversions-to-span): *Inline array conversion operator will not be used for conversion from expression of the declaring type.*
 - [**CS9184**](#inline-array-declaration): *'Inline arrays' language feature is not supported for inline array types with element field which is either a '`ref`' field, or has type that is not valid as a type argument.*
 - [**CS9189**](#element-access): *`foreach` statement on an inline array of type is not supported*
+- [**CS9259**](#inline-array-declaration): *Attribute <xref:System.Runtime.CompilerServices.InlineArrayAttribute?displayProperty=fullName> cannot be applied to a record struct.*
 
 ## Inline array declaration
 
 You declare inline arrays as a `struct` type with a single field, and an attribute that specifies the length of the array. The compiler generates the following errors for invalid inline array declarations:
 
+- **CS9125**: *Attribute parameter 'SizeConst' must be specified.*
 - **CS9167**: *Inline array length must be greater than 0.*
 - **CS9168**: *Inline array struct must not have explicit layout.*
 - **CS9169**: *Inline array struct must declare one and only one instance field which must not be a ref field.*
 - **CS9180**: *Inline array element field cannot be declared as required, readonly, volatile, or as a fixed size buffer.*
 - **CS9184**: *'Inline arrays' language feature is not supported for inline array types with element field which is either a '`ref`' field, or has type that is not valid as a type argument.*
+- **CS9259**: *Attribute <xref:System.Runtime.CompilerServices.InlineArrayAttribute?displayProperty=fullName> cannot be applied to a record struct.*
 
 To fix these arrays, ensure the following are true:
 
@@ -72,6 +80,7 @@ To fix these arrays, ensure the following are true:
 - The enclosing `struct` has a single instance field, and that instance field is not a `ref` field.
 - The single instance field is not a fixed size buffer.
 - The single instance field doesn't include the `required`, `volatile`, or `readonly` modifiers.
+- Remove the `record` modifier from your inline array declaration.
 
 ## Element access
 
@@ -96,7 +105,7 @@ The argument to the indexer must be:
 
 ## Conversions to Span
 
-You often use <xref:System.Span%601?displayProperty=nameWithType> or <xref:System.ReadOnlySpan%601?displayProperty=nameWithType> to work with inline arrays. The compiler generates the following errors for invalid conversions:
+You often use <xref:System.Span`1?displayProperty=nameWithType> or <xref:System.ReadOnlySpan`1?displayProperty=nameWithType> to work with inline arrays. The compiler generates the following errors for invalid conversions:
 
 - **CS9164**: *Cannot convert expression to `Span<T>` because it is not an assignable variable*
 - **CS9165**: *Cannot convert expression to `ReadOnlySpan<T>` because it may not be passed or returned by reference*
@@ -111,4 +120,4 @@ An inline array can be implicitly converted to a `Span<T>` or `ReadOnlySpan<T>` 
 - The inline array must be writable in order to convert an inline array to a `Span<T>`. If the array is readonly, you can't convert it to a writable `Span<T>`. You can use `ReadOnlySpan<T>` instead.
 - The *safe context* of the inline array must be at least as wide as the *safe context* of the `Span<T>` or `ReadOnlySpan<T>` for the conversion to succeed. You must either limit the context of the span, or expand the scope of the inline array.
 
-In addition, the compiler never generates calls to a `Slice` method in an inline buffer. Conversion operators to convert an inline buffer to a `Span` or `ReadOnlySpan` aren't called. The compiler generates code to create a <xref:System.Span%601?displayProperty=nameWithType> or <xref:System.ReadOnlySpan%601?displayProperty=nameWithType> directly from the memory buffer.
+In addition, the compiler never generates calls to a `Slice` method in an inline buffer. Conversion operators to convert an inline buffer to a `Span` or `ReadOnlySpan` aren't called. The compiler generates code to create a <xref:System.Span`1?displayProperty=nameWithType> or <xref:System.ReadOnlySpan`1?displayProperty=nameWithType> directly from the memory buffer.

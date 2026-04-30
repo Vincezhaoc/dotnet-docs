@@ -2,7 +2,7 @@
 title: System.Globalization.RegionInfo class
 description: Learn more about the System.Globalization.RegionInfo class.
 ms.date: 12/28/2023
-ms.topic: conceptual
+ms.topic: concept-article
 ---
 # <xref:System.Globalization.RegionInfo> class
 
@@ -35,4 +35,4 @@ In scenarios such as the following, use culture names instead of country/region 
   | <xref:System.Globalization.RegionInfo.CurrencyNativeName> | `US Dollar`     | `US Dollar`     | `Dólar de EE.UU.` |
   | <xref:System.Globalization.RegionInfo.Name>               | `US`            | `en-US`         | `es-US`           |
   | <xref:System.Globalization.RegionInfo.NativeName>         | `United States` | `United States` | `Estados Unidos`  |
-  | <xref:System.Globalization.RegionInfo.ToString%2A>        | `US`            | `en-US`         | `es-US`           |
+  | <xref:System.Globalization.RegionInfo.ToString*>        | `US`            | `en-US`         | `es-US`           |

@@ -3,7 +3,7 @@ title: Install .NET on Fedora
 description: Learn about which versions of .NET SDK and .NET Runtime are supported, and how to install .NET on Fedora.
 author: adegeo
 ms.author: adegeo
-ms.date: 05/16/2024
+ms.date: 04/23/2026
 ms.custom: linux-related-content
 ---
 
@@ -22,20 +22,28 @@ For more information on installing .NET without a package manager, see one of th
 
 The following table is a list of currently supported .NET releases and the versions of Fedora they're supported on. These versions remain supported until either the version of [.NET reaches end-of-support](https://dotnet.microsoft.com/platform/support/policy/dotnet-core) or the version of [Fedora reaches end-of-life](https://fedoraproject.org/wiki/End_of_life).
 
-| Fedora | .NET       |
-|--------|------------|
-| 40     | 8.0, 6.0   |
-| 39     | 8.0, 6.0   |
+| Fedora | .NET     |
+|--------|----------|
+| 43     | 10, 9, 8 |
+| 42     | 10, 9, 8 |
 
 [!INCLUDE [versions-not-supported](includes/versions-not-supported.md)]
 
-## Install .NET 8
+# [.NET 10](#tab/dotnet10)
+
+[!INCLUDE [linux-release-wait](includes/linux-release-wait.md)]
+
+[!INCLUDE [linux-dnf-install-100](includes/linux-install-100-dnf.md)]
+
+# [.NET 9](#tab/dotnet9)
+
+[!INCLUDE [linux-dnf-install-90](includes/linux-install-90-dnf.md)]
+
+# [.NET 8](#tab/dotnet8)
 
 [!INCLUDE [linux-dnf-install-80](includes/linux-install-80-dnf.md)]
 
-## Install .NET 6
-
-[!INCLUDE [linux-dnf-install-60](includes/linux-install-60-dnf.md)]
+---
 
 ## Install preview versions
 
@@ -47,38 +55,23 @@ The following table is a list of currently supported .NET releases and the versi
 
 ## Dependencies
 
-[!INCLUDE [linux-rpm-install-dependencies](includes/linux-rpm-install-dependencies.md)]
+.NET depends on various Linux packages for different functionality. The following packages are required:
 
-## Install on older distributions
+- glibc
+- libgcc
+- ca-certificates
+- openssl-libs
+- libstdc++
+- libicu
+- tzdata
+- krb5-libs
+- zlib (required for .NET 8 only)
 
-Older versions of Fedora don't contain .NET in the default package repositories. You can install .NET with the [_dotnet-install.sh_ script](linux-scripted-manual.md#scripted-install), or use Microsoft's repository to install .NET:
+You can install all the required packages with the following command:
 
-01. First, add the Microsoft signing key to your list of trusted keys.
-
-    ```bash
-    sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-    ```
-
-01. Next, add the Microsoft package repository. The source of the repository is based on your version of Fedora.
-
-    | Fedora Version | Package repository |
-    | -------------- | ------- |
-    | 36             | `https://packages.microsoft.com/config/fedora/36/prod.repo` |
-    | 35             | `https://packages.microsoft.com/config/fedora/35/prod.repo` |
-    | 34             | `https://packages.microsoft.com/config/fedora/34/prod.repo` |
-    | 33             | `https://packages.microsoft.com/config/fedora/33/prod.repo` |
-    | 32             | `https://packages.microsoft.com/config/fedora/32/prod.repo` |
-    | 31             | `https://packages.microsoft.com/config/fedora/31/prod.repo` |
-    | 30             | `https://packages.microsoft.com/config/fedora/30/prod.repo` |
-    | 29             | `https://packages.microsoft.com/config/fedora/29/prod.repo` |
-    | 28             | `https://packages.microsoft.com/config/fedora/28/prod.repo` |
-    | 27             | `https://packages.microsoft.com/config/fedora/27/prod.repo` |
-
-    ```bash
-    sudo wget -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/31/prod.repo
-    ```
-
-01. Use the `sudo dnf install` command to install a .NET package.
+```bash
+sudo dnf install -y glibc libgcc ca-certificates openssl-libs libstdc++ libicu tzdata krb5-libs zlib
+```
 
 ## How to install other versions
 
@@ -107,4 +100,4 @@ For more information about solving these problems, see [Troubleshoot `fxr`, `lib
 
 - [.NET CLI overview](../tools/index.md)
 - [How to enable TAB completion for the .NET CLI](../tools/enable-tab-autocomplete.md)
-- [Tutorial: Create a console application with .NET SDK using Visual Studio Code](../tutorials/with-visual-studio-code.md)
+- [Tutorial: Create a console application with .NET](../tutorials/create-console-app.md)

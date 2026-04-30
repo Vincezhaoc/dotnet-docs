@@ -3,7 +3,7 @@ title: Attributes for Identifying Service Objects and Assigning Hardware
 description: Attributes for Identifying Service Objects and Assigning Hardware (POS for .NET v1.14 SDK Documentation)
 ms.date: 02/27/2008
 ms.topic: how-to
-ms.custom: "pos-restored-from-archive,UpdateFrequency5"
+ms.custom: "pos-restored-from-archive"
 ---
 
 # Attributes for Identifying Service Objects and Assigning Hardware (POS for .NET v1.14 SDK Documentation)
@@ -17,7 +17,7 @@ In order to provide these features, POS for .NET depends on three different .NET
 - **ServiceObject**
     This attribute is applied to the Service Object class and specifies the type, name, and version information for the Service Object. See the [Creating a Basic Service Object Code Template](creating-a-basic-service-object-code-template.md) section for an example.
 - **HardwareId**
-    This attribute is used to specify which hardware IDs will be used by this Service Object. This information is used by **PosExplorer** to filter out Service Objects that use Plug and Play hardware which is not currently plugged in. The **HardwareId** attribute allows multiples, so there may be several attached to a Server Object class. See the sample topic [Adding Plug and Play Support](adding-plug-and-play-support.md) for an example. For a more lengthy discussion of Plug and Play features, including how the **HardwareId** attribute is utilized, see the topics [Adding Plug and Play Support](adding-plug-and-play-support.md) and POS for .NET [POS for .NET Integration with Plug and Play](pos-for-net-integration-with-plug-and-play.md).
+    This attribute is used to specify which hardware IDs will be used by this Service Object. This information is used by **PosExplorer** to filter out Service Objects that use Plug and Play hardware which is not currently plugged in. The `HardwareId` attribute allows multiples, so there may be several attached to a Server Object class. See the sample topic [Adding Plug and Play Support](adding-plug-and-play-support.md) for an example. For a more lengthy discussion of Plug and Play features, including how the `HardwareId` attribute is utilized, see the topics [Adding Plug and Play Support](adding-plug-and-play-support.md) and POS for .NET [POS for .NET Integration with Plug and Play](pos-for-net-integration-with-plug-and-play.md).
 
 ## See Also
 

@@ -1,12 +1,11 @@
-﻿
-namespace object_collection_initializers;
+﻿namespace object_collection_initializers;
 
 public class BasicObjectInitializers
 {
     // <SnippetCatDeclaration>
     public class Cat
     {
-        // Auto-implemented properties.
+        // Automatically implemented properties.
         public int Age { get; set; }
         public string? Name { get; set; }
 
@@ -81,12 +80,12 @@ public class BasicObjectInitializers
         // </SnippetAnonymousUse>
 
         // <SnippetListInitializer>
-        List<Cat> cats = new List<Cat>
-        {
-            new Cat{ Name = "Sylvester", Age=8 },
-            new Cat{ Name = "Whiskers", Age=2 },
-            new Cat{ Name = "Sasha", Age=14 }
-        };
+        List<Cat> cats =
+        [
+            new Cat { Name = "Sylvester", Age = 8 },
+            new Cat { Name = "Whiskers", Age = 2 },
+            new Cat { Name = "Sasha", Age = 14 }
+        ];
         // </SnippetListInitializer>
 
         // <SnippetListInitializerWithNull>
@@ -97,6 +96,14 @@ public class BasicObjectInitializers
             null
         };
         // </SnippetListInitializerWithNull>
+
+        // <SnippetListInitializerWithSpreadOperator>
+        List<Cat> allCats = [.. cats, .. moreCats];
+        // </SnippetListInitializerWithSpreadOperator>
+
+        // <SnippetListInitializerWithSpreadOperatorAndAdditionalElement>
+        List<Cat> additionalCats = [.. cats, new Cat { Name = "Furrytail", Age = 5 }, .. moreCats];
+        // </SnippetListInitializerWithSpreadOperatorAndAdditionalElement>
 
         // <SnippetDictionaryIndexerInitializer>
         var numbers = new Dictionary<int, string>
@@ -151,7 +158,7 @@ public class InitializationSample
 {
     public class Cat
     {
-        // Auto-implemented properties.
+        // Automatically implemented properties.
         public int Age { get; set; }
         public string? Name { get; set; }
 
@@ -168,12 +175,12 @@ public class InitializationSample
         Cat cat = new Cat { Age = 10, Name = "Fluffy" };
         Cat sameCat = new Cat("Fluffy"){ Age = 10 };
 
-        List<Cat> cats = new List<Cat>
-        {
+        List<Cat> cats =
+        [
             new Cat { Name = "Sylvester", Age = 8 },
             new Cat { Name = "Whiskers", Age = 2 },
             new Cat { Name = "Sasha", Age = 14 }
-        };
+        ];
 
         List<Cat?> moreCats = new List<Cat?>
         {
@@ -182,15 +189,10 @@ public class InitializationSample
             null
         };
 
+        List<Cat> allCats = [.. cats, new Cat { Name = "Łapka", Age = 5 }, cat, .. moreCats];
+
         // Display results.
-        System.Console.WriteLine(cat.Name);
-
-        foreach (Cat c in cats)
-        {
-            System.Console.WriteLine(c.Name);
-        }
-
-        foreach (Cat? c in moreCats)
+        foreach (Cat? c in allCats)
         {
             if (c != null)
             {
@@ -203,13 +205,14 @@ public class InitializationSample
         }
     }
     // Output:
-    //Fluffy
-    //Sylvester
-    //Whiskers
-    //Sasha
-    //Furrytail
-    //Peaches
-    //List element has null value.
+    // Sylvester
+    // Whiskers
+    // Sasha
+    // Łapka
+    // Fluffy
+    // Furrytail
+    // Peaches
+    // List element has null value.
 }
 // </SnippetFullExample>
 
@@ -218,7 +221,7 @@ public class FullExample
 {
     class FormattedAddresses : IEnumerable<string>
     {
-        private List<string> internalList = new List<string>();
+        private List<string> internalList = new();
         public IEnumerator<string> GetEnumerator() => internalList.GetEnumerator();
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => internalList.GetEnumerator();
@@ -288,7 +291,7 @@ public class DictionaryExample
         {
             if (!internalDictionary.TryGetValue(key, out List<TValue>? storedValues))
             {
-                internalDictionary.Add(key, storedValues = new List<TValue>());
+                internalDictionary.Add(key, storedValues = new());
             }
             storedValues.AddRange(values);
         }

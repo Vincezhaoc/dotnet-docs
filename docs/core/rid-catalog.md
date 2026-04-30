@@ -56,7 +56,7 @@ The above RID specifies that `osx-x64` imports `unix-x64`. So, when NuGet restor
 The following example shows a slightly bigger RID graph also defined in the *runtime.json*  file:
 
 ```
-    linux-arm64     linux-arm32
+    linux-arm64     linux-x64
          |     \   /     |
          |     linux     |
          |       |       |
@@ -84,9 +84,9 @@ There are some considerations about RIDs that you have to keep in mind when work
 
 To be able to use RIDs, you have to know which RIDs exist. For the latest and complete version, see the [PortableRuntimeIdentifierGraph.json](https://github.com/dotnet/runtime/blob/main/src/libraries/Microsoft.NETCore.Platforms/src/PortableRuntimeIdentifierGraph.json) in the [`dotnet/runtime`](https://github.com/dotnet/runtime) repository.
 
-RIDs that are considered 'portable'&mdash;that is, aren't tied to a specific version or OS distribution&mdash;are the recommended choice. This means that portable RIDs should be used for both [building a platform-specific application](./deploying/index.md#platform-specific-and-framework-dependent) and [creating a NuGet package with RID-specific assets](/nuget/create-packages/supporting-multiple-target-frameworks#architecture-specific-folders).
+RIDs that are considered 'portable'&mdash;that is, aren't tied to a specific version or OS distribution&mdash;are the recommended choice. This means that portable RIDs should be used for both [building a platform-specific application](./deploying/index.md#native-dependencies) and [creating a NuGet package with RID-specific assets](/nuget/create-packages/supporting-multiple-target-frameworks#architecture-specific-folders).
 
-Starting with .NET 8, the default behavior of the .NET SDK and runtime is to only consider non-version-specific and non-distro-specific RIDs. When restoring and building, the SDK [uses a smaller portable RID graph](./compatibility/sdk/8.0/rid-graph.md). The <xref:System.Runtime.InteropServices.RuntimeInformation.RuntimeIdentifier?displayProperty=nameWithType> [returns the platform for which the runtime was built](./compatibility/core-libraries/8.0/runtimeidentifier.md). At run time, .NET finds [RID-specific assets using a known set of portable RIDs](./compatibility/deployment/8.0/rid-asset-list.md). When building an application with RID-specific assets that may be ignored at runtime, the SDK will emit a warning: [NETSDK1206](./tools/sdk-errors/netsdk1206.md).
+Starting with .NET 8, the default behavior of the .NET SDK and runtime is to only consider non-version-specific and non-distro-specific RIDs. When restoring and building, the SDK [uses a smaller portable RID graph](./compatibility/sdk/8.0/rid-graph.md). The <xref:System.Runtime.InteropServices.RuntimeInformation.RuntimeIdentifier?displayProperty=nameWithType> [returns the platform for which the runtime was built](./compatibility/core-libraries/8.0/runtimeidentifier.md). At runtime, .NET finds [RID-specific assets using a known set of portable RIDs](./compatibility/deployment/8.0/rid-asset-list.md). When building an application with RID-specific assets that may be ignored at runtime, the SDK will emit a warning: [NETSDK1206](./tools/sdk-errors/netsdk1206.md).
 
 ### Loading assets for a specific OS version or distribution
 
@@ -116,6 +116,7 @@ For more information, see [Install .NET on Windows](install/windows.md#supported
 - `linux-arm` (Linux distributions running on Arm like Raspbian on Raspberry Pi Model 2+)
 - `linux-arm64` (Linux distributions running on 64-bit Arm like Ubuntu Server 64-bit on Raspberry Pi Model 3+)
 - `linux-bionic-arm64` (Distributions using Android's bionic libc, for example, Termux)
+- `linux-loongarch64` (Linux distributions running on LoongArch64)
 
 For more information, see [.NET dependencies and requirements](./install/linux.md).
 
@@ -131,10 +132,15 @@ For more information, see [.NET dependencies and requirements](./install/macos.m
 ### iOS RIDs
 
 - `ios-arm64`
+- `iossimulator-arm64`
+- `iossimulator-x64`
 
 ### Android RIDs
 
 - `android-arm64`
+- `android-arm`
+- `android-x64`
+- `android-x86`
 
 ## See also
 

@@ -50,7 +50,7 @@ At run time, each message is serialized as a standard Protobuf representation an
 
 gRPC is integrated into .NET Core 3.0 SDK and later. The following tools support it:
 
-- Visual Studio 2022 with the ASP.NET and web development workload installed
+- Visual Studio 2022 or later with the ASP.NET and web development workload installed
 - Visual Studio Code
 - The `dotnet` CLI
 
@@ -59,8 +59,8 @@ The SDK includes tooling for endpoint routing, built-in IoC, and logging. The op
 ![gRPC Support in Visual Studio 2022](./media/visual-studio-2022-grpc-template.png)
 
 **Figure 4-20**. gRPC support in Visual Studio 2022
-  
-Figure 4-21 shows the skeleton gRPC service generated from the built-in scaffolding included in Visual Studio 2022.  
+
+Figure 4-21 shows the skeleton gRPC service generated from the built-in scaffolding included in Visual Studio 2022.
 
 ![gRPC project in Visual Studio 2022](./media/grpc-project.png  )
 
@@ -78,7 +78,7 @@ Favor gRPC for the following scenarios:
 - Point-to-point real-time communication - gRPC can push messages in real time without polling and has excellent support for bi-directional streaming.
 - Network constrained environments – binary gRPC messages are always smaller than an equivalent text-based JSON message.
 
-At the time, of this writing, gRPC is primarily used with backend services. Modern browsers can't provide the level of HTTP/2 control required to support a front-end gRPC client. That said, there's support for [gRPC-Web with .NET](https://devblogs.microsoft.com/aspnet/grpc-web-for-net-now-available/) that enables gRPC communication from browser-based apps built with JavaScript or Blazor WebAssembly technologies. [gRPC-Web](https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-WEB.md) enables an ASP.NET Core gRPC app to support gRPC features in browser apps:
+At the time of this writing, gRPC is primarily used with backend services. Modern browsers can't provide the level of HTTP/2 control required to support a front-end gRPC client. That said, there's support for [gRPC-Web with .NET](https://devblogs.microsoft.com/aspnet/grpc-web-for-net-now-available/) that enables gRPC communication from browser-based apps built with JavaScript or Blazor WebAssembly technologies. [gRPC-Web](https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-WEB.md) enables an ASP.NET Core gRPC app to support gRPC features in browser apps:
 
 - Strongly typed, code-generated clients
 - Compact Protobuf messages

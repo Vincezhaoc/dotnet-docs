@@ -1,7 +1,8 @@
 ---
 title: NuGet and .NET libraries
 description: Best practice recommendations for packaging with NuGet for .NET libraries.
-ms.date: 01/15/2019
+ms.date: 03/19/2026
+ai-usage: ai-assisted
 ---
 # NuGet
 
@@ -44,7 +45,7 @@ A NuGet package supports many [metadata properties](/nuget/reference/nuspec). Th
 | `PackageVersion`                   | `version`                  | NuGet package version. For more information, see [NuGet package version](./versioning.md#nuget-package-version).             |
 | `Title`                            | `title`                    | A human-friendly title of the package. It defaults to the `PackageId`.             |
 | `Description`                      | `description`              | A long description of the package displayed in UI.             |
-| `Authors`                          | `authors`                  | A comma-separated list of package authors, matching the profile names on nuget.org.             |
+| `Authors`                          | `authors`                  | A comma-separated list of package author display names (for example, `James Newton-King`). These names are displayed as plain text on NuGet.org and are not linked to NuGet.org profiles. |
 | `PackageTags`                      | `tags`                     | A space or semicolon-delimited list of tags and keywords that describe the package. Tags are used when searching for packages.             |
 | `PackageIcon`                   | `icon`                  | A path to an image in the package to use as a package icon. Read more about [`icon` metadata](/nuget/reference/nuspec#icon). |
 | `PackageProjectUrl`                | `projectUrl`               | A URL for the project homepage or source repository.             |
@@ -65,20 +66,20 @@ A NuGet package supports many [metadata properties](/nuget/reference/nuspec). Th
 
 > Source Link automatically adds `RepositoryUrl` and `RepositoryType` metadata to the NuGet package. Source Link also adds information about the exact source code the package was built from. For example, a package created from a Git repository will have the commit hash added as metadata.
 
-## Pre-release packages
+## Prerelease packages
 
-NuGet packages with a version suffix are considered [pre-release](/nuget/create-packages/prerelease-packages). By default, the NuGet Package Manager UI shows stable releases unless a user opts-in to pre-release packages, making pre-release packages ideal for limited user testing.
+NuGet packages with a version suffix are considered [prerelease](/nuget/create-packages/prerelease-packages). By default, the NuGet Package Manager UI shows stable releases unless a user opts-in to prerelease packages, making prerelease packages ideal for limited user testing.
 
 ```xml
 <PackageVersion>1.0.1-beta1</PackageVersion>
 ```
 
 > [!NOTE]
-> A stable package cannot depend on a pre-release package. You must either make your own package pre-release or depend on an older stable version.
+> A stable package cannot depend on a prerelease package. You must either make your own package prerelease or depend on an older stable version.
 
-![NuGet pre-release package dependency](./media/nuget/nuget-prerelease-package.png "NuGet pre-release package dependency")
+![NuGet prerelease package dependency](./media/nuget/nuget-prerelease-package.png "NuGet prerelease package dependency")
 
-✔️ DO publish a pre-release package when testing, previewing, or experimenting.
+✔️ DO publish a prerelease package when testing, previewing, or experimenting.
 
 ✔️ DO publish a stable package when it's ready so other stable packages can reference it.
 

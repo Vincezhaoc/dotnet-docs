@@ -7,21 +7,24 @@ dev_langs:
   - "vb"
 ms.assetid: fde6f43f-c594-486f-abcb-2211197fae20
 ---
-# Script Blocks Using msxsl:script
+# Script blocks Using msxsl:script
 
 > [!NOTE]
 > Script blocks are supported only in .NET Framework. They are _not_ supported on .NET Core or .NET 5 or later.
 
-The <xref:System.Xml.Xsl.XslCompiledTransform> class supports embedded scripts using the `msxsl:script` element. When the style sheet is loaded, any defined functions are compiled to common intermediate language (CIL) by the Code Document Object Model (CodeDOM) and are executed during run time. The assembly generated from the embedded script block is separate than the assembly generated for the style sheet.
+The <xref:System.Xml.Xsl.XslCompiledTransform> class supports embedded scripts using the `msxsl:script` element. When the style sheet is loaded, any defined functions are compiled to common intermediate language (CIL) by the Code Document Object Model (CodeDOM) and are executed during runtime. The assembly generated from the embedded script block is separate than the assembly generated for the style sheet.
 
-## Enable XSLT Script
+## Enable XSLT script
 
- Support for embedded scripts is an optional XSLT setting on the <xref:System.Xml.Xsl.XslCompiledTransform> class. Script support is disabled by default. To enable script support, create an <xref:System.Xml.Xsl.XsltSettings> object with the <xref:System.Xml.Xsl.XsltSettings.EnableScript%2A> property set to `true` and pass the object to the <xref:System.Xml.Xsl.XslCompiledTransform.Load%2A> method.
+Support for embedded scripts is an optional XSLT setting on the <xref:System.Xml.Xsl.XslCompiledTransform> class. Script support is disabled by default. To enable script support, create an <xref:System.Xml.Xsl.XsltSettings> object with the <xref:System.Xml.Xsl.XsltSettings.EnableScript> property set to `true` and pass the object to the <xref:System.Xml.Xsl.XslCompiledTransform.Load*> method.
+
+> [!WARNING]
+> Starting in .NET 10, the <xref:System.Xml.Xsl.XsltSettings.EnableScript> property is marked as obsolete and generates warning SYSLIB0062. Since script blocks aren't supported on .NET Core or .NET 5+, this property has no effect and setting it to `true` throws a <xref:System.PlatformNotSupportedException> at runtime.
 
 > [!NOTE]
 > XSLT scripting should be enabled only if you require script support and you are working in a fully trusted environment.
 
-## msxsl:script Element Definition
+## msxsl:script element definition
 
  The `msxsl:script` element is a Microsoft extension to the XSLT 1.0 recommendation and has the following definition:
 
@@ -31,7 +34,7 @@ The <xref:System.Xml.Xsl.XslCompiledTransform> class supports embedded scripts u
 
  The `msxsl` prefix is bound to the `urn:schemas-microsoft-com:xslt` namespace URI. The style sheet must include the `xmlns:msxsl=urn:schemas-microsoft-com:xslt` namespace declaration.
 
- The `language` attribute is optional. Its value is the code language of the embedded code block. The language is mapped to the appropriate CodeDOM compiler using the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateProvider%2A?displayProperty=nameWithType> method. The <xref:System.Xml.Xsl.XslCompiledTransform> class can support any Microsoft .NET language, assuming the appropriate provider is installed on the machine and is registered in the system.codedom section of the machine.config file. If a `language` attribute is not specified, the language defaults to JScript. The language name is not case-sensitive so 'JavaScript' and 'javascript' are equivalent.
+ The `language` attribute is optional. Its value is the code language of the embedded code block. The language is mapped to the appropriate CodeDOM compiler using the <xref:System.CodeDom.Compiler.CodeDomProvider.CreateProvider*?displayProperty=nameWithType> method. The <xref:System.Xml.Xsl.XslCompiledTransform> class can support any Microsoft .NET language, assuming the appropriate provider is installed on the machine and is registered in the system.codedom section of the machine.config file. If a `language` attribute is not specified, the language defaults to JScript. The language name is not case-sensitive so 'JavaScript' and 'javascript' are equivalent.
 
  The `implements-prefix` attribute is mandatory. This attribute is used to declare a namespace and associate it with the script block. The value of this attribute is the prefix that represents the namespace. This prefix can be defined somewhere in a style sheet.
 
@@ -46,25 +49,25 @@ The <xref:System.Xml.Xsl.XslCompiledTransform> class supports embedded scripts u
 </msxsl:script>
 ```
 
-## Script Functions
+## Script functions
 
  Functions can be declared within the `msxsl:script` element. When a function is declared, it is contained in a script block. Style sheets can contain multiple script blocks, each operating independent of the other. That means that if you are executing inside a script block, you cannot call a function that you defined in another script block unless it is declared to have the same namespace and the same scripting language. Because each script block can be in its own language, and the block is parsed according to the grammar rules of that language parser we recommend that you use the correct syntax for the language in use. For example, if you are in a Microsoft C# script block, use the C# comment syntax.
 
  The supplied arguments and return values to the function can be of any type. Because the W3C XPath types are a subset of the common language runtime (CLR) types, type conversion takes place on types that are not considered to be an XPath type. The following table shows the corresponding W3C types and the equivalent CLR type.
 
-|W3C type|CLR type|
-|--------------|--------------|
-|`String`|<xref:System.String>|
-|`Boolean`|<xref:System.Boolean>|
-|`Number`|<xref:System.Double>|
-|`Result Tree Fragment`|<xref:System.Xml.XPath.XPathNavigator>|
-|`Node Set`|<xref:System.Xml.XPath.XPathNodeIterator>|
+| W3C type               | CLR type                                  |
+|------------------------|-------------------------------------------|
+| `String`               | <xref:System.String>                      |
+| `Boolean`              | <xref:System.Boolean>                     |
+| `Number`               | <xref:System.Double>                      |
+| `Result Tree Fragment` | <xref:System.Xml.XPath.XPathNavigator>    |
+| `Node Set`             | <xref:System.Xml.XPath.XPathNodeIterator> |
 
  CLR numeric types are converted to <xref:System.Double>. The <xref:System.DateTime> type is converted to <xref:System.String>. <xref:System.Xml.XPath.IXPathNavigable> types are converted to <xref:System.Xml.XPath.XPathNavigator>. **XPathNavigator[]** is converted to <xref:System.Xml.XPath.XPathNodeIterator>.
 
  All other types throw an error.
 
-### Importing Namespaces and Assemblies
+### Import namespaces and assemblies
 
  The <xref:System.Xml.Xsl.XslCompiledTransform> class predefines a set of assemblies and namespaces that are supported by default by the `msxsl:script` element. However, you can use classes and members belonging to a namespace that is not on the predefined list by importing the assembly and namespace in `msxsl:script` block.
 
@@ -73,9 +76,7 @@ The <xref:System.Xml.Xsl.XslCompiledTransform> class supports embedded scripts u
  The following two assemblies are referenced by default:
 
 - System.dll
-
 - System.Xml.dll
-
 - Microsoft.VisualBasic.dll (when the script language is VB)
 
  You can import the additional assemblies using the `msxsl:assembly` element. This includes the assembly when the style sheet is compiled. The `msxsl:assembly` element has the following definition:
@@ -97,19 +98,12 @@ The <xref:System.Xml.Xsl.XslCompiledTransform> class supports embedded scripts u
  The following namespaces are included by default:
 
 - System
-
 - System.Collection
-
 - System.Text
-
 - System.Text.RegularExpressions
-
 - System.Xml
-
 - System.Xml.Xsl
-
 - System.Xml.XPath
-
 - Microsoft.VisualBasic (when the script language is VB)
 
  You can add support for additional namespaces using the `namespace` attribute. The attribute value is the name of the namespace.

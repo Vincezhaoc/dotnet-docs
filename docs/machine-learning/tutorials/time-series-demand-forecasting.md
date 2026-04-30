@@ -25,7 +25,7 @@ In this tutorial, you learn how to:
 
 ## Prerequisites
 
-- [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/) with the ".NET Desktop Development" workload installed.
+* [Visual Studio 2022 or later](https://visualstudio.microsoft.com/downloads/) with the **.NET Desktop Development** workload installed.
 
 ## Time series forecasting sample overview
 
@@ -43,7 +43,7 @@ The algorithm used in this tutorial is [Singular Spectrum Analysis(SSA)](http://
 
 1. Create a C# **Console Application** called "BikeDemandForecasting". Click the **Next** button.
 
-1. Choose .NET 6 as the framework to use. Click the **Create** button.
+1. Choose .NET 8 as the framework to use. Click the **Create** button.
 
 1. Install **Microsoft.ML** version NuGet package
 
@@ -62,13 +62,13 @@ The algorithm used in this tutorial is [Singular Spectrum Analysis(SSA)](http://
 1. Download the [*DailyDemand.mdf* database file](https://github.com/dotnet/machinelearning-samples/raw/main/samples/csharp/getting-started/Forecasting_BikeSharingDemand/BikeDemandForecasting/Data/DailyDemand.mdf) and save it to the *Data* directory.
 
 > [!NOTE]
-> The data used in this tutorial comes from the [UCI Bike Sharing Dataset](http://archive.ics.uci.edu/ml/datasets/bike+sharing+dataset). Fanaee-T, Hadi, and Gama, Joao, 'Event labeling combining ensemble detectors and background knowledge', Progress in Artificial Intelligence (2013): pp. 1-15, Springer Berlin Heidelberg, [Web Link](https://link.springer.com/article/10.1007%2Fs13748-013-0040-3).
+> The data used in this tutorial comes from the [UCI Bike Sharing Dataset](http://archive.ics.uci.edu/ml/datasets/bike+sharing+dataset). Hadi Fanaee-T and João Gama, 'Event labeling combining ensemble detectors and background knowledge', Progress in Artificial Intelligence (2013): pp. 1-15, Springer Berlin Heidelberg, [Web Link](https://link.springer.com/article/10.1007%2Fs13748-013-0040-3).
 
 The original dataset contains several columns corresponding to seasonality and weather. For brevity and because the algorithm used in this tutorial only requires the values from a single numerical column, the original dataset has been condensed to include only the following columns:
 
-- **dteday**: The date of the observation.
-- **year**: The encoded year of the observation (0=2011, 1=2012).
-- **cnt**: The total number of bike rentals for that day.
+* **dteday**: The date of the observation.
+* **year**: The encoded year of the observation (0=2011, 1=2012).
+* **cnt**: The total number of bike rentals for that day.
 
 The original dataset is mapped to a database table with the following schema in a SQL Server database.
 
@@ -100,9 +100,9 @@ The following is a sample of the data:
 
     The `ModelInput` class contains the following columns:
 
-    - **RentalDate**: The date of the observation.
-    - **Year**: The encoded year of the observation (0=2011, 1=2012).
-    - **TotalRentals**: The total number of bike rentals for that day.
+    * **RentalDate**: The date of the observation.
+    * **Year**: The encoded year of the observation (0=2011, 1=2012).
+    * **TotalRentals**: The total number of bike rentals for that day.
 
 1. Create `ModelOutput` class below the newly created `ModelInput` class.
 
@@ -110,9 +110,9 @@ The following is a sample of the data:
 
     The `ModelOutput` class contains the following columns:
 
-    - **ForecastedRentals**: The predicted values for the forecasted period.
-    - **LowerBoundRentals**: The predicted minimum values for the forecasted period.
-    - **UpperBoundRentals**: The predicted maximum values for the forecasted period.
+    * **ForecastedRentals**: The predicted values for the forecasted period.
+    * **LowerBoundRentals**: The predicted minimum values for the forecasted period.
+    * **UpperBoundRentals**: The predicted maximum values for the forecasted period.
 
 ### Define paths and initialize variables
 
@@ -201,8 +201,8 @@ Evaluate how well the model performs by forecasting next year's data and compari
 
     To evaluate performance, the following metrics are used:
 
-    - **Mean Absolute Error**: Measures how close predictions are to the actual value. This value ranges between 0 and infinity. The closer to 0, the better the quality of the model.
-    - **Root Mean Squared Error**: Summarizes the error in the model. This value ranges between 0 and infinity. The closer to 0, the better the quality of the model.
+    * **Mean Absolute Error**: Measures how close predictions are to the actual value. This value ranges between 0 and infinity. The closer to 0, the better the quality of the model.
+    * **Root Mean Squared Error**: Summarizes the error in the model. This value ranges between 0 and infinity. The closer to 0, the better the quality of the model.
 
 1. Output the metrics to the console.
 
@@ -216,11 +216,11 @@ Evaluate how well the model performs by forecasting next year's data and compari
 
 If you're satisfied with your model, save it for later use in other applications.
 
-1. Below the `Evaluate()` method create a [`TimeSeriesPredictionEngine`](xref:Microsoft.ML.Transforms.TimeSeries.TimeSeriesPredictionEngine%602). [`TimeSeriesPredictionEngine`](xref:Microsoft.ML.Transforms.TimeSeries.TimeSeriesPredictionEngine%602) is a convenience method to make single predictions.
+1. Below the `Evaluate()` method create a [`TimeSeriesPredictionEngine`](xref:Microsoft.ML.Transforms.TimeSeries.TimeSeriesPredictionEngine`2). [`TimeSeriesPredictionEngine`](xref:Microsoft.ML.Transforms.TimeSeries.TimeSeriesPredictionEngine`2) is a convenience method to make single predictions.
 
     [!code-csharp [CreateTimeSeriesEngine](~/machinelearning-samples/samples/csharp/getting-started/Forecasting_BikeSharingDemand/BikeDemandForecasting/Program.cs#L41)]
 
-1. Save the model to a file called `MLModel.zip` as specified by the previously defined `modelPath` variable. Use the [`Checkpoint`](xref:Microsoft.ML.Transforms.TimeSeries.TimeSeriesPredictionEngine%602.CheckPoint%2A) method to save the model.
+1. Save the model to a file called `MLModel.zip` as specified by the previously defined `modelPath` variable. Use the [`Checkpoint`](xref:Microsoft.ML.Transforms.TimeSeries.TimeSeriesPredictionEngine`2.CheckPoint%2A) method to save the model.
 
     [!code-csharp [SaveModel](~/machinelearning-samples/samples/csharp/getting-started/Forecasting_BikeSharingDemand/BikeDemandForecasting/Program.cs#L42)]
 
@@ -235,7 +235,7 @@ If you're satisfied with your model, save it for later use in other applications
     }
     ```
 
-1. Inside the `Forecast` method, use the [`Predict`](xref:Microsoft.ML.Transforms.TimeSeries.TimeSeriesPredictionEngine%602.Predict%2A) method to forecast rentals for the next seven days.
+1. Inside the `Forecast` method, use the [`Predict`](xref:Microsoft.ML.Transforms.TimeSeries.TimeSeriesPredictionEngine`2.Predict%2A) method to forecast rentals for the next seven days.
 
     [!code-csharp [SingleForecast](~/machinelearning-samples/samples/csharp/getting-started/Forecasting_BikeSharingDemand/BikeDemandForecasting/Program.cs#L78)]
 
@@ -288,5 +288,5 @@ You can find the source code for this tutorial at the [dotnet/machinelearning-sa
 
 ## Next steps
 
-- [Machine learning tasks in ML.NET](../resources/tasks.md)
-- [Improve model accuracy](../resources/improve-machine-learning-model-ml-net.md)
+* [Machine learning tasks in ML.NET](../resources/tasks.md)
+* [Improve model accuracy](../resources/improve-machine-learning-model-ml-net.md)

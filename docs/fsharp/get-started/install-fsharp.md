@@ -9,7 +9,7 @@ You can install F# in multiple ways, depending on your environment.
 
 ## Install F# with Visual Studio
 
-1. If you're downloading [Visual Studio](https://visualstudio.microsoft.com/downloads/?utm_medium=microsoft&utm_source=learn.microsoft.com&utm_campaign=inline+link&utm_content=download+vs2019) for the first time, it will first install Visual Studio Installer. Install the appropriate edition of Visual Studio from the installer.
+1. If you're downloading [Visual Studio](https://visualstudio.microsoft.com/downloads/?utm_medium=microsoft&utm_source=learn.microsoft.com&utm_campaign=inline+link) for the first time, it will first install Visual Studio Installer. Install the appropriate edition of Visual Studio from the installer.
 
    If you already have Visual Studio installed, choose **Modify** next to the edition you want to add F# to.
 
@@ -28,12 +28,6 @@ You can install F# in multiple ways, depending on your environment.
 3. Select the Extensions icon and search for "Ionide":
 
    The only plugin required for F# support in Visual Studio Code is [Ionide-fsharp](https://marketplace.visualstudio.com/items?itemName=Ionide.Ionide-fsharp). However, you can also install [Ionide-FAKE](https://marketplace.visualstudio.com/items?itemName=Ionide.Ionide-FAKE) to get [FAKE](https://fake.build/) support and [Ionide-Paket](https://marketplace.visualstudio.com/items?itemName=Ionide.Ionide-Paket) to get [Paket](https://fsprojects.github.io/Paket/) support. FAKE and Paket are additional F# community tools for building projects and managing dependencies, respectively.
-
-## Install F# with Visual Studio for Mac
-
-F# is installed by default in [Visual Studio for Mac](https://visualstudio.microsoft.com/vs/mac/?utm_medium=microsoft&utm_source=learn.microsoft.com&utm_campaign=inline+link), no matter which configuration you choose.
-
-After the install completes, choose **Start Visual Studio**. You can also open Visual Studio through Finder on macOS.
 
 ## Install F# on a build server
 

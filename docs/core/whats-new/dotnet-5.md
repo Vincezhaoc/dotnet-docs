@@ -2,10 +2,7 @@
 title: What's new in .NET 5
 description: Learn about .NET 5, a cross-platform and open-source development platform that is the next evolution of .NET Core.
 ms.date: 07/26/2022
-ms.custom: devdivchpfy22
-ms.topic: whats-new
-ms.author: dapine
-author: IEvangelist
+ms.update-cycle: 3650-days
 ---
 
 # What's new in .NET 5
@@ -134,7 +131,7 @@ For more information on project templates from the .NET CLI, see [`dotnet new`](
 There are new features in and for [System.Text.Json](../../standard/serialization/system-text-json/overview.md):
 
 - [Preserve references and handle circular references](../../standard/serialization/system-text-json/preserve-references.md)
-- [HttpClient and HttpContent extension methods](../../standard/serialization/system-text-json/overview.md#httpclient-and-httpcontent-extension-methods)
+- [Serialization extension methods on HttpClient](../../standard/serialization/system-text-json/httpclient-extensions.md)
 - [Allow or write numbers in quotes](../../standard/serialization/system-text-json/invalid-json.md#allow-or-write-numbers-in-quotes)
 - [Support immutable types and C# 9 Records](../../standard/serialization/system-text-json/immutability.md)
 - [Support non-public property accessors](../../standard/serialization/system-text-json/immutability.md)

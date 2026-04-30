@@ -6,11 +6,11 @@ author: sdmaclea
 ---
 # Default probing
 
-The <xref:System.Runtime.Loader.AssemblyLoadContext.Default%2A?displayProperty=nameWithType> instance is responsible for locating an assembly's dependencies. This article describes the <xref:System.Runtime.Loader.AssemblyLoadContext.Default%2A?displayProperty=nameWithType> instance's probing logic.
+The <xref:System.Runtime.Loader.AssemblyLoadContext.Default?displayProperty=nameWithType> instance is responsible for locating an assembly's dependencies. This article describes the <xref:System.Runtime.Loader.AssemblyLoadContext.Default?displayProperty=nameWithType> instance's probing logic.
 
 ## Host configured probing properties
 
-When the runtime is started, the runtime host provides a set of named probing properties that configure <xref:System.Runtime.Loader.AssemblyLoadContext.Default%2A?displayProperty=nameWithType> probe paths.
+When the runtime is started, the runtime host provides a set of named probing properties that configure <xref:System.Runtime.Loader.AssemblyLoadContext.Default?displayProperty=nameWithType> probe paths.
 
 Each probing property is optional. If present, each property is a string value that contains a delimited list of absolute paths. The delimiter is ';' on Windows and ':' on all other platforms.
 
@@ -32,6 +32,11 @@ Additionally, the *\*.deps.json* files for any referenced frameworks are similar
 
 The environment variable `DOTNET_ADDITIONAL_DEPS` can be used to add additional dependencies.  `dotnet.exe` also contains an optional `--additional-deps` parameter to set this value on application startup.
 
+> [!NOTE]
+> The `DOTNET_ADDITIONAL_DEPS` environment variable and the `--additional-deps` command-line option only apply to **framework-dependent applications**.
+> These options are **ignored for self-contained applications**.
+> For more information, see [Framework-dependent vs self-contained deployments](../deploying/index.md).
+
 The `APP_PATHS` property is not populated by default and is omitted for most applications.
 
 The list of all *\*.deps.json* files used by the application can be accessed via `System.AppContext.GetData("APP_CONTEXT_DEPS_FILES")`.
@@ -44,18 +49,22 @@ Each property is available by calling the <xref:System.AppContext.GetData(System
 
 The .NET Core runtime host will output useful trace messages when certain environment variables are enabled:
 
-|Environment Variable        |Description  |
-|----------------------------|---------|
-|`COREHOST_TRACE=1`          |Enables tracing.|
-|`COREHOST_TRACEFILE=<path>` |Traces to a file path instead of the default `stderr`.|
-|`COREHOST_TRACE_VERBOSITY`  |Sets the verbosity from 1 (lowest) to 4 (highest).|
+|Environment Variable           |Description  |
+|-------------------------------|---------|
+|`DOTNET_HOST_TRACE=1`          |Enables tracing.|
+|`DOTNET_HOST_TRACEFILE=<path>` |Traces to a file path instead of the default `stderr`.|
+|`DOTNET_HOST_TRACE_VERBOSITY`  |Sets the verbosity from 1 (lowest) to 4 (highest).|
+
+For more information, see [DOTNET_HOST_TRACE environment variables](../tools/dotnet-environment-variables.md#dotnet_host_trace).
 
 ## Managed assembly default probing
 
-When probing to locate a managed assembly, the <xref:System.Runtime.Loader.AssemblyLoadContext.Default%2A?displayProperty=nameWithType> looks in order at:
+When probing to locate a managed assembly, the <xref:System.Runtime.Loader.AssemblyLoadContext.Default?displayProperty=nameWithType> looks in order at:
 
 - Files matching the <xref:System.Reflection.AssemblyName.Name?displayProperty=nameWithType> in `TRUSTED_PLATFORM_ASSEMBLIES` (after removing file extensions).
 - Assembly files in `APP_PATHS` with common file extensions.
+
+When loading in the default <xref:System.Runtime.Loader.AssemblyLoadContext>, assemblies found in `TRUSTED_PLATFORM_ASSEMBLIES` or `APP_PATHS` take precedence over a specified path or raw assembly object. For example, if you call <xref:System.Runtime.Loader.AssemblyLoadContext.LoadFromStream*?displayProperty=nameWithType> or <xref:System.Runtime.Loader.AssemblyLoadContext.LoadFromAssemblyPath*?displayProperty=nameWithType> on the default <xref:System.Runtime.Loader.AssemblyLoadContext> and an assembly with a matching name exists in `TRUSTED_PLATFORM_ASSEMBLIES` or `APP_PATHS`, the runtime loads the assembly from those locations instead of from the specified stream or path.
 
 ## Satellite (resource) assembly probing
 

@@ -1,14 +1,16 @@
-﻿using Microsoft.Win32.SafeHandles;
-using System;
-using System.Runtime.InteropServices;
+﻿using System;
+using System.IO;
+using System.Threading;
 
-public class BaseClassWithSafeHandle : IDisposable
+public class DisposableBase : IDisposable
 {
-    // To detect redundant calls
-    private bool _disposedValue;
+    // Detect redundant Dispose() calls in a thread-safe manner.
+    // _isDisposed == 0 means Dispose(bool) has not been called yet.
+    // _isDisposed == 1 means Dispose(bool) has been already called.
+    private int _isDisposed;
 
-    // Instantiate a SafeHandle instance.
-    private SafeHandle? _safeHandle = new SafeFileHandle(IntPtr.Zero, true);
+    // Instantiate a disposable object owned by this class.
+    private Stream? _managedResource = new MemoryStream();
 
     // Public implementation of Dispose pattern callable by consumers.
     public void Dispose()
@@ -20,15 +22,16 @@ public class BaseClassWithSafeHandle : IDisposable
     // Protected implementation of Dispose pattern.
     protected virtual void Dispose(bool disposing)
     {
-        if (!_disposedValue)
+        // In case _isDisposed is 0, atomically set it to 1.
+        // Enter the branch only if the original value is 0.
+        if (Interlocked.CompareExchange(ref _isDisposed, 1, 0) == 0)
         {
             if (disposing)
             {
-                _safeHandle?.Dispose();
-                _safeHandle = null;
+                // Dispose managed state.
+                _managedResource?.Dispose();
+                _managedResource = null;
             }
-
-            _disposedValue = true;
         }
     }
 }

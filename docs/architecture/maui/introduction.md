@@ -60,7 +60,7 @@ Below is a high-level overview of the architecture of the sample application.
 
 The sample application ships with:
 
-- .NET Aspire App Hosting & Orchestration
+- Aspire App Hosting & Orchestration
 - An Blazor web application developed with ASP.NET Core.
 - A multi-platform app developed with .NET MAUI, which supports iOS, Android, macOS via Mac Catalyst, and Windows.
 
@@ -71,7 +71,7 @@ The sample application includes the following backend services:
 - An ordering microservice, which is a domain-driven service that uses domain-driven design patterns.
 - A basket microservice, which is a data-driven CRUD service that uses Redis Cache.
 
-These backend services are implemented as microservices using ASP.NET Core, and are deployed as unique containers with .NET Aspire. Collectively, these backend services are referred to as the eShop reference application. Client apps communicate with the backend services through a Representational State Transfer (REST) web interface. For more information about microservices and containers, see [Containerized microservices](micro-services.md).
+These backend services are implemented as microservices using ASP.NET Core, and are deployed as unique containers with Aspire. Collectively, these backend services are referred to as the eShop reference application. Client apps communicate with the backend services through a Representational State Transfer (REST) web interface. For more information about microservices and containers, see [Containerized microservices](micro-services.md).
 
 ## Multi-Platform app
 
@@ -101,7 +101,7 @@ In addition, unit tests are provided for some of the classes in the eShop multi-
 
 ## Multi-Platform app solution
 
-The eShop multi-platform app solution organizes the source code and other resources into a multiple projects. All of the core mobile components are contained in a singular project named eShopContainers. This is a feature introduced with .NET 6 that allows a project to target multiple outputs which helps eliminate the need for multiple platform projects that we would have used in Xamarin.Forms and earlier .NET versions. An additional project is included for unit testing.
+The eShop multi-platform app solution organizes the source code and other resources into a multiple projects. All of the core mobile components are contained in a singular project named eShopContainers. This is a feature introduced with .NET 6 that allows a project to target multiple outputs which helps eliminate the need for multiple platform projects that we would have used in earlier .NET versions. An additional project is included for unit testing.
 
 While this project has all of its components stored in a singular project, it is worth considering separating it into multiple projects based on your needs. For example, if you have multiple implementations of service providers based off of a service with their own dependencies, it may make sense to break those service provider implementations out into their own separate project. Good candidates for project separation include shared models, service implementations, api client components, database or caching layers. Any place where you feel that the business could re-use a component in another project is a potential candidate for separation. These projects can then be packaged via [NuGet](/nuget/) for easy distribution and versioning.
 

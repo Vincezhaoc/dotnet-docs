@@ -21,7 +21,10 @@
 # This should make it easy to add new rules without breaking existing ones.
 
 ######## API landing page ###########
-/api/ @dotnet/docs
+/api/ @gewarren @dotnet/docs
+
+######## Includes files ###########
+/includes/ @dotnet/docs
 
 ############ What's new ###############
 /docs/whats-new/ @billwagner @dotnet/docs
@@ -29,6 +32,9 @@
 ############ Guides ################
 # .NET Core
 /docs/core/ @dotnet/docs
+
+# .NET fundamentals
+/docs/fundamentals/ @dotnet/docs
 
 # .NET Framework
 /docs/framework/ @dotnet/docs
@@ -40,82 +46,85 @@
 /docs/csharp/ @BillWagner @dotnet/docs
 
 # The F# Guide:
-/docs/fsharp/ @BillWagner @kathleendollard @dotnet/fsharp-team-msft @dotnet/docs
+/docs/fsharp/ @BillWagner @dotnet/fsharp-team-msft @dotnet/docs
 
 # The Visual Basic Guide:
-/docs/visual-basic/ @KathleenDollard @BillWagner @dotnet/docs
+/docs/visual-basic/ @BillWagner @dotnet/docs
 
 # The ML.NET Guide:
-/docs/machine-learning/ @gewarren @luisquintanilla @JakeRadMSFT @michaelgsharp @dotnet/docs
+/docs/machine-learning/ @gewarren @luisquintanilla @JakeRadMSFT @dotnet/docs
 
 # The .NET Architecture Guide:
-/docs/architecture/ @nishanil @IEvangelist @dotnet/docs
+/docs/architecture/ @dotnet/docs
 
 # .NET Orleans
-/docs/orleans/ @IEvangelist @dotnet/docs
+/docs/orleans/ @meaghanlewis @ReubenBond
+
+# IoT Guide
+/docs/iot/ @dotnet/docs
+
+############### AI ################
+
+/docs/ai/ @gewarren @dotnet/docs
 
 ############### Azure ################
 
 # Azure Guide
-/docs/azure/ @alexwolfmsft @CamSoper @dotnet/docs
+/docs/azure/ @alexwolfmsft @dotnet/docs
 
 # Azure SDK package list
 /docs/azure/includes/ @dotnet/docs
 
 # Azure SDK catch-all entry
-/docs/azure/sdk/ @jsquire @alexwolfmsft @CamSoper @scottaddie @dotnet/docs
+/docs/azure/sdk/ @jsquire @alexwolfmsft @scottaddie @dotnet/docs
 
 # Azure SDK authentication topics
-/docs/azure/sdk/authentication/ @christothes @schaabs @dotnet/docs @alexwolfmsft @CamSoper @scottaddie
+/docs/azure/sdk/authentication/ @JonathanCrd @christothes @dotnet/docs @alexwolfmsft @scottaddie
 
 # Azure SDK miscellaneous topics
-/docs/azure/sdk/azure-sdk-configure-proxy.md @annelo-msft @christothes @JoshLove-msft @KrzysztofCwalina @jsquire @alexwolfmsft @CamSoper @scottaddie @dotnet/docs
-/docs/azure/sdk/azure-sdk-for-net.md @jsquire @alexwolfmsft @CamSoper @scottaddie @dotnet/docs
-/docs/azure/sdk/dependency-injection.md @JoshLove-msft @jsquire @alexwolfmsft @CamSoper @scottaddie @dotnet/docs
-/docs/azure/sdk/logging.md @annelo-msft @christothes @JoshLove-msft @KrzysztofCwalina @jsquire @alexwolfmsft @CamSoper @scottaddie @dotnet/docs
-/docs/azure/sdk/packages.md @jsquire @alexwolfmsft @CamSoper @scottaddie @dotnet/docs
-/docs/azure/sdk/pagination.md @annelo-msft @christothes @JoshLove-msft @KrzysztofCwalina @jsquire @alexwolfmsft @CamSoper @scottaddie @dotnet/docs
-/docs/azure/sdk/protocol-convenience-methods.md @annelo-msft @jsquire @alexwolfmsft @CamSoper @scottaddie @dotnet/docs
-/docs/azure/sdk/resource-management.md @ArthurMa1978 @m-nash @alexwolfmsft @CamSoper @scottaddie @dotnet/docs
-/docs/azure/sdk/thread-safety.md @annelo-msft @christothes @JoshLove-msft @KrzysztofCwalina @jsquire @alexwolfmsft @CamSoper @scottaddie @dotnet/docs
-/docs/azure/sdk/unit-testing-mocking.md @annelo-msft @christothes @JoshLove-msft @KrzysztofCwalina @jsquire @alexwolfmsft @CamSoper @scottaddie @dotnet/docs
+/docs/azure/sdk/azure-sdk-configure-proxy.md @annelo-msft @christothes @JoshLove-msft @KrzysztofCwalina @jsquire @alexwolfmsft @scottaddie @dotnet/docs
+/docs/azure/sdk/azure-sdk-for-net.md @jsquire @alexwolfmsft @scottaddie @dotnet/docs
+/docs/azure/sdk/dependency-injection.md @JoshLove-msft @jsquire @alexwolfmsft @scottaddie @dotnet/docs
+/docs/azure/sdk/logging.md @annelo-msft @christothes @JoshLove-msft @KrzysztofCwalina @jsquire @alexwolfmsft
+/docs/azure/sdk/packages.md @jsquire @alexwolfmsft @scottaddie @dotnet/docs
+/docs/azure/sdk/pagination.md @annelo-msft @christothes @JoshLove-msft @KrzysztofCwalina @jsquire @alexwolfmsft @scottaddie @dotnet/docs
+/docs/azure/sdk/protocol-convenience-methods.md @annelo-msft @jsquire @alexwolfmsft @scottaddie @dotnet/docs
+/docs/azure/sdk/resource-management.md @ArthurMa1978 @m-nash @alexwolfmsft @scottaddie @dotnet/docs
+/docs/azure/sdk/thread-safety.md @annelo-msft @christothes @JoshLove-msft @KrzysztofCwalina @jsquire @alexwolfmsft @scottaddie @dotnet/docs
+/docs/azure/sdk/unit-testing-mocking.md @annelo-msft @christothes @JoshLove-msft @KrzysztofCwalina @jsquire @alexwolfmsft @scottaddie @dotnet/docs
 
-# IoT Guide
-/docs/iot/ @CamSoper @dotnet/docs
-
-# Includes files
-/includes/ @dotnet/docs
-
-############### .NET 5 ################
+############### Fundamentals ################
 
 # Code analysis
 /docs/fundamentals/code-analysis/ @gewarren @dotnet/docs
 
 ############### .NET Core ########################
-# What's New
-/docs/core/whats-new/ @gewarren @dotnet/docs
+# Breaking changes
+/docs/core/compatibility/ @gewarren @dotnet/docs
+# Containers
+/docs/core/containers/ @dotnet/docs
 # Deployment
 /docs/core/deploying/ @adegeo @dotnet/docs
 # Diagnostics
 /docs/core/diagnostics/ @tommcdon @dotnet/docs
-# Extensions
-/docs/core/extensions/ @IEvangelist @dotnet/docs
 # Docker
-/docs/core/docker/ @IEvangelist @dotnet/docs
+/docs/core/docker/ @adegeo @dotnet/docs
+# Extensions
+/docs/core/extensions/ @gewarren @dotnet/docs
 # Install
 /docs/core/install/ @adegeo @dotnet/docs
-# Breaking changes
-/docs/core/compatibility/ @gewarren @dotnet/docs
 # Project SDKs
 /docs/core/project-sdk/ @gewarren @dotnet/docs
 # Config settings
 /docs/core/runtime-config/ @gewarren @dotnet/docs
 # Testing
-/docs/core/testing/ @IEvangelist @dotnet/docs
+/docs/core/testing/ @meaghanlewis @Youssef1313
 # Tools
-/docs/core/tools/ @tdykstra @dotnet/docs
+/docs/core/tools/ @meaghanlewis @dotnet/docs
 # Tutorials
-/docs/core/tutorials/ @tdykstra @dotnet/docs
+/docs/core/tutorials/ @meaghanlewis @dotnet/docs
+# What's new
+/docs/core/whats-new/ @dotnet/docs
 
 ################### .NET Framework ##################
 # App domains
@@ -150,14 +159,14 @@
 /docs/framework/configure-apps/file-schema/network/ @karelz @dotnet/docs
 /docs/framework/network-programming/ @karelz @dotnet/docs
 # WCF
-/docs/framework/configure-apps/file-schema/wcf/ @HongGit @dotnet/docs
-/docs/framework/wcf/ @HongGit @dotnet/docs
+/docs/framework/configure-apps/file-schema/wcf/ @dotnet/docs
+/docs/framework/wcf/ @dotnet/docs
 
 ################## .NET Standard ##################
 # Analyzers
-/docs/standard/analyzers/ @IEvangelist @dotnet/docs
+/docs/standard/analyzers/ @gewarren @dotnet/docs
 # Assembly
-/docs/standard/assembly/ @IEvangelist @dotnet/docs
+/docs/standard/assembly/ @gewarren @dotnet/docs
 # Asynchronous Programming Patterns
 /docs/standard/asynchronous-programming-patterns/ @BillWagner @dotnet/docs
 # Attributes
@@ -168,19 +177,19 @@
 # Base types
 /docs/standard/base-types/ @adegeo @dotnet/docs
 # Collections
-/docs/standard/collections/ @IEvangelist @dotnet/docs
+/docs/standard/collections/ @adegeo @dotnet/docs
 # System.CommandLine
-/docs/standard/commandline/ @tdykstra @dotnet/docs
+/docs/standard/commandline/ @gewarren @dotnet/docs
 # Data
 /docs/standard/data/ @gewarren @dotnet/docs
 # Data - SQLite
-/docs/standard/data/sqlite/ @ajcvickers @dotnet/docs
+/docs/standard/data/sqlite/ @dotnet/docs
 # Datetime
 /docs/standard/datetime/ @adegeo @dotnet/docs
 # Design guidelines
 /docs/standard/design-guidelines/ @BillWagner @dotnet/docs
 # Events
-/docs/standard/events/ @IEvangelist @dotnet/docs
+/docs/standard/events/ @adegeo @dotnet/docs
 # Exceptions
 /docs/standard/exceptions/ @gewarren @dotnet/docs
 # GC
@@ -192,7 +201,7 @@
 # I/O
 /docs/standard/io/ @adegeo @dotnet/docs
 # Library guidance
-/docs/standard/library-guidance/ @jamesnk @IEvangelist @dotnet/docs
+/docs/standard/library-guidance/ @jamesnk @dotnet/docs
 # LINQ
 /docs/standard/linq/ @dotnet/docs
 # Memory and spans
@@ -200,9 +209,9 @@
 # Native Interop
 /docs/standard/native-interop/ @jkoritzinsky @dotnet/docs
 # Parallel programming
-/docs/standard/parallel-programming/ @IEvangelist @dotnet/docs
+/docs/standard/parallel-programming/ @adegeo @dotnet/docs
 # Security
-/docs/standard/security/ @IEvangelist @dotnet/docs
+/docs/standard/security/ @BillWagner @dotnet/docs
 # Serialization
 /docs/standard/serialization/ @gewarren @dotnet/docs
 # Threading
@@ -212,17 +221,16 @@
 
 ################## E-books ##################
 # Blazor:
-/docs/architecture/blazor-for-web-forms-developers/ @danroth27 @IEvangelist @dotnet/docs
-# gRPC:
-/docs/architecture/grpc-for-wcf-developers/ @IEvangelist @dotnet/docs
+/docs/architecture/blazor-for-web-forms-developers/ @danroth27 @dotnet/docs
 # Desktop:
-/docs/architecture/modernize-desktop/ @OliaG @IEvangelist @dotnet/docs
+/docs/architecture/modernize-desktop/ @adegeo @dotnet/docs
 
 ################# Samples folder ##############
 
 ## These have been pulled directly from the samples repo:
 
-/samples/snippets/csharp/ @BillWagner @IEvangelist @dotnet/docs
+# C# snippets:
+/samples/snippets/csharp/ @BillWagner @dotnet/docs
 # Visual Basic snippets:
 /samples/snippets/visualbasic/ @BillWagner @dotnet/docs
 # F# Snippets:

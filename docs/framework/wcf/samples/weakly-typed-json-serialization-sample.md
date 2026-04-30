@@ -53,7 +53,7 @@ public class PersonalInfo
 
 This can be cumbersome, especially if the client has to handle more than one type of JSON object.
 
-The `JsonObject` type provided by this sample introduces a weakly-typed representation of the deserialized JSON object. `JsonObject` relies on the natural mapping between JSON objects and .NET Framework dictionaries, and the mapping between JSON arrays and .NET Framework arrays. The following code shows the `JsonObject` type.
+The `JsonObject` type provided by this sample introduces a weakly typed representation of the deserialized JSON object. `JsonObject` relies on the natural mapping between JSON objects and .NET Framework dictionaries, and the mapping between JSON arrays and .NET Framework arrays. The following code shows the `JsonObject` type.
 
 ```csharp
 // Instantiation of JsonObject json omitted
@@ -105,7 +105,7 @@ XmlDictionaryReader reader = channel.GetMemberProfile().GetReaderAtBodyContents(
 JsonObject json = new JsonObject(reader);
 ```
 
-The `JsonObject` constructor takes a <xref:System.Xml.XmlDictionaryReader>, which is obtained through the <xref:System.ServiceModel.Channels.Message.GetReaderAtBodyContents%2A> method. The reader contains an XML representation of the JSON message received by the client. For more information, see the topic [Mapping Between JSON and XML](../feature-details/mapping-between-json-and-xml.md).
+The `JsonObject` constructor takes a <xref:System.Xml.XmlDictionaryReader>, which is obtained through the <xref:System.ServiceModel.Channels.Message.GetReaderAtBodyContents*> method. The reader contains an XML representation of the JSON message received by the client. For more information, see the topic [Mapping Between JSON and XML](../feature-details/mapping-between-json-and-xml.md).
 
 The program produces the following output:
 

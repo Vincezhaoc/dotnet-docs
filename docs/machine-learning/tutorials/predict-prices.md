@@ -22,13 +22,13 @@ In this tutorial, you learn how to:
 
 ## Prerequisites
 
-* [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/) with the ".NET Desktop Development" workload installed.
+* [Visual Studio 2022 or later](https://visualstudio.microsoft.com/downloads/) with the **.NET Desktop Development** workload installed.
 
 ## Create a console application
 
 1. Create a C# **Console Application** called "TaxiFarePrediction".
 
-1. Choose .NET 6 as the framework to use. Click the **Create** button.
+1. Choose .NET 8 as the framework to use. Click the **Create** button.
 
 1. Create a directory named *Data* in your project to store the data set and model files.
 
@@ -36,7 +36,7 @@ In this tutorial, you learn how to:
 
     [!INCLUDE [mlnet-current-nuget-version](../../../includes/mlnet-current-nuget-version.md)]
 
-    In **Solution Explorer**, right-click the project and select **Manage NuGet Packages**. Choose "nuget.org" as the Package source, select the **Browse** tab, search for **Microsoft.ML**, select the package in the list, and select the **Install** button. Select the **OK** button on the **Preview Changes** dialog and then select the **I Accept** button on the **License Acceptance** dialog if you agree with the license terms for the packages listed. Do the same for the **Microsoft.ML.FastTree** NuGet package.
+    In **Solution Explorer**, right-click the project and select **Manage NuGet Packages**. Choose "nuget.org" as the Package source, select the **Browse** tab, search for **Microsoft.ML**, select the package in the list, and select **Install**. Select the **OK** button on the **Preview Changes** dialog and then select the **I Accept** button on the **License Acceptance** dialog if you agree with the license terms for the packages listed. Do the same for the **Microsoft.ML.FastTree** NuGet package.
 
 ## Prepare and understand the data
 
@@ -63,7 +63,7 @@ The provided data set contains the following columns:
 Create classes for the input data and the predictions:
 
 1. In **Solution Explorer**, right-click the project, and then select **Add** > **New Item**.
-1. In the **Add New Item** dialog box, select **Class** and change the **Name** field to *TaxiTrip.cs*. Then, select the **Add** button.
+1. In the **Add New Item** dialog box, select **Class** and change the **Name** field to *TaxiTrip.cs*. Then, select **Add**.
 1. Add the following `using` directives to the new file:
 
    [!code-csharp[AddUsings](./snippets/predict-prices/csharp/TaxiTrip.cs#1 "Add necessary usings")]
@@ -244,7 +244,7 @@ Use the `PredictionEngine` to predict the fare by adding the following code to `
 
 [!code-csharp[MakePredictionEngine](./snippets/predict-prices/csharp/Program.cs#22 "Create the PredictionFunction")]
 
-The [PredictionEngine](xref:Microsoft.ML.PredictionEngine%602) is a convenience API, which allows you to perform a prediction on a single instance of data. [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine%602) is not thread-safe. It's acceptable to use in single-threaded or prototype environments. For improved performance and thread safety in production environments, use the `PredictionEnginePool` service, which creates an [`ObjectPool`](xref:Microsoft.Extensions.ObjectPool.ObjectPool%601) of [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine%602) objects for use throughout your application. See this guide on how to [use `PredictionEnginePool` in an ASP.NET Core Web API](../how-to-guides/serve-model-web-api-ml-net.md#register-predictionenginepool-for-use-in-the-application).
+The [PredictionEngine](xref:Microsoft.ML.PredictionEngine`2) is a convenience API, which allows you to perform a prediction on a single instance of data. [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine`2) is not thread-safe. It's acceptable to use in single-threaded or prototype environments. For improved performance and thread safety in production environments, use the `PredictionEnginePool` service, which creates an [`ObjectPool`](xref:Microsoft.Extensions.ObjectPool.ObjectPool`1) of [`PredictionEngine`](xref:Microsoft.ML.PredictionEngine`2) objects for use throughout your application. See this guide on how to [use `PredictionEnginePool` in an ASP.NET Core Web API](../how-to-guides/serve-model-web-api-ml-net.md#register-predictionenginepool-for-use-in-the-application).
 
 > [!NOTE]
 > `PredictionEnginePool` service extension is currently in preview.
@@ -257,7 +257,7 @@ Next, predict the fare based on a single instance of the taxi trip data and pass
 
 [!code-csharp[Predict](./snippets/predict-prices/csharp/Program.cs#24 "Create a prediction of taxi fare")]
 
-The [Predict()](xref:Microsoft.ML.PredictionEngine%602.Predict%2A) function makes a prediction on a single instance of data.
+The [Predict()](xref:Microsoft.ML.PredictionEngine`2.Predict%2A) function makes a prediction on a single instance of data.
 
 To display the predicted fare of the specified trip, add the following code into the `TestSinglePrediction` method:
 

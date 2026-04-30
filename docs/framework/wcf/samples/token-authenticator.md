@@ -3,6 +3,7 @@ description: "Learn more about: Token Authenticator"
 title: "Token Authenticator"
 ms.date: "03/30/2017"
 ms.assetid: 84382f2c-f6b1-4c32-82fa-aebc8f6064db
+ms.custom: sfi-ropc-nochange
 ---
 # Token Authenticator
 
@@ -276,7 +277,7 @@ Use the following steps to create a custom token authenticator:
     serviceHost.Description.Behaviors.Add(serviceCredential);
     ```
 
-To display the caller's information, you can use the <xref:System.ServiceModel.ServiceSecurityContext.PrimaryIdentity%2A> as shown in the following code. The <xref:System.ServiceModel.ServiceSecurityContext.Current%2A> contains claims information about the current caller.
+To display the caller's information, you can use the <xref:System.ServiceModel.ServiceSecurityContext.PrimaryIdentity*> as shown in the following code. The <xref:System.ServiceModel.ServiceSecurityContext.Current*> contains claims information about the current caller.
 
 ```csharp
 static void DisplayIdentityInformation()

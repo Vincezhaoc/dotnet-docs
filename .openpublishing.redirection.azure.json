@@ -17,6 +17,14 @@
             "redirect_url": "/dotnet/azure/migration/vm"
         },
         {
+            "source_path_from_root": "/docs/azure/migration/appmod/overview.md",
+            "redirect_url": "/dotnet/core/porting/github-copilot-app-modernization-overview?toc=/dotnet/azure/toc.json&bc=/dotnet/breadcrumb/toc.json"
+        },
+        {
+            "source_path_from_root": "/docs/azure/migration/appmod/faq.md",
+            "redirect_url": "/dotnet/core/porting/github-copilot-app-modernization-faq?toc=/dotnet/azure/toc.json&bc=/dotnet/breadcrumb/toc.json"
+        },
+        {
             "source_path_from_root": "/docs/azure/dotnet-quickstart-vs.md",
             "redirect_url": "/visualstudio/deployment/quickstart-deploy-aspnet-web-app"
         },
@@ -55,6 +63,10 @@
         {
             "source_path_from_root": "/docs/azure/dotnet-tutorials.md",
             "redirect_url": "/dotnet/azure/"
+        },
+        {
+            "source_path_from_root": "/docs/azure/landing-page.yml",
+            "redirect_url": "/dotnet/azure/index"
         },
         {
             "source_path_from_root": "/docs/azure/logging.md",
@@ -102,7 +114,7 @@
         },
         {
             "source_path_from_root": "/docs/azure/sdk/authentication-azure-hosted-apps.md",
-            "redirect_url": "/dotnet/azure/sdk/authentication/azure-hosted-apps"
+            "redirect_url": "/dotnet/azure/sdk/authentication/system-assigned-managed-identity"
         },
         {
             "source_path_from_root": "/docs/azure/sdk/authentication-additional-methods.md",
@@ -119,6 +131,18 @@
         {
             "source_path_from_root": "/docs/azure/ai/get-started-app-chat-scaling-with-azure-container-apps.md",
             "redirect_url": "/dotnet/ai/get-started-app-chat-scaling-with-azure-container-apps"
+        },
+        {
+            "source_path_from_root": "/docs/azure/sdk/azure-sdk-configure-proxy.md",
+            "redirect_url": "/dotnet/azure/sdk/configure-proxy"
+        },
+        {
+            "source_path_from_root": "/docs/azure/sdk/authentication/authentication-best-practices.md",
+            "redirect_url": "/dotnet/azure/sdk/authentication/best-practices"
+        },
+        {
+            "source_path_from_root": "/docs/azure/sdk/authentication/azure-hosted-apps.md",
+            "redirect_url": "/dotnet/azure/sdk/authentication/system-assigned-managed-identity"
         }
     ]
 }

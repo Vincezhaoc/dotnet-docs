@@ -44,7 +44,7 @@ Property name ( [ parameterlist ] ) [ As returntype ] [ Implements implementslis
 
 - `Default`
 
-  Optional. Specifies that this property is the default property for the class or structure on which it is defined. Default properties must accept parameters and can be set and retrieved without specifying the property name. If you declare the property as `Default`, you cannot use `Private` on the property or on either of its property procedures.
+  Optional. Specifies that this property is the default property for the class or structure on which it is defined. Default properties must accept parameters and can be set and retrieved without specifying the property name. If you declare the property as `Default`, you cannot use `Private` on the property or on either of its property procedures. For examples and detailed guidance, see [How to: Declare and Call a Default Property in Visual Basic](../../programming-guide/language-features/procedures/how-to-declare-and-call-a-default-property.md).
 
 - `accessmodifier`
 
@@ -108,7 +108,7 @@ Property name ( [ parameterlist ] ) [ As returntype ] [ Implements implementslis
 
 - `parameterlist`
 
-  Optional. List of local variable names representing the parameters of this property, and possible additional parameters of the `Set` procedure. See [Parameter List](parameter-list.md).
+  Optional. List of local variable names representing the parameters of this property, and possible additional parameters of the `Set` procedure. Parameterized properties are often used to create indexers or default properties that allow collection-like access. See [Parameter List](parameter-list.md) and [How to: Declare and Call a Default Property in Visual Basic](../../programming-guide/language-features/procedures/how-to-declare-and-call-a-default-property.md).
 
 - `returntype`
 
@@ -135,7 +135,7 @@ Property name ( [ parameterlist ] ) [ As returntype ] [ Implements implementslis
 
 - `Get`
 
-  Optional. Required if the property is marked `ReadOnly`. Starts a `Get` property procedure that is used to return the value of the property.  The `Get` statement is not used with [auto-implemented properties](../../programming-guide/language-features/procedures/auto-implemented-properties.md).
+  Optional. Required if the property is marked `ReadOnly`. Starts a `Get` property procedure that is used to return the value of the property.  The `Get` statement is not used with [automatically implemented properties](../../programming-guide/language-features/procedures/auto-implemented-properties.md).
 
 - `statements`
 
@@ -147,7 +147,7 @@ Property name ( [ parameterlist ] ) [ As returntype ] [ Implements implementslis
 
 - `Set`
 
-  Optional. Required if the property is marked `WriteOnly`. Starts a `Set` property procedure that is used to store the value of the property.  The `Set` statement is not used with [auto-implemented properties](../../programming-guide/language-features/procedures/auto-implemented-properties.md).
+  Optional. Required if the property is marked `WriteOnly`. Starts a `Set` property procedure that is used to store the value of the property.  The `Set` statement is not used with [automatically implemented properties](../../programming-guide/language-features/procedures/auto-implemented-properties.md).
 
 - `End Set`
 
@@ -159,11 +159,11 @@ Property name ( [ parameterlist ] ) [ As returntype ] [ Implements implementslis
 
 ## Remarks
 
-The `Property` statement introduces the declaration of a property. A property can have a `Get` procedure (read only), a `Set` procedure (write only), or both (read-write). You can omit the `Get` and `Set` procedure when using an auto-implemented property. For more information, see [Auto-Implemented Properties](../../programming-guide/language-features/procedures/auto-implemented-properties.md).
+The `Property` statement introduces the declaration of a property. A property can have a `Get` procedure (read only), a `Set` procedure (write only), or both (read-write). You can omit the `Get` and `Set` procedure when using an automatically implemented property. For more information, see [Automatically implemented properties](../../programming-guide/language-features/procedures/auto-implemented-properties.md).
 
 You can use `Property` only at class level. This means the *declaration context* for a property must be a class, structure, module, or interface, and cannot be a source file, namespace, procedure, or block. For more information, see [Declaration Contexts and Default Access Levels](declaration-contexts-and-default-access-levels.md).
 
-By default, properties use public access. You can adjust a property's access level with an access modifier on the `Property` statement, and you can optionally adjust one of its property procedures to a more restrictive access level.
+By default, properties use public access. You can adjust a property's access level with an access modifier on the `Property` statement, and you can optionally adjust one of its property procedures to a more restrictive access level. For detailed examples of mixed access levels, see [How to: Declare a Property with Mixed Access Levels](../../programming-guide/language-features/procedures/how-to-declare-a-property-with-mixed-access-levels.md).
 
 Visual Basic passes a parameter to the `Set` procedure during property assignments. If you do not supply a parameter for `Set`, the integrated development environment (IDE) uses an implicit parameter named `value`. This parameter holds the value to be assigned to the property. You typically store this value in a private local variable and return it whenever the `Get` procedure is called.
 
@@ -205,11 +205,31 @@ The following example declares a property in a class.
 
 [!code-vb[VbVbalrStatements#51](~/samples/snippets/visualbasic/VS_Snippets_VBCSharp/VbVbalrStatements/VB/Class1.vb#51)]
 
+### Parameterized Properties
+
+The following example shows how to create a parameterized property, also called an indexer, which allows array-like access to a collection:
+
+[!code-vb[VbVbalrStatements#59](~/samples/snippets/visualbasic/VS_Snippets_VBCSharp/VbVbalrStatements/VB/Class1.vb#59)]
+
+For comprehensive examples of property usage, including automatic implementation, mixed access levels, and validation scenarios, see [Property Procedures](../../programming-guide/language-features/procedures/property-procedures.md).
+
 ## See also
 
-- [Auto-Implemented Properties](../../programming-guide/language-features/procedures/auto-implemented-properties.md)
-- [Objects and Classes](../../programming-guide/language-features/objects-and-classes/index.md)
+### Property Types and Features
+
+- [Automatically implemented properties](../../programming-guide/language-features/procedures/auto-implemented-properties.md)
+- [Property Procedures](../../programming-guide/language-features/procedures/property-procedures.md)
+- [How to: Create a Property](../../programming-guide/language-features/procedures/how-to-create-a-property.md)
+
+### Advanced Property Scenarios
+
+- [How to: Declare and Call a Default Property in Visual Basic](../../programming-guide/language-features/procedures/how-to-declare-and-call-a-default-property.md)
+- [How to: Declare a Property with Mixed Access Levels](../../programming-guide/language-features/procedures/how-to-declare-a-property-with-mixed-access-levels.md)
+
+### Related Statements and Concepts
+
 - [Get Statement](get-statement.md)
 - [Set Statement](set-statement.md)
 - [Parameter List](parameter-list.md)
 - [Default](../modifiers/default.md)
+- [Objects and Classes](../../programming-guide/language-features/objects-and-classes/index.md)

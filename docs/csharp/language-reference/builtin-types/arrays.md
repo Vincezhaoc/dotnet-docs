@@ -1,7 +1,7 @@
 ---
-title: "Arrays"
+title: "The array reference type"
 description: Store multiple variables of the same type in an array data structure in C#. Declare an array by specifying a type or specify Object to store any type.
-ms.date: 08/24/2023
+ms.date: 01/14/2026
 helpviewer_keywords:
   - "arrays [C#]"
   - "C# language, arrays"
@@ -20,29 +20,49 @@ helpviewer_keywords:
 ---
 # Arrays
 
-You can store multiple variables of the same type in an array data structure. You declare an array by specifying the type of its elements. If you want the array to store elements of any type, you can specify `object` as its type. In the unified type system of C#, all types, predefined and user-defined, reference types and value types, inherit directly or indirectly from <xref:System.Object>.
+You can store multiple variables of the same type in an array data structure. You declare an array by specifying the type of its elements. If you want the array to store elements of any type, specify `object` as its type. In the unified type system of C#, all types, predefined and user-defined, reference types and value types, inherit directly or indirectly from <xref:System.Object>.
+
+[!INCLUDE[csharp-version-note](../includes/initial-version.md)]
 
 ```csharp
 type[] arrayName;
 ```
 
+An array is a reference type, so the array can be a [nullable reference](../../nullable-references.md) type. The element types might be reference types, so you can declare an array to hold nullable reference types. The following example declarations show the different syntax used to declare the nullability of the array or the elements:
+
+```csharp
+type?[] arrayName; // non nullable array of nullable element types.
+type[]? arrayName; // nullable array of non-nullable element types.
+type?[]? arrayName; // nullable array of nullable element types.
+```
+
+Uninitialized elements in an array are set to the default value for that type:
+
+```csharp
+int[] numbers = new int[10]; // All values are 0
+string[] messages = new string[10]; // All values are null.
+```
+
+> [!IMPORTANT]
+> In the preceding example, even though the type is `string[]`, an array of non-nullable strings, the default value for each element is null. The best way to initialize an array to non-null values is to use a [collection expressions](../operators/collection-expressions.md).
+
 An array has the following properties:
 
 - An array can be [single-dimensional](#single-dimensional-arrays), [multidimensional](#multidimensional-arrays), or [jagged](#jagged-arrays).
-- The number of dimensions are set when an array variable is declared. The length of each dimension is established when the array instance is created. These values can't be changed during the lifetime of the instance.
+- The number of dimensions is set when you declare an array variable. You establish the length of each dimension when you create the array instance. You can't change these values during the lifetime of the instance.
 - A jagged array is an array of arrays, and each member array has the default value of `null`.
 - Arrays are zero indexed: an array with `n` elements is indexed from `0` to `n-1`.
 - Array elements can be of any type, including an array type.
-- Array types are [reference types](../keywords/reference-types.md) derived from the abstract base type <xref:System.Array>. All arrays implement <xref:System.Collections.IList> and <xref:System.Collections.IEnumerable>. You can use the [foreach](../statements/iteration-statements.md#the-foreach-statement) statement to iterate through an array. Single-dimensional arrays also implement <xref:System.Collections.Generic.IList%601> and <xref:System.Collections.Generic.IEnumerable%601>.
+- Array types are [reference types](../keywords/reference-types.md) derived from the abstract base type <xref:System.Array>. All arrays implement <xref:System.Collections.IList> and <xref:System.Collections.IEnumerable>. You can use the [foreach](../statements/iteration-statements.md#the-foreach-statement) statement to iterate through an array. Single-dimensional arrays also implement <xref:System.Collections.Generic.IList`1> and <xref:System.Collections.Generic.IEnumerable`1>.
 
-The elements of an array can be initialized to known values when the array is created. Beginning with C# 12, all of the collection types can be initialized using a [Collection expression](../operators/collection-expressions.md). Elements that aren't initialized are set to the [default value](default-values.md). The default value is the 0-bit pattern. All reference types (including [non-nullable](../../nullable-references.md#known-pitfalls) types), have the values `null`. All value types have the 0-bit patterns. That means the <xref:System.Nullable%601.HasValue?displayProperty=nameWithType> property is `false` and the <xref:System.Nullable%601.Value?displayProperty=nameWithType> property is undefined. In the .NET implementation, the `Value` property throws an exception.
+You can initialize the elements of an array to known values when you create the array. Beginning with C# 12, you can use a [Collection expression](../operators/collection-expressions.md) to initialize all of the collection types. Elements that you don't initialize are set to the [default value](default-values.md). The default value is the 0-bit pattern. All reference types (including [non-nullable](../../nullable-references.md#known-pitfalls) types) have the value `null`. All value types have the 0-bit patterns. That means the <xref:System.Nullable`1.HasValue?displayProperty=nameWithType> property is `false` and the <xref:System.Nullable`1.Value?displayProperty=nameWithType> property is undefined. In the .NET implementation, the `Value` property throws an exception.
 
 The following example creates single-dimensional, multidimensional, and jagged arrays:
 
 :::code language="csharp" source="./snippets/shared/Arrays.cs" id="DeclareArrays":::
 
 > [!IMPORTANT]
-> Many of the examples in this article use [collection expressions](../operators/collection-expressions.md) (which use square brackets) to initialize the arrays. Collection expressions were first introduced in C# 12, which shipped with .NET 8. If you can't ugrade to C# 12 yet, use `{` and `}` to initialize the arrays instead.
+> Many of the examples in this article use [collection expressions](../operators/collection-expressions.md) (which use square brackets) to initialize the arrays. Collection expressions were first introduced in C# 12, which shipped with .NET 8. If you can't upgrade to C# 12 yet, use `{` and `}` to initialize the arrays instead.
 >
 > ```csharp
 > // Collection expressions:
@@ -53,11 +73,13 @@ The following example creates single-dimensional, multidimensional, and jagged a
 
 ## Single-dimensional arrays
 
-A *single-dimensional array* is a sequence of like elements. You access an element via its *index*. The *index* is its ordinal position in the sequence. The first element in the array is at index `0`. You create a single-dimensional array using the [new](../operators/new-operator.md) operator specifying the array element type and the number of elements. The following example declares and initializes single-dimensional arrays:
+A *single-dimensional array* is a sequence of like elements. You access an element through its *index*. The *index* is the element's ordinal position in the sequence. The first element in the array is at index `0`. You create a single-dimensional array by using the [new](../operators/new-operator.md) operator and specifying the array element type and the number of elements. The following example declares and initializes single-dimensional arrays:
 
 :::code language="csharp" source="snippets/shared/Arrays.cs" id="SingleDimensionalArrayDeclaration":::
 
 The first declaration declares an uninitialized array of five integers, from `array[0]` to `array[4]`. The elements of the array are initialized to the [default value](default-values.md) of the element type, `0` for integers. The second declaration declares an array of strings and initializes all seven values of that array. A series of `Console.WriteLine` statements prints all the elements of the `weekDay` array. For single-dimensional arrays, the `foreach` statement processes elements in increasing index order, starting with index 0 and ending with index `Length - 1`.
+
+For more information about indices, see the [Explore indexes and ranges](../../tutorials/ranges-indexes.md) article.
 
 ### Pass single-dimensional arrays as arguments
 
@@ -67,33 +89,33 @@ You can pass an initialized single-dimensional array to a method. In the followi
 
 ## Multidimensional arrays
 
-Arrays can have more than one dimension. For example, the following declarations create four arrays: two have two dimensions, two have three dimensions. The first two declarations declare the length of each dimension, but don't initialize the values of the array. The second two declarations use an initializer to set the values of each element in the multidimensional array.
+Arrays can have more than one dimension. For example, the following declarations create four arrays. Two arrays have two dimensions. Two arrays have three dimensions. The first two declarations declare the length of each dimension, but don't initialize the values of the array. The second two declarations use an initializer to set the values of each element in the multidimensional array.
 
 :::code language="csharp" source="./snippets/shared/Arrays.cs" id="MultiDimensionalArrayDeclaration":::
 
-For multi-dimensional arrays, elements are traversed such that the indices of the rightmost dimension are incremented first, then the next left dimension, and so on, to the leftmost index. The following example enumerates both a 2D and a 3D array:
+For multidimensional arrays, traversal increments the indices of the rightmost dimension first, then the next left dimension, and so on, to the leftmost index. The following example enumerates both a 2D and a 3D array:
 
 :::code language="csharp" source="./snippets/shared/Arrays.cs" id="ForeachMultiDimension":::
 
 In a 2D array, you can think of the left index as the *row* and the right index as the *column*.
 
-However, with multidimensional arrays, using a nested [for](../statements/iteration-statements.md#the-for-statement) loop gives you more control over the order in which to process the array elements:
+However, with multidimensional arrays, using a nested [for](../statements/iteration-statements.md#the-for-statement) loop gives you more control over the order in which you process the array elements:
 
 :::code language="csharp" source="./snippets/shared/Arrays.cs" id="ForMultiDimension":::
 
 ### Pass multidimensional arrays as arguments
 
-You pass an initialized multidimensional array to a method in the same way that you pass a one-dimensional array. The following code shows a partial declaration of a print method that accepts a two-dimensional array as its argument. You can initialize and pass a new array in one step, as is shown in the following example. In the following example, a two-dimensional array of integers is initialized and passed to the `Print2DArray` method. The method displays the elements of the array.
+Pass an initialized multidimensional array to a method the same way you pass a one-dimensional array. The following code shows a partial declaration of a print method that accepts a two-dimensional array as its argument. You can initialize and pass a new array in one step, as shown in the following example. In the following example, a two-dimensional array of integers is initialized and passed to the `Print2DArray` method. The method displays the elements of the array.
 
 :::code language="csharp" source="./snippets/shared/Arrays.cs" id="MultiDimensionParameter":::
 
 ## Jagged arrays
 
-A jagged array is an array whose elements are arrays, possibly of different sizes. A jagged array is sometimes called an "array of arrays." Its elements are reference types and are initialized to `null`. The following examples show how to declare, initialize, and access jagged arrays. The first example, `jaggedArray`, is declared in one statement. Each contained array is created in subsequent statements. The second example, `jaggedArray2` is declared and initialized in one statement. It's possible to mix jagged and multidimensional arrays. The final example, `jaggedArray3`, is a declaration and initialization of a single-dimensional jagged array that contains three two-dimensional array elements of different sizes.
+A jagged array is an array whose elements are arrays, possibly of different sizes. A jagged array is sometimes called an "array of arrays." Its elements are reference types and are initialized to `null`. The following examples show how to declare, initialize, and access jagged arrays. The first example, `jaggedArray`, is declared in one statement. Each contained array is created in subsequent statements. The second example, `jaggedArray2` is declared and initialized in one statement. You can mix jagged and multidimensional arrays. The final example, `jaggedArray3`, is a declaration and initialization of a single-dimensional jagged array that contains three two-dimensional array elements of different sizes.
 
 :::code language="csharp" source="./snippets/shared/Arrays.cs" id="JaggedArrayDeclaration":::
 
-A jagged array's elements must be initialized before you can use them. Each of the elements is itself an array. It's also possible to use initializers to fill the array elements with values. When you use initializers, you don't need the array size.
+You must initialize a jagged array's elements before you can use them. Each of the elements is itself an array. You can also use initializers to fill the array elements with values. When you use initializers, you don't need the array size.
 
 This example builds an array whose elements are themselves arrays. Each one of the array elements has a different size.
 

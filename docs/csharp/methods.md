@@ -2,7 +2,7 @@
 title: Overview of methods
 description: Overview of methods, method parameters, and method return values
 ms.subservice: fundamentals
-ms.date: 05/17/2024
+ms.date: 04/17/2025
 ---
 
 # Methods in C\#
@@ -10,7 +10,7 @@ ms.date: 05/17/2024
 A method is a code block that contains a series of statements. A program causes the statements to be executed by calling the method and specifying any required method arguments. In C#, every executed instruction is performed in the context of a method.
 
 > [!NOTE]
-> This topic discusses named methods. For information about anonymous functions, see [Lambda expressions](language-reference/operators/lambda-expressions.md).
+> This article discusses named methods. For information about anonymous functions, see [Lambda expressions](language-reference/operators/lambda-expressions.md).
 
 ## Method signatures
 
@@ -25,13 +25,13 @@ Methods are declared in a `class`, `record`, or `struct` by specifying:
 These parts together form the method signature.
 
 > [!IMPORTANT]
-> A return type of a method is not part of the signature of the method for the purposes of method overloading. However, it is part of the signature of the method when determining the compatibility between a delegate and the method that it points to.
+> A return type of a method isn't part of the signature of the method for the purposes of method overloading. However, it's part of the signature of the method when determining the compatibility between a delegate and the method that it points to.
 
 The following example defines a class named `Motorcycle` that contains five methods:
 
 :::code language="csharp" source="snippets/methods/methods40.cs" id="snippet40":::
 
-The `Motorcycle` class includes an overloaded method, `Drive`. Two methods have the same name, but are differentiated by their parameter types.
+The `Motorcycle` class includes an overloaded method, `Drive`. Two methods have the same name, but their parameter lists differentiate them.
 
 ## Method invocation
 
@@ -125,7 +125,7 @@ You assign the parameter's default value with one of the following kinds of expr
 - An expression of the form `new ValType()`, where `ValType` is a value type. This expression invokes the value type's implicit parameterless constructor, which isn't an actual member of the type.
 
   > [!NOTE]
-  > In C# 10 and later, when an expression of the form `new ValType()` invokes the explicitly defined parameterless constructor of a value type, the compiler generates an error as the default parameter value must be a compile-time constant. Use the `default(ValType)` expression or the `default` literal to provide the default parameter value. For more information about parameterless constructors, see the [Struct initialization and default values](language-reference/builtin-types/struct.md#struct-initialization-and-default-values) section of the [Structure types](language-reference/builtin-types/struct.md) article.
+  > When an expression of the form `new ValType()` invokes the explicitly defined parameterless constructor of a value type, the compiler generates an error as the default parameter value must be a compile-time constant. Use the `default(ValType)` expression or the `default` literal to provide the default parameter value. For more information about parameterless constructors, see the [Struct initialization and default values](language-reference/builtin-types/struct.md#struct-initialization-and-default-values) section of the [Structure types](language-reference/builtin-types/struct.md) article.
 
 If a method includes both required and optional parameters, optional parameters are defined at the end of the parameter list, after all required parameters.
 
@@ -143,7 +143,7 @@ The following example calls the `ExampleMethod` method three times. The first tw
 
 The use of optional parameters affects *overload resolution*, or the way the C# compiler determines which overload to invoke for a method call, as follows:
 
-- A method, indexer, or constructor is a candidate for execution if each of its parameters corresponds by name or by position to a single argument, and that argument can be converted to the type of the parameter.
+- A member is a candidate for execution if each of its parameters corresponds by name or by position to a single argument. Furthermore, that argument can be converted to the type of the parameter.
 - If more than one candidate is found, overload resolution rules for preferred conversions are applied to the arguments that are explicitly specified. Omitted arguments for optional parameters are ignored.
 - If two candidates are judged to be equally good, preference goes to a candidate that doesn't have optional parameters for which arguments were omitted in the call.
 
@@ -157,19 +157,21 @@ For example, these two methods use the `return` keyword to return integers:
 
 :::code language="csharp" source="snippets/methods/return44.cs" id="snippet44":::
 
-The examples above are expression bodied members. Expression bodied members return the value returned by the expression.
+The preceding examples are expression bodied members. Expression bodied members return the value returned by the expression.
 
 You can also choose to define your methods with a statement body and a `return` statement:
 
 :::code language="csharp" source="snippets/methods/return44.cs" id="snippet43":::
 
-To use a value returned from a method, the calling method can use the method call itself anywhere a value of the same type would be sufficient. You can also assign the return value to a variable. For example, the following three code examples accomplish the same goal:
+To use a value returned from a method, you can assign the return value to a variable:
+
+:::code language="csharp" source="snippets/methods/return44.cs" id="snippet47":::
+
+The calling method can also use the method call itself anywhere a value of the same type would be sufficient. For example, the following two code examples accomplish the same goal:
 
 :::code language="csharp" source="snippets/methods/return44.cs" id="snippet45":::
 
 :::code language="csharp" source="snippets/methods/return44.cs" id="snippet46":::
-
-:::code language="csharp" source="snippets/methods/return44.cs" id="snippet47":::
 
 Sometimes, you want your method to return more than a single value. You use *tuple types* and *tuple literals* to return multiple values. The tuple type defines the data types of the tuple's elements. Tuple literals provide the actual values of the returned tuple. In the following example, `(string, string, string, int)` defines the tuple type returned by the `GetPersonalInfo` method. The expression `(per.FirstName, per.MiddleName, per.LastName, per.Age)` is the tuple literal; the method returns the first, middle, and family name, along with the age, of a `PersonInfo` object.
 
@@ -209,16 +211,16 @@ If a method takes an array as a parameter and modifies the value of individual e
 
 :::code language="csharp" source="snippets/methods/returnarray1.cs" id="snippet101":::
 
-## Extension methods
+## Extension members
 
 Ordinarily, there are two ways to add a method to an existing type:
 
 - Modify the source code for that type. Modifying the source creates a breaking change if you also add any private data fields to support the method.
 - Define the new method in a derived class. A method can't be added in this way using inheritance for other types, such as structures and enumerations. Nor can it be used to "add" a method to a sealed class.
 
-Extension methods let you "add" a method to an existing type without modifying the type itself or implementing the new method in an inherited type. The extension method also doesn't have to reside in the same assembly as the type it extends. You call an extension method as if it were a defined member of a type.
+Extension members let you "add" members to an existing type without modifying the type itself or implementing the new method in an inherited type. The extension member also doesn't have to reside in the same assembly as the type it extends. You call an extension method as if it were a defined member of a type.
 
-For more information, see [Extension Methods](programming-guide/classes-and-structs/extension-methods.md).
+For more information, see [Extension members](programming-guide/classes-and-structs/extension-methods.md).
 
 ## Async Methods
 
@@ -229,7 +231,7 @@ If you mark a method with the [async](language-reference/keywords/async.md) modi
 > [!NOTE]
 > An async method returns to the caller when either it encounters the first awaited object that's not yet complete or it gets to the end of the async method, whichever occurs first.
 
-An async method typically has a return type of <xref:System.Threading.Tasks.Task%601>, <xref:System.Threading.Tasks.Task>, <xref:System.Collections.Generic.IAsyncEnumerable%601>, or `void`. The `void` return type is used primarily to define event handlers, where a `void` return type is required. An async method that returns `void` can't be awaited, and the caller of a void-returning method can't catch exceptions that the method throws. An async method can have [any task-like return type](language-reference/keywords/async.md#return-types).
+An async method typically has a return type of <xref:System.Threading.Tasks.Task`1>, <xref:System.Threading.Tasks.Task>, <xref:System.Collections.Generic.IAsyncEnumerable`1>, or `void`. The `void` return type is used primarily to define event handlers, where a `void` return type is required. An async method that returns `void` can't be awaited, and the caller of a void-returning method can't catch exceptions that the method throws. An async method can have [any task-like return type](language-reference/keywords/async.md#return-types).
 
 In the following example, `DelayAsync` is an async method that has a return statement that returns an integer. Because it's an async method, its method declaration must have a return type of `Task<int>`. Because the return type is `Task<int>`, the evaluation of the `await` expression in `DoSomethingAsync` produces an integer, as the following `int result = await delayTask` statement demonstrates.
 
@@ -258,7 +260,7 @@ If the method returns `void` or is an async method, the body of the method must 
 
 An iterator performs a custom iteration over a collection, such as a list or an array. An iterator uses the [yield return](language-reference/statements/yield.md) statement to return each element one at a time. When a `yield return` statement is reached, the current location is remembered so that the caller can request the next element in the sequence.
 
-The return type of an iterator can be <xref:System.Collections.IEnumerable>, <xref:System.Collections.Generic.IEnumerable%601>, <xref:System.Collections.Generic.IAsyncEnumerable%601>, <xref:System.Collections.IEnumerator>, or <xref:System.Collections.Generic.IEnumerator%601>.
+The return type of an iterator can be <xref:System.Collections.IEnumerable>, <xref:System.Collections.Generic.IEnumerable`1>, <xref:System.Collections.Generic.IAsyncEnumerable`1>, <xref:System.Collections.IEnumerator>, or <xref:System.Collections.Generic.IEnumerator`1>.
 
 For more information, see [Iterators](programming-guide/concepts/iterators.md).
 

@@ -1,11 +1,11 @@
 ---
 title: dotnet command
 description: Learn about the dotnet command (the generic driver for the .NET CLI) and its usage.
-ms.date: 05/06/2022
+ms.date: 10/28/2025
 ---
 # dotnet command
 
-**This article applies to:** ✔️ .NET Core 3.1 SDK and later versions
+**This article applies to:** ✔️ .NET 6 SDK and later versions
 
 ## Name
 
@@ -35,7 +35,7 @@ dotnet [--additionalprobingpath <PATH>] [--additional-deps <PATH>]
     [--fx-version <VERSION>]  [--roll-forward <SETTING>]
     <PATH_TO_APPLICATION> [arguments]
 
-dotnet exec [--additionalprobingpath] [--additional-deps <PATH>]
+dotnet exec [--additionalprobingpath <PATH>] [--additional-deps <PATH>]
     [--depsfile <PATH>]
     [--fx-version <VERSION>]  [--roll-forward <SETTING>]
     [--runtimeconfig <PATH>]
@@ -74,13 +74,17 @@ The following options are available when `dotnet` is used by itself, without spe
 
 Prints out the version of the .NET SDK used by `dotnet` commands, which may be affected by a *global.json* file. Available only when the SDK is installed.
 
-- **`--list-runtimes`**
+- **`--list-runtimes [--arch <ARCH>]`**
 
-  Prints out a list of the installed .NET runtimes. An x86 version of the SDK lists only x86 runtimes, and an x64 version of the SDK lists only x64 runtimes.
+  Prints out a list of the installed .NET runtimes for the architecture of the invoked `dotnet`. An x86 version of `dotnet` lists only x86 runtimes, and an x64 version of `dotnet` lists only x64 runtimes.
 
-- **`--list-sdks`**
+  .NET 10 and later versions support the `--arch` argument. If specified and not the same as the `dotnet` architecture, searches for a .NET installation of the specified architecture and prints out any runtimes installed there. Allowed values include arm64, x64, and x86. The dotnet/runtime repo has the full [list of valid architecture values](https://github.com/dotnet/runtime/blob/1713d65316467e3eaf23514b6642eba5869f1b70/src/native/corehost/hostmisc/utils.cpp#L194-L205).
 
-  Prints out a list of the installed .NET SDKs.
+- **`--list-sdks [--arch <ARCH>]`**
+
+  Prints out a list of the installed .NET SDKs for the architecture of the invoked `dotnet`. An x86 version of `dotnet` lists only x86 SDKs, and an x64 version of `dotnet` lists only x64 SDKs.
+
+  .NET 10 and later versions support the `--arch` argument. If specified and not the same as the `dotnet` architecture, searches for a .NET installation of the specified architecture and prints out any SDKs installed there. Allowed values include arm64, x64, and x86. The dotnet/runtime repo has the full [list of valid architecture values](https://github.com/dotnet/runtime/blob/1713d65316467e3eaf23514b6642eba5869f1b70/src/native/corehost/hostmisc/utils.cpp#L194-L205).
 
 - **`-?|-h|--help`**
 
@@ -153,7 +157,7 @@ The following options are available only when `dotnet` runs an application by us
 
 - **`--runtimeconfig <PATH>`**
 
-  Path to a *runtimeconfig.json* file. A *runtimeconfig.json* file contains run-time settings and is typically named *\<applicationname>.runtimeconfig.json*. For more information, see [.NET runtime configuration settings](../runtime-config/index.md#runtimeconfigjson).
+  Path to a *runtimeconfig.json* file. A *runtimeconfig.json* file contains runtime settings and is typically named *\<applicationname>.runtimeconfig.json*. For more information, see [.NET runtime configuration settings](../runtime-config/index.md#runtimeconfigjson).
 
 ## dotnet commands
 
@@ -166,7 +170,6 @@ The following options are available only when `dotnet` runs an application by us
 | [dotnet clean](dotnet-clean.md)                    | Clean build outputs.                                                |
 | [dotnet exec](#options-for-running-an-application) | Runs a .NET application.                                            |
 | [dotnet help](dotnet-help.md)                      | Shows more detailed documentation online for the command.           |
-| [dotnet migrate](dotnet-migrate.md)                | Migrates a valid Preview 2 project to a .NET Core SDK 1.0 project.  |
 | [dotnet msbuild](dotnet-msbuild.md)                | Provides access to the MSBuild command line.                        |
 | [dotnet new](dotnet-new.md)                        | Initializes a C# or F# project for a given template.                |
 | [dotnet pack](dotnet-pack.md)                      | Creates a NuGet package of your code.                               |
@@ -182,16 +185,18 @@ The following options are available only when `dotnet` runs an application by us
 
 | Command                                               | Function                     |
 |-------------------------------------------------------|------------------------------|
-| [dotnet add reference](dotnet-add-reference.md)       | Adds a project reference.    |
-| [dotnet list reference](dotnet-list-reference.md)     | Lists project references.    |
-| [dotnet remove reference](dotnet-remove-reference.md) | Removes a project reference. |
+| [dotnet reference add](dotnet-reference-add.md)       | Adds a project reference.    |
+| [dotnet reference list](dotnet-reference-list.md)     | Lists project references.    |
+| [dotnet reference remove](dotnet-reference-remove.md) | Removes a project reference. |
 
 ### NuGet packages
 
-| Command                                           | Function                 |
-|---------------------------------------------------|--------------------------|
-| [dotnet add package](dotnet-add-package.md)       | Adds a NuGet package.    |
-| [dotnet remove package](dotnet-remove-package.md) | Removes a NuGet package. |
+| Command                                           | Function                      |
+|---------------------------------------------------|-------------------------------|
+| [dotnet package add](dotnet-package-add.md)       | Adds a NuGet package.         |
+| [dotnet package list](dotnet-package-list.md)     | Lists NuGet packages.         |
+| [dotnet package remove](dotnet-package-remove.md) | Removes a NuGet package.      |
+| [dotnet package search](dotnet-package-search.md) | Searches for a NuGet package. |
 
 ### NuGet commands
 
@@ -211,9 +216,13 @@ The following options are available only when `dotnet` runs an application by us
 
 | Command                                                 | Function                                            |
 |---------------------------------------------------------|-----------------------------------------------------|
+| [dotnet workload clean](dotnet-workload-clean.md)       | Removes workload components.                        |
+| [dotnet workload config](dotnet-workload-config.md)     | Enables or disables workload-set update mode.       |
+| [dotnet workload history](dotnet-workload-history.md)   | Shows all workload installation actions.            |
 | [dotnet workload install](dotnet-workload-install.md)   | Installs an optional workload.                      |
 | [dotnet workload list](dotnet-workload-list.md)         | Lists all installed workloads.                      |
 | [dotnet workload repair](dotnet-workload-repair.md)     | Repairs all installed workloads.                    |
+| [dotnet workload restore](dotnet-workload-restore.md)   | Restore workloads required for a project.           |
 | [dotnet workload search](dotnet-workload-search.md)     | List selected workloads or all available workloads. |
 | [dotnet workload uninstall](dotnet-workload-install.md) | Uninstalls a workload.                              |
 | [dotnet workload update](dotnet-workload-update.md)     | Reinstalls all installed workloads.                 |

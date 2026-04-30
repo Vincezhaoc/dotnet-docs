@@ -1,7 +1,7 @@
 ---
 title: "Install the .NET Framework developer pack or redistributable"
 description: "Developers can download and install the .NET Framework developer pack and targeting pack. You can include the .NET Framework redistributable with your apps."
-ms.date: 02/23/2022
+ms.date: 02/02/2026
 helpviewer_keywords:
   - ".NET Framework redistributable package, downloading"
   - ".NET Framework, installing"
@@ -11,10 +11,10 @@ ms.assetid: daf9d9d5-84ac-4bd9-a864-27665ffd0f5c
 ---
 # Install .NET Framework for developers
 
-.NET is an integral part of many apps running on Windows and provides common functionality for those apps to run. For developers, .NET Framework provides a comprehensive and consistent programming model for building apps that have visually stunning user experiences and seamless and secure communication.
+.NET Framework is an integral part of many apps running on Windows and provides common functionality for those apps to run. For developers, .NET Framework provides a comprehensive and consistent programming model for building apps that have visually stunning user experiences and seamless and secure communication.
 
 > [!NOTE]
-> This article is intended for **developers** who either want to install .NET Framework on their own system or who want to install it with their applications. For **users** interested in installing .NET Framework, see the individual articles that discuss installing .NET Framework on specific operating systems, such as [Install .NET Framework on Windows 10 and Windows Server 2016](on-windows-10.md).
+> This article is intended for **developers** who either want to install .NET Framework on their own system or who want to install it with their applications. For **users** interested in installing .NET Framework, see [Install .NET Framework on Windows and Windows Server](on-windows-and-server.md).
 
 This article provides links for installing all versions of .NET Framework from .NET Framework 4.5 to .NET Framework 4.8.1 on your computer. If you're a developer, you can also use these links to download and redistribute .NET Framework with your apps. For information on deploying a version of .NET Framework with your app, see [.NET Framework deployment guide for developers](../deployment/deployment-guide-for-developers.md).
 
@@ -22,7 +22,7 @@ This article provides links for installing all versions of .NET Framework from .
 
 [!INCLUDE[net-framework-4-versions](../../../includes/net-framework-4x-versions.md)]
 
-For more information about versions of .NET Framework and how to determine which versions are installed on a computer, see [Versions and Dependencies](../migration-guide/versions-and-dependencies.md) and [How to: Determine Which .NET Framework Versions Are Installed](../migration-guide/how-to-determine-which-versions-are-installed.md).
+For more information about versions of .NET Framework and how to determine which versions are installed on a computer, see [Versions and Dependencies](../install/versions-and-dependencies.md) and [How to: Determine Which .NET Framework Versions Are Installed](../install/how-to-determine-which-versions-are-installed.md).
 
 > [!NOTE]
 > For information on .NET Framework 3.5, see [Install the .NET Framework 3.5 on Windows 11, Windows 10, Windows 8.1, and Windows 8](dotnet-35-windows.md).
@@ -31,7 +31,7 @@ Use the following table for quick links, or read further for details. To view th
 
 | .NET Framework version | Installer (Developer Pack and Runtime) | Platform support |
 | ---------------------- | -------------------------------------- | ---------------- |
-|**4.8.1**   | [.NET Framework 4.8.1](https://dotnet.microsoft.com/download/dotnet-framework/net481)    | **Included in:**<br/><br/>[Visual Studio 2022 (version 17.3)](https://my.visualstudio.com/Downloads?q=visual%20studio%202017)<br/><br/> **You can install on:**<br/><br/>Windows 11<br/>Windows 10 version 21H2<br/>Windows 10 version 21H1<br/>Windows 10 version 20H2<br/>Windows Server 2022<br /><br/> (for a full list, see [system requirements](../get-started/system-requirements.md))|
+|**4.8.1**   | [.NET Framework 4.8.1](https://dotnet.microsoft.com/download/dotnet-framework/net481)    | **Included in:**<br/><br/>Windows 11 version 22H2<br/>[Visual Studio 2022 and later versions](https://visualstudio.microsoft.com/downloads/?utm_medium=microsoft&utm_source=learn.microsoft.com&utm_campaign=inline+link)<br/><br/> **You can install on:**<br/><br/>Windows 11<br/>Windows 10 version 21H2<br/>Windows 10 version 21H1<br/>Windows 10 version 20H2<br/>Windows Server 2022<br /><br/> (for a full list, see [system requirements](../get-started/system-requirements.md))|
 |**4.8**   | [.NET Framework 4.8](https://dotnet.microsoft.com/download/dotnet-framework/net48)    | **Included in:**<br/><br/>Windows 11<br/>Windows 10 May 2019 Update (and later versions)<br/>[Visual Studio 2019 (version 16.3)](https://my.visualstudio.com/Downloads?q=visual%20studio%202019)<br/><br/> **You can install on:**<br/><br/>Windows 10 October 2018 Update<br/>Windows 10 April 2018 Update<br/>Windows 10 Fall Creators Update<br/>Windows 10 Creators Update <br /> Windows 10 Anniversary Update<br /> Windows 8.1 and earlier<br />Windows Server 2022<br /> Windows Server 2019<br/>Windows Server, Version 1809<br/>Windows Server, Version 1803<br /><br/> (for a full list, see [system requirements](../get-started/system-requirements.md))|
 |**4.7.2** | [.NET Framework 4.7.2](https://dotnet.microsoft.com/download/dotnet-framework/net472) | **Included in:** <br/><br/>Windows 10 October 2018 Update<br/>Windows 10 April 2018 Update<br/>Windows Server 2019<br/>Windows Server, Version 1809<br/>Windows Server, Version 1803<br/>[Visual Studio 2017 (15.8 update)](https://my.visualstudio.com/Downloads?q=visual%20studio%202017)<br/><br/> **You can install on:**<br/> <br/>Windows 10 Fall Creators Update<br/>Windows 10 Creators Update <br /> Windows 10 Anniversary Update<br /> Windows 8.1 and earlier<br /> Windows Server, version 1709 and earlier<br /><br/> (for a full list, see [system requirements](../get-started/system-requirements.md))|
 |**4.7.1** | [.NET Framework 4.7.1](https://dotnet.microsoft.com/download/dotnet-framework/net471) | **Included in:** <br/><br/>Windows 10 Fall Creators Update<br/>Windows Server, version 1709<br/>[Visual Studio 2017 (15.5 update)](https://my.visualstudio.com/Downloads?q=visual%20studio%202017)<br/><br/> **You can install on:**<br/><br/> Windows 10 Creators Update <br /> Windows 10 Anniversary Update<br /> Windows 8.1 and earlier<br /> Windows Server 2016 and earlier<br /> (for a full list, see [system requirements](../get-started/system-requirements.md))|
@@ -84,7 +84,7 @@ From the developer pack download page, choose **Download**. Next, choose **Run**
 
 :::image type="content" source="media/guide-for-developers/visual-studio-framework.png" alt-text="Visual Studio installer with .NET Framework options selected." lightbox="media/guide-for-developers/visual-studio-framework-large.png":::
 
-When you target a particular version of .NET Framework, your application is built by using the reference assemblies that are included with that version's developer pack. At run time, assemblies are resolved from the Global Assembly Cache, and the reference assemblies are not used.
+When you target a particular version of .NET Framework, your application is built by using the reference assemblies that are included with that version's developer pack. At runtime, assemblies are resolved from the Global Assembly Cache, and the reference assemblies are not used.
 
 When building an application from Visual Studio or using MSBuild from the command line, MSBuild may display error MSB3644, "The reference assemblies for framework "*framework-version*" were not found." To address the error, download the developer pack or the targeting pack for that version of .NET Framework.
 

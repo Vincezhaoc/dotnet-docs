@@ -1,58 +1,123 @@
 ---
 title: Troubleshoot deployments
-description: Learn how to troubleshoot an Orleans app deployment.
-ms.date: 07/03/2024
+description: Learn how to troubleshoot common Orleans deployment issues.
+ms.date: 01/21/2026
+ms.topic: troubleshooting
+ms.custom: devops
+zone_pivot_groups: orleans-version
 ---
 
 # Troubleshoot deployments
 
-This page gives some general guidelines for troubleshooting any issues that occur while deploying to Azure Cloud Services.
-These are very common issues to watch out for.
-Be sure to check the logs for more information.
+:::zone target="docs" pivot="orleans-7-0,orleans-8-0,orleans-9-0,orleans-10-0"
 
-## The `SiloUnavailableException`
+This page provides general guidelines for troubleshooting common Orleans deployment issues.
 
-First, check to make sure that you are starting the silos before attempting to initialize the client. Sometimes the silos take a long time to start so it can be beneficial to try to initialize the client multiple times. If it still throws an exception, then there might be another issue with the silos.
+## SiloUnavailableException
 
-Check the silo configuration and make sure that the silos are starting up properly.
+A <xref:Orleans.Runtime.SiloUnavailableException> indicates that the target silo for a grain call is unavailable. This commonly occurs when:
 
-## Common connection string issues
+- **Silo terminated abruptly**: A silo crashed or was forcefully terminated and has been evicted from the cluster. This is expected behavior during cluster membership changes.
+- **Network partition**: The target silo is temporarily unreachable due to network issues.
+- **Silo shutdown during request**: The silo began shutting down while a request was in flight.
 
-- Using the local connection string when deploying to Azure – the website will fail to connect.
-- Using different connection strings for the silos and the front end (web and worker roles) – the website will fail to initialize the client because it cannot connect to the silos.
+When this exception occurs during a grain call, the grain reference remains valid. You can retry the call later, and Orleans will route the request to the new activation location.
 
-The connection string configuration can be checked in the Azure Portal. The logs may not display properly if the connection
-strings are not set up correctly.
+If this exception occurs during initial client connection (`IClusterClient.Connect`), it typically means no silos are available to accept the connection. Common causes include:
 
-## Modify the configuration files improperly
+- **Silos haven't started yet**: Ensure silos start before attempting to initialize the client. Sometimes silos take time to start and register with the clustering provider.
+- **Incorrect clustering configuration**: Verify that the client and silos use the same clustering provider and connection settings.
+- **Network connectivity issues**: Check firewall rules and network security groups to ensure the client can reach silo gateway endpoints.
 
-Make sure that the proper endpoints are configured in the _ServiceDefinition.csdef_ file or else the deployment will not work.
-It will give errors saying that it cannot get the endpoint information.
+## Common configuration issues
+
+> [!TIP]
+> Use managed identity instead of connection strings whenever possible. Connection strings contain secrets and should be avoided in production.
+
+- **Mismatched configuration between components**: All silos and clients must use the same clustering provider and configuration to join the same cluster.
+- **Using local configuration when deploying to cloud environments**: Ensure clustering provider configuration is appropriate for the deployment environment.
+
+## Version considerations
+
+Orleans 7.0 and later includes a version-tolerant serializer that supports rolling upgrades and mixed-version clusters. You can safely run silos with different Orleans versions during deployments, as long as the versions are within the same major version family (for example, 8.x with 8.y).
+
+However, it's still recommended to keep Orleans versions consistent across your solution to:
+
+- Avoid confusion during debugging
+- Ensure all features work as expected
+- Simplify dependency management
+
+For information about the version-tolerant serializer, see [Orleans serialization](../host/configuration-guide/serialization.md).
 
 ## Missing logs
 
-Make sure that the connection strings are set up properly.
+Ensure logging is configured properly. Orleans uses the standard <xref:Microsoft.Extensions.Logging.ILogger> abstraction. Configure your logging provider (Serilog, NLog, Console, Application Insights, etc.) to capture Orleans logs at the appropriate level.
 
-Likely, the _Web.config_ file in the web role or the _app.config_ file in the worker role was modified improperly. Incorrect versions in these files can cause issues with the deployment. Be careful when dealing with updates.
+```csharp
+builder.Logging.SetMinimumLevel(LogLevel.Information);
+```
+
+## Container and Kubernetes troubleshooting
+
+For container-based deployments (Docker, Kubernetes, Azure Container Apps):
+
+- **Pod scheduling issues**: Check resource requests and limits are appropriate for your workload.
+- **Clustering provider connectivity**: Ensure all silos can connect to the configured clustering provider (Redis, Azure Storage, SQL Server, etc.).
+- **Silo endpoint configuration**: Ensure <xref:Orleans.Configuration.EndpointOptions.SiloPort> and <xref:Orleans.Configuration.EndpointOptions.GatewayPort> are correctly exposed and mapped.
+- **Liveness and readiness probes**: Configure appropriate health check endpoints.
+
+For detailed Kubernetes troubleshooting, see [Deploy Orleans to Kubernetes](kubernetes.md).
+
+:::zone-end
+
+:::zone target="docs" pivot="orleans-3-x"
+
+This page provides general guidelines for troubleshooting issues occurring during deployment. These are common issues to watch out for. Check the logs for more detailed information.
+
+> [!NOTE]
+> For Azure Cloud Services (classic) specific troubleshooting, see [Troubleshoot Azure Cloud Service deployments](troubleshooting-azure-cloud-services-deployments.md). Note that Azure Cloud Services (classic) was retired on August 31, 2024.
+
+## The <xref:Orleans.Runtime.SiloUnavailableException>
+
+This exception indicates that the target silo for a grain call is unavailable. This commonly occurs when a silo terminates abruptly and is evicted from the cluster, which is expected behavior during cluster membership changes.
+
+If this exception occurs during initial client connection, ensure silos start before attempting to initialize the client. Sometimes silos take time to start, so retrying client initialization can be beneficial. If it still throws an exception, check the silo configuration and ensure the silos start properly.
+
+## Common connection string issues
+
+- **Using the local connection string when deploying to Azure**: The website fails to connect.
+- **Using different connection strings for silos and the front end (web and worker roles)**: The website fails to initialize the client because it cannot connect to the silos.
+
+Check the connection string configuration in the Azure portal. Logs might not display properly if connection strings aren't set up correctly.
+
+## Improperly modified configuration files
+
+Ensure proper endpoints are configured in the _ServiceDefinition.csdef_ file; otherwise, the deployment won't work. Errors stating that endpoint information cannot be obtained will occur.
+
+## Missing logs
+
+Ensure the connection strings are set up properly.
+
+It's likely the _Web.config_ file in the web role or the _app.config_ file in the worker role was modified improperly. Incorrect versions in these files can cause deployment issues. Be careful when handling updates.
 
 ## Version issues
 
-Make sure that the same version of Orleans is used in every project in the solution. Not doing this can lead to the worker role recycling. Check the logs for more information. Visual Studio provides some silo startup error messages in the deployment history.
+Ensure the same version of Orleans is used in every project in the solution. Using different versions can lead to worker role recycling. Check the logs for more information. Visual Studio provides some silo startup error messages in the deployment history.
 
 ## Role keeps recycling
 
-- Check that all the appropriate Orleans assemblies are in the solution and have `Copy Local` set to `True`.
-- Check the logs to see if there is an unhandled exception while initializing.
-- Make sure that the connection strings are correct.
-- Check the Azure Cloud Services troubleshooting pages for more information.
+- Verify all appropriate Orleans assemblies are in the solution and have **Copy Local** set to **True**.
+- Check the logs for unhandled exceptions during initialization.
+- Ensure the connection strings are correct.
+- Refer to the Azure Cloud Services troubleshooting pages for more information.
 
 ## How to check logs
 
-- Use the cloud explorer in Visual Studio to navigate to the appropriate storage table or blob in the storage account.
+- Use Cloud Explorer in Visual Studio to navigate to the appropriate storage table or blob in the storage account.
 
-The WADLogsTable is a good starting point for looking at the logs.
+The `WADLogsTable` is a good starting point for examining logs.
 
-- You might only be logging errors. If you want informational logs as well, you will need to modify the configuration to set the logging severity level.
+- Only errors might be logged. If informational logs are also desired, modify the configuration to set the logging severity level.
 
 Programmatic configuration:
 
@@ -61,17 +126,17 @@ Programmatic configuration:
 
 Declarative configuration:
 
-- Add `<Tracing DefaultTraceLevel="Info" />` to the _OrleansConfiguration.xml_ and/or the _ClientConfiguration.xml_ files.
+- Add `<Tracing DefaultTraceLevel="Info" />` to the _OrleansConfiguration.xml_ and/or _ClientConfiguration.xml_ files.
 
-In the _diagnostics.wadcfgx_ file for the web and worker roles, make sure to set the `scheduledTransferLogLevelFilter` attribute in the `Logs` element to `Information`, as this is an additional layer of trace filtering that defines which traces are sent to the `WADLogsTable` in Azure Storage.
+In the _diagnostics.wadcfgx_ file for the web and worker roles, ensure the `scheduledTransferLogLevelFilter` attribute in the `Logs` element is set to `Information`. This setting acts as an additional layer of trace filtering defining which traces are sent to the `WADLogsTable` in Azure Storage.
 
-You can find more information about this in the [Configuration Guide](../host/configuration-guide/index.md).
+Find more information about this in the [Configuration Guide](../host/configuration-guide/index.md).
 
 ## Compatibility with ASP.NET
 
-The razor view engine included in ASP.NET uses the same code generation assemblies as Orleans (`Microsoft.CodeAnalysis` and `Microsoft.CodeAnalysis.CSharp`). This can present a version compatibility problem at runtime.
+The Razor view engine included in ASP.NET uses the same code generation assemblies as Orleans (`Microsoft.CodeAnalysis` and `Microsoft.CodeAnalysis.CSharp`). This can present a version compatibility problem at runtime.
 
-To resolve this, try upgrading `Microsoft.CodeDom.Providers.DotNetCompilerPlatform` (this is the NuGet package ASP.NET uses to include the above assemblies) to the latest version, and setting binding redirects like this:
+To resolve this, try upgrading `Microsoft.CodeDom.Providers.DotNetCompilerPlatform` (the NuGet package ASP.NET uses to include these assemblies) to the latest version and setting binding redirects like this:
 
 ```xml
 <dependentAssembly>
@@ -85,3 +150,5 @@ To resolve this, try upgrading `Microsoft.CodeDom.Providers.DotNetCompilerPlatfo
     <bindingRedirect oldVersion="0.0.0.0-2.0.0.0" newVersion="1.3.1.0" />
 </dependentAssembly>
 ```
+
+:::zone-end

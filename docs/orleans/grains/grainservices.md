@@ -1,23 +1,28 @@
 ---
 title: Create a GrainService
 description: Learn how to create a GrainService in .NET Orleans.
-ms.date: 07/03/2024
+ms.date: 01/21/2026
+ms.topic: how-to
 zone_pivot_groups: orleans-version
 ---
 
-# Grain Services
+# Grain services
 
-Grain Services are remotely accessible, partitioned services for supporting the functionality grains. Each instance of a grain service is responsible for some set of grains and those grains can get a reference to the grain service which is currently responsible for servicing them by using a `GrainServiceClient`.
+:::zone target="docs" pivot="orleans-8-0,orleans-9-0,orleans-10-0"
 
-Grain Services exist to support cases where responsibility for servicing grains should be distributed around the Orleans cluster. For example, Orleans Reminders are implemented using grain services: each silo is responsible for handling reminder operations for a subset of grains and notifying those grains when their reminders fire.
+Grain services are remotely accessible, partitioned services for supporting grain functionality. Each instance of a grain service is responsible for some set of grains. Those grains can get a reference to the grain service currently responsible for servicing them by using a `GrainServiceClient`.
 
-Grain Services are configured on silos and are initialized when the silo starts, before the silo completes initialization. They are not collected when idle and instead have lifetimes which extend for the lifetime of the silo itself.
+:::zone-end
 
-## Create a GrainService
+Grain services exist to support cases where responsibility for servicing grains should be distributed around the Orleans cluster. For example, Orleans Reminders are implemented using grain services: each silo handles reminder operations for a subset of grains and notifies those grains when their reminders fire.
 
-A <xref:Orleans.Runtime.GrainService> is a special grain; one that has no stable identity, and runs in every silo from startup to shutdown. There are several steps involved when implementing an <xref:Orleans.Services.IGrainService> interface.
+You configure grain services on silos. They initialize when the silo starts, before the silo completes initialization. They aren't collected when idle; instead, their lifetimes extend for the lifetime of the silo itself.
 
-1. Define the grain service communication interface. The interface of a `GrainService` is built using the same principles you would use for building the interface of a grain.
+## Create a grain service
+
+A <xref:Orleans.Runtime.GrainService> is a special grain: it has no stable identity and runs in every silo from startup to shutdown. Implementing an <xref:Orleans.Services.IGrainService> interface involves several steps.
+
+1. Define the grain service communication interface. Build the interface of a `GrainService` using the same principles you use for building a grain interface.
 
     ```csharp
     public interface IDataService : IGrainService
@@ -26,11 +31,9 @@ A <xref:Orleans.Runtime.GrainService> is a special grain; one that has no stable
     }
     ```
 
-1. Create the `DataService` grain service. It's good to know that you can also inject an <xref:Orleans.IGrainFactory> so you can make grain calls from your `GrainService`.
+1. Create the `DataService` grain service. It's helpful to know that you can also inject an <xref:Orleans.IGrainFactory> so you can make grain calls from your `GrainService`.
 
-    <!-- markdownlint-disable MD044 -->
-    :::zone target="docs" pivot="orleans-7-0"
-    <!-- markdownlint-enable MD044 -->
+    :::zone target="docs" pivot="orleans-7-0,orleans-8-0,orleans-9-0,orleans-10-0"
 
     ```csharp
     [Reentrant]
@@ -66,45 +69,13 @@ A <xref:Orleans.Runtime.GrainService> is a special grain; one that has no stable
 
     :::zone-end
 
-    <!-- markdownlint-disable MD044 -->
-    :::zone target="docs" pivot="orleans-3-x"
-    <!-- markdownlint-enable MD044 -->
+:::zone target="docs" pivot="orleans-3-x"
 
-    ```csharp
-    [Reentrant]
-    public class DataService : GrainService, IDataService
-    {
-        readonly IGrainFactory _grainFactory;
+:::code language="csharp" source="snippets-v3/grainservices/GrainServices.cs" id="data_service":::
 
-        public DataService(
-            IServiceProvider services,
-            IGrainIdentity id,
-            Silo silo,
-            ILoggerFactory loggerFactory,
-            IGrainFactory grainFactory)
-            : base(id, silo, loggerFactory)
-        {
-            _grainFactory = grainFactory;
-        }
+:::zone-end
 
-        public override Task Init(IServiceProvider serviceProvider) =>
-            base.Init(serviceProvider);
-
-        public override Task Start() => base.Start();
-
-        public override Task Stop() => base.Stop();
-
-        public Task MyMethod()
-        {
-            // TODO: custom logic here.
-            return Task.CompletedTask;
-        }
-    }
-    ```
-
-    :::zone-end
-
-1. Create an interface for the <xref:Orleans.Runtime.Services.GrainServiceClient%601>`GrainServiceClient` to be used by other grains to connect to the `GrainService`.
+1. Create an interface for the <xref:Orleans.Runtime.Services.GrainServiceClient`1>`GrainServiceClient` that other grains will use to connect to the `GrainService`.
 
     ```csharp
     public interface IDataServiceClient : IGrainServiceClient<IDataService>, IDataService
@@ -112,10 +83,7 @@ A <xref:Orleans.Runtime.GrainService> is a special grain; one that has no stable
     }
     ```
 
-<!-- markdownlint-disable MD044 -->
-:::zone target="docs" pivot="orleans-7-0"
-<!-- markdownlint-enable MD044 -->
-1. Create the grain service client. Clients typically act as proxies for the grain services which they target, so you will usually add a method for each method on the target service. These methods will need to get a reference to the grain service which they target so that they can call into it. The `GrainServiceClient<T>` base class provides several overloads of the `GetGrainService` method which can return a grain reference corresponding to a `GrainId`, a numeric hash (`uint`), or a `SiloAddress`. The latter two overloads are for advanced cases where a developer wants to use a different mechanism to map responsibility to hosts or wants to address a host directly. In our sample code below, we define a property, `GrainService`, which returns the `IDataService` for the grain which is calling the `DataServiceClient`. To do that, we use the `GetGrainService(GrainId)` overload in conjunction with the `CurrentGrainReference` property.
+1. Create the grain service client. Clients typically act as proxies for the grain services they target, so you usually add a method for each method on the target service. These methods need to get a reference to the target grain service so they can call into it. The `GrainServiceClient<T>` base class provides several overloads of the `GetGrainService` method that can return a grain reference corresponding to a <xref:Orleans.Runtime.GrainId>, a numeric hash (`uint`), or a <xref:Orleans.Runtime.SiloAddress>. The latter two overloads are for advanced cases where you want to use a different mechanism to map responsibility to hosts or address a host directly. In the sample code below, we define a property, `GrainService`, which returns the `IDataService` for the grain calling the `DataServiceClient`. To do that, we use the `GetGrainService(GrainId)` overload in conjunction with the `CurrentGrainReference` property.
 
     ```csharp
     public class DataServiceClient : GrainServiceClient<IDataService>, IDataServiceClient
@@ -133,28 +101,7 @@ A <xref:Orleans.Runtime.GrainService> is a special grain; one that has no stable
     }
     ```
 
-:::zone-end
-<!-- markdownlint-disable MD044 -->
-:::zone target="docs" pivot="orleans-3-x"
-<!-- markdownlint-enable MD044 -->
-
-1. Create the actual grain service client. It pretty much just acts as a proxy for the data service. Unfortunately, you have to manually type in all the method mappings, which are just simple one-liners.
-
-    ```csharp
-    public class DataServiceClient : GrainServiceClient<IDataService>, IDataServiceClient
-    {
-        public DataServiceClient(IServiceProvider serviceProvider)
-            : base(serviceProvider)
-        {
-        }
-
-        public Task MyMethod() => GrainService.MyMethod();
-    }
-    ```
-
-:::zone-end
-
-1. Inject the grain service client into the other grains that need it. The `GrainServiceClient` is not guaranteed to access the `GrainService` on the local silo. Your command could potentially be sent to the `GrainService` on any silo in the cluster.
+1. Inject the grain service client into the other grains that need it. The `GrainServiceClient` isn't guaranteed to access the `GrainService` on the local silo. Your command could potentially be sent to the `GrainService` on any silo in the cluster.
 
     ```csharp
     public class MyNormalGrain: Grain<NormalGrainState>, INormalGrain
@@ -168,54 +115,62 @@ A <xref:Orleans.Runtime.GrainService> is a special grain; one that has no stable
     }
     ```
 
-1. Configure the grain service and grain service client in the silo. You need to do this so that the silo will start the `GrainService`.
+1. Configure the grain service and grain service client in the silo. You need to do this so the silo starts the `GrainService`.
+
+    :::zone target="docs" pivot="orleans-7-0,orleans-8-0,orleans-9-0,orleans-10-0"
 
     ```csharp
-    (ISiloHostBuilder builder) =>
-        builder.ConfigureServices(
-            services => services.AddGrainService<DataService>()
-                                .AddSingleton<IDataServiceClient, DataServiceClient>());
+    builder.UseOrleans(siloBuilder =>
+    {
+        siloBuilder.Services
+            .AddGrainService<DataService>()
+            .AddSingleton<IDataServiceClient, DataServiceClient>();
+    });
     ```
+
+    :::zone-end
+
+:::zone target="docs" pivot="orleans-3-x"
+
+:::code language="csharp" source="snippets-v3/grainservices/GrainServices.cs" id="configure_grain_service":::
+
+:::zone-end
 
 ## Additional notes
 
-<!-- markdownlint-disable-next-line proper-names -->
-There's an extension method on <xref:Orleans.Hosting.GrainServicesSiloBuilderExtensions.AddGrainService%2A?displayProperty=nameWithType> which is used to register grain services.
+There's an extension method, <xref:Orleans.Hosting.GrainServicesSiloBuilderExtensions.AddGrainService*?displayProperty=nameWithType>, used to register grain services.
 
 ```csharp
 services.AddSingleton<IGrainService>(
     serviceProvider => GrainServiceFactory(grainServiceType, serviceProvider));
 ```
 
-<!-- markdownlint-disable-next-line proper-names -->
-The silo fetches `IGrainService` types from the service provider when starting: _orleans/src/Orleans.Runtime/Silo/Silo.cs_
+The silo fetches `IGrainService` types from the service provider when starting (see _orleans/src/Orleans.Runtime/Silo/Silo.cs_):
 
 ```csharp
 var grainServices = this.Services.GetServices<IGrainService>();
 ```
 
-<!-- markdownlint-disable MD044 -->
-:::zone target="docs" pivot="orleans-7-0"
-<!-- markdownlint-enable MD044 -->
+:::zone target="docs" pivot="orleans-7-0,orleans-8-0,orleans-9-0,orleans-10-0"
 The [Microsoft.Orleans.Runtime](https://www.nuget.org/packages/Microsoft.Orleans.Runtime) NuGet package should be referenced by the `GrainService` project.
 :::zone-end
-<!-- markdownlint-disable MD044 -->
 :::zone target="docs" pivot="orleans-3-x"
-<!-- markdownlint-enable MD044 -->
 The [Microsoft.Orleans.OrleansRuntime](https://www.nuget.org/packages/Microsoft.Orleans.OrleansRuntime) NuGet package should be referenced by the `GrainService` project.
 :::zone-end
 
-In order for this to work you have to register both the service and its client. The code looks something like this:
+For this to work, you must register both the service and its client. The code looks something like this:
 
 ```csharp
-var builder = new HostBuilder()
-    .UseOrleans(c =>
-    {
-        c.AddGrainService<DataService>()  // Register GrainService
-        .ConfigureServices(services =>
-        {
-            // Register Client of GrainService
-            services.AddSingleton<IDataServiceClient, DataServiceClient>();
-        });
-    })
- ```
+var builder = Host.CreateApplicationBuilder(args);
+
+builder.UseOrleans(siloBuilder =>
+{
+    siloBuilder.AddGrainService<DataService>();  // Register GrainService
+});
+
+// Register Client of GrainService
+builder.Services.AddSingleton<IDataServiceClient, DataServiceClient>();
+
+using var host = builder.Build();
+await host.RunAsync();
+```

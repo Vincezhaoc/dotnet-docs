@@ -21,15 +21,15 @@ You can find the source code for this tutorial at the [dotnet/samples](https://g
 
 ## Prerequisites
 
-* [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/) with the ".NET Desktop Development" workload installed.
+* [Visual Studio 2022 or later](https://visualstudio.microsoft.com/downloads/) with the **.NET Desktop Development** workload installed.
 
 * [The phone-calls.csv dataset](https://github.com/dotnet/machinelearning-samples/blob/main/samples/csharp/getting-started/AnomalyDetection_PhoneCalls/SrEntireDetection/Data/phone-calls.csv).
 
 ## Create a console application
 
-1. Create a C# **Console Application** called "PhoneCallsAnomalyDetection". Click the **Next** button.
+1. Create a C# **Console Application** called "PhoneCallsAnomalyDetection". Select **Next**.
 
-2. Choose .NET 6 as the framework to use. Click the **Create** button.
+2. Choose .NET 8 as the target framework. Select **Create**.
 
 3. Create a directory named *Data* in your project to save your data set files.
 
@@ -79,7 +79,7 @@ Add a new class to your project:
 
 1. In **Solution Explorer**, right-click the project, and then select **Add > New Item**.
 
-2. In the **Add New Item dialog box**, select **Class** and change the **Name** field to *PhoneCallsData.cs*. Then, select the **Add** button.
+2. In the **Add New Item dialog box**, select **Class** and change the **Name** field to *PhoneCallsData.cs*. Then, select **Add**.
 
    The *PhoneCallsData.cs* file opens in the code editor.
 
@@ -95,7 +95,7 @@ Add a new class to your project:
 
     `PhoneCallsData` specifies an input data class. The [LoadColumn](xref:Microsoft.ML.Data.LoadColumnAttribute.%23ctor%28System.Int32%29) attribute specifies which columns (by column index) in the dataset should be loaded. It has two attributes `timestamp` and `value` that correspond to the same attributes in the data file.
 
-    `PhoneCallsPrediction` specifies the prediction data class. For SR-CNN detector, the prediction depends on the [detect mode](xref:Microsoft.ML.TimeSeries.SrCnnDetectMode) specified. In this sample, we select the `AnomalyAndMargin` mode. The output contains seven columns. In most cases, `IsAnomaly`, `ExpectedValue`, `UpperBoundary`, and `LowerBoundary` are informative enough. They tell you if a point is an anomaly, the expected value of the point and the lower / upper boundary region of the point.
+    `PhoneCallsPrediction` specifies the prediction data class. For SR-CNN detector, the prediction depends on the [detect mode](xref:Microsoft.ML.TimeSeries.SrCnnDetectMode) specified. In this sample, you select the `AnomalyAndMargin` mode. The output contains seven columns. In most cases, `IsAnomaly`, `ExpectedValue`, `UpperBoundary`, and `LowerBoundary` are informative enough. They tell you if a point is an anomaly, the expected value of the point, and the lower and upper boundary region of the point.
 
 5. Add the following code to the line right below the `using` directives to specify the path to your data file:
 
@@ -117,7 +117,7 @@ Data in ML.NET is represented as an [IDataView interface](xref:Microsoft.ML.IDat
 
     [!code-csharp[LoadData](./snippets/phone-calls-anomaly-detection/csharp/Program.cs#LoadData "loading dataset")]
 
-    The [LoadFromTextFile()](xref:Microsoft.ML.TextLoaderSaverCatalog.LoadFromTextFile%60%601%28Microsoft.ML.DataOperationsCatalog,System.String,System.Char,System.Boolean,System.Boolean,System.Boolean,System.Boolean%29) defines the data schema and reads in the file. It takes in the data path variables and returns an `IDataView`.
+    The [LoadFromTextFile()](xref:Microsoft.ML.TextLoaderSaverCatalog.LoadFromTextFile``1%28Microsoft.ML.DataOperationsCatalog,System.String,System.Char,System.Boolean,System.Boolean,System.Boolean,System.Boolean%29) defines the data schema and reads in the file. It takes in the data path variables and returns an `IDataView`.
 
 ## Time series anomaly detection
 
@@ -129,7 +129,7 @@ In this tutorial, you will see that these procedures can be completed using two 
 
 ## Detect Period
 
-In the first step, we invoke the `DetectSeasonality` function to determine the period of the series.
+In the first step, you invoke the `DetectSeasonality` function to determine the period of the series.
 
 ### Create the DetectPeriod method
 
@@ -142,7 +142,7 @@ In the first step, we invoke the `DetectSeasonality` function to determine the p
     }
     ```
 
-2. Use the <xref:Microsoft.ML.TimeSeriesCatalog.DetectSeasonality%2A> function to detect period. Add it to the `DetectPeriod` method with the following code:
+2. Use the <xref:Microsoft.ML.TimeSeriesCatalog.DetectSeasonality*> function to detect period. Add it to the `DetectPeriod` method with the following code:
 
     [!code-csharp[DetectSeasonality](./snippets/phone-calls-anomaly-detection/csharp/Program.cs#DetectSeasonality)]
 
@@ -168,7 +168,7 @@ Period of the series is: 7.
 
 ## Detect Anomaly
 
-In this step, you use the <xref:Microsoft.ML.TimeSeriesCatalog.DetectEntireAnomalyBySrCnn%2A> method to find anomalies.
+In this step, you use the <xref:Microsoft.ML.TimeSeriesCatalog.DetectEntireAnomalyBySrCnn*> method to find anomalies.
 
 ### Create the DetectAnomaly method
 

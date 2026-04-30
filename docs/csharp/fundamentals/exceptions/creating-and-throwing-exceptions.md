@@ -22,22 +22,22 @@ Programmers should throw exceptions when one or more of the following conditions
 
   :::code language="csharp" source="snippets/exceptions/ProgramLog.cs" ID="ProgramLog":::
 
-- When an argument to a method causes an exception. In this case, the original exception should be caught and an <xref:System.ArgumentException> instance should be created. The original exception should be passed to the constructor of the <xref:System.ArgumentException> as the <xref:System.Exception.InnerException%2A> parameter:
+- When an argument to a method causes an exception. In this case, the original exception should be caught and an <xref:System.ArgumentException> instance should be created. The original exception should be passed to the constructor of the <xref:System.ArgumentException> as the <xref:System.Exception.InnerException*> parameter:
 
   :::code language="csharp" source="snippets/exceptions/Program.cs" ID="InvalidArg":::
 
   > [!NOTE]
   > The preceding example shows how to use the `InnerException` property. It's intentionally simplified. In practice, you should check that an index is in range before using it. You could use this technique of wrapping an exception when a member of a parameter throws an exception you couldn't anticipate before calling the member.
 
-Exceptions contain a property named <xref:System.Exception.StackTrace%2A>. This string contains the name of the methods on the current call stack, together with the file name and line number where the exception was thrown for each method. A <xref:System.Exception.StackTrace%2A> object is created automatically by the common language runtime (CLR) from the point of the `throw` statement, so that exceptions must be thrown from the point where the stack trace should begin.
+Exceptions contain a property named <xref:System.Exception.StackTrace*>. This string contains the name of the methods on the current call stack, together with the file name and line number where the exception was thrown for each method. A <xref:System.Exception.StackTrace*> object is created automatically by the common language runtime (CLR) from the point of the `throw` statement, so that exceptions must be thrown from the point where the stack trace should begin.
 
-All exceptions contain a property named <xref:System.Exception.Message%2A>. This string should be set to explain the reason for the exception. Information that is sensitive to security shouldn't be put in the message text. In addition to <xref:System.Exception.Message%2A>, <xref:System.ArgumentException> contains a property named <xref:System.ArgumentException.ParamName%2A> that should be set to the name of the argument that caused the exception to be thrown. In a property setter, <xref:System.ArgumentException.ParamName%2A> should be set to `value`.
+All exceptions contain a property named <xref:System.Exception.Message*>. This string should be set to explain the reason for the exception. Information that is sensitive to security shouldn't be put in the message text. In addition to <xref:System.Exception.Message*>, <xref:System.ArgumentException> contains a property named <xref:System.ArgumentException.ParamName*> that should be set to the name of the argument that caused the exception to be thrown. In a property setter, <xref:System.ArgumentException.ParamName*> should be set to `value`.
 
 Public and protected methods throw exceptions whenever they can't complete their intended functions. The exception class thrown is the most specific exception available that fits the error conditions. These exceptions should be documented as part of the class functionality, and derived classes or updates to the original class should retain the same behavior for backward compatibility.
 
-## Things to avoid when throwing exceptions
+## Things to consider when throwing exceptions
 
-The following list identifies practices to avoid when throwing exceptions:
+The following list identifies practices to consider when throwing exceptions:
 
 - Don't use exceptions to change the flow of a program as part of ordinary execution. Use exceptions to report and handle error conditions.
 - Exceptions shouldn't be returned as a return value or parameter instead of being thrown.
@@ -46,7 +46,7 @@ The following list identifies practices to avoid when throwing exceptions:
 
 ## Exceptions in task-returning methods
 
-Methods declared with the `async` modifier have some special considerations when it comes to exceptions. Exceptions thrown in an `async` method are stored in the returned task and don't emerge until, for example, the task is awaited. For more information about stored exceptions, see [Asynchronous exceptions](../../asynchronous-programming/index.md#asynchronous-exceptions).
+Methods declared with the `async` modifier have some special considerations when it comes to exceptions. Exceptions thrown in an `async` method are stored in the returned task and don't emerge until, for example, the task is awaited. For more information about stored exceptions, see [Asynchronous exceptions](../../asynchronous-programming/index.md#handle-asynchronous-exceptions).
 
 We recommend that you validate arguments and throw any corresponding exceptions, such as <xref:System.ArgumentException> and <xref:System.ArgumentNullException>, before entering the asynchronous parts of your methods. That is, these validation exceptions should emerge synchronously before the work starts. The following code snippet shows an example where, if the exceptions are thrown, the <xref:System.ArgumentException> exceptions would emerge synchronously, whereas the <xref:System.InvalidOperationException> would be stored in the returned task.
 
@@ -54,7 +54,7 @@ We recommend that you validate arguments and throw any corresponding exceptions,
 
 ## Define exception classes
 
-Programs can throw a predefined exception class in the <xref:System> namespace (except where previously noted), or create their own exception classes by deriving from <xref:System.Exception>. The derived classes should define at least three constructors: one parameterless constructor, one that sets the message property, and one that sets both the <xref:System.Exception.Message%2A> and <xref:System.Exception.InnerException%2A> properties. For example:
+Programs can throw a predefined exception class in the <xref:System> namespace (except where previously noted), or create their own exception classes by deriving from <xref:System.Exception>. The derived classes should define at least three constructors: one parameterless constructor, one that sets the message property, and one that sets both the <xref:System.Exception.Message*> and <xref:System.Exception.InnerException> properties. For example:
 
 :::code language="csharp" source="snippets/exceptions/InvalidDepartmentException.cs" ID="DefineExceptionClass":::
 

@@ -1,28 +1,28 @@
 ---
-title: What's new in the SDK for .NET 9
-description: Learn about the new .NET SDK features introduced in .NET 9, including for unit testing, terminal logger, tool roll-forward, and build script analyzers.
+title: What's new in the SDK and tooling for .NET 9
+description: Learn about the new .NET SDK features introduced in .NET 9, including for unit testing, Terminal Logger, tool roll-forward, and build script analyzers.
 titleSuffix: ""
-ms.date: 09/09/2024
-ms.topic: whats-new
+ms.date: 11/11/2024
+ms.update-cycle: 3650-days
 ---
 
-# What's new in the SDK for .NET 9
+# What's new in the SDK and tooling for .NET 9
 
-This article describes new features in the .NET SDK for .NET 9. It's been updated for .NET RC 1.
+This article describes new features in the .NET SDK and tooling for .NET 9.
 
 ## Unit testing
 
-This section describes the updates to unit testing in .NET 9: running tests in parallel, and terminal logger test output.
+This section describes the updates to unit testing in .NET 9: running tests in parallel, and Terminal Logger test output.
 
 ### Run tests in parallel
 
 In .NET 9, `dotnet test` is more fully integrated with MSBuild. Because MSBuild supports [building in parallel](/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild), you can run tests for the same project across different target frameworks in parallel. By default, MSBuild limits the number of parallel processes to the number of processors on the computer. You can also set your own limit using the [-maxcpucount](/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild#-maxcpucount-switch) switch. If you want to opt out of the parallelism, set the `TestTfmsInParallel` MSBuild property to `false`.
 
-### Terminal logger test display
+### Terminal Logger test display
 
-Test result reporting for [`dotnet test`](../../tools/dotnet-test.md) is now supported directly in the MSBuild terminal logger. You get more fully featured test reporting both _while_ tests are running (displays the running test name) and _after_ tests are completed (any test errors are rendered in a better way).
+Test result reporting for [`dotnet test`](../../tools/dotnet-test.md) is now supported directly in MSBuild Terminal Logger. You get more fully featured test reporting both _while_ tests are running (displays the running test name) and _after_ tests are completed (any test errors are rendered in a better way).
 
-For more information about the terminal logger, see [dotnet build options](../../tools/dotnet-build.md#options).
+For more information about Terminal Logger, see [dotnet build options](../../tools/dotnet-build.md#options).
 
 ## .NET tool roll-forward
 
@@ -30,13 +30,13 @@ For more information about the terminal logger, see [dotnet build options](../..
 
 A new option for [`dotnet tool install`](../../tools/dotnet-tool-install.md) lets _users_ decide how .NET tools should be run. When you install a tool via `dotnet tool install`, or when you run tool via [`dotnet tool run <toolname>`](../../tools/dotnet-tool-run.md), you can specify a new flag called `--allow-roll-forward`. This option configures the tool with roll-forward mode `Major`. This mode allows the tool to run on a newer major version of .NET if the matching .NET version is not available. This feature helps early adopters use .NET tools without tool authors having to change any code.
 
-## Terminal logger
+## Terminal Logger
 
-The terminal logger is now [enabled by default](#enabled-by-default) and also has [improved usability](#usability).
+Terminal Logger is now [enabled by default](#enabled-by-default) and also has [improved usability](#usability).
 
 ### Enabled by default
 
-Starting in .NET 9, the default experience for all .NET CLI commands that use MSBuild is terminal logger, the enhanced logging experience that was released in .NET 8. This new output uses the capabilities of modern terminals to provide functionality like:
+Starting in .NET 9, the default experience for all .NET CLI commands that use MSBuild is Terminal Logger, the enhanced logging experience that was released in .NET 8. This new output uses the capabilities of modern terminals to provide functionality like:
 
 - Clickable links
 - Duration timers for MSBuild tasks
@@ -44,9 +44,9 @@ Starting in .NET 9, the default experience for all .NET CLI commands that use MS
 
 The output is more condensed and usable than the existing MSBuild console logger.
 
-The new logger attempts to auto-detect if it can be used, but you can also manually control whether terminal logger is used. Specify the `--tl:off` command-line option to disable terminal logger for a specific command. Or, to disable terminal logger more broadly, set the `MSBUILDTERMINALLOGGER` environment variable to `off`.
+The new logger attempts to auto-detect if it can be used, but you can also manually control whether Terminal Logger is used. Specify the `--tl:off` command-line option to disable Terminal Logger for a specific command. Or, to disable Terminal Logger more broadly, set the `MSBUILDTERMINALLOGGER` environment variable to `off`.
 
-The set of commands that uses terminal logger by default is:
+The set of commands that uses Terminal Logger by default is:
 
 - `build`
 - `clean`
@@ -58,7 +58,7 @@ The set of commands that uses terminal logger by default is:
 
 ### Usability
 
-The terminal logger now summarizes the total count of failures and warnings at the end of a build. It also shows errors that contain newlines. (For more information about the terminal logger, see ['dotnet build' options](../../tools/dotnet-build.md#options), specifically the `--tl` option.)
+Terminal Logger now summarizes the total count of failures and warnings at the end of a build. It also shows errors that contain newlines. (For more information about Terminal Logger, see ['dotnet build' options](../../tools/dotnet-build.md#options), specifically the `--tl` option.)
 
 Consider the following project file that emits a warning when the project is built:
 
@@ -109,11 +109,13 @@ Build succeeded with 3 warning(s) in 0.8s
 
 The message lines of the warning no longer have the repeated project and location information that clutter the display. In addition, the build summary shows how many warnings (and errors, if there are any) were generated during the build.
 
-If you have feedback about the terminal logger, you can provide it in the [MSBuild repository](https://github.com/dotnet/msbuild/issues).
+If you have feedback about Terminal Logger, you can provide it in the [MSBuild repository](https://github.com/dotnet/msbuild/issues).
 
-## NuGet security audits
+## Faster NuGet dependency resolution for large repos
 
-Starting in .NET 8, `dotnet restore` [audits NuGet package references for known vulnerabilities](../../tools/dotnet-restore.md#audit-for-security-vulnerabilities). In .NET 9, the default mode has changed from auditing only _direct_ package references to auditing both _direct_ and _transitive_ package references.
+The NuGet dependency resolver has been overhauled to improve performance and scalability for all `<PackageReference>` projects. Enabled by default, the new algorithm speeds up restore operations without compromising on functionality, strictly adhering to the core dependency resolution rules.
+
+If you encounter any issues, such as restore failures or unexpected package versions, you can [revert to the legacy resolver](/nuget/consume-packages/Package-References-in-Project-Files#nuget-dependency-resolver).
 
 ## MSBuild script analyzers ("BuildChecks")
 
@@ -200,3 +202,19 @@ Requirements (depending on your environment):
 ### Environment variable naming
 
 Environment variables that the container publish tooling uses to control some of the finer aspects of registry communication and security now start with the prefix `DOTNET` instead of `SDK`. The `SDK` prefix will continue to be supported in the near term.
+
+## Code analysis
+
+.NET 9 includes several new code analyzers and fixers to help verify that you're using .NET library APIs correctly and efficiently. The following table summarizes the new analyzers.
+
+| Rule ID | Category | Description |
+|---------|----------|-------------|
+| [CA1514: Avoid redundant length argument](../../../fundamentals/code-analysis/quality-rules/ca1514.md) | Maintainability | An explicitly calculated length argument can be error-prone and is unnecessary when you're slicing to the end of a string or buffer. |
+| [CA1515: Consider making public types internal](../../../fundamentals/code-analysis/quality-rules/ca1515.md) | Maintainability | Types inside an executable assembly should be declared as `internal`. |
+| [CA1871: Do not pass a nullable struct to 'ArgumentNullException.ThrowIfNull'](../../../fundamentals/code-analysis/quality-rules/ca1871.md) | Performance | For improved performance, it's better to check the `HasValue` property and manually throw an exception than to pass a nullable struct to `ArgumentNullException.ThrowIfNull`. |
+| [CA1872: Prefer 'Convert.ToHexString' and 'Convert.ToHexStringLower' over call chains based on 'BitConverter.ToString'](../../../fundamentals/code-analysis/quality-rules/ca1872.md) | Performance | Use <xref:System.Convert.ToHexString*?displayProperty=nameWithType> or <xref:System.Convert.ToHexStringLower*?displayProperty=nameWithType> when encoding bytes to a hexadecimal string representation. |
+| [CA2022: Avoid inexact read with Stream.Read](../../../fundamentals/code-analysis/quality-rules/ca2022.md) | Reliability | A call to `Stream.Read` might return fewer bytes than requested, resulting in unreliable code if the return value isn't checked. |
+| [CA2262: Set 'MaxResponseHeadersLength' properly](../../../fundamentals/code-analysis/quality-rules/ca2262.md) | Usage | The <xref:System.Net.Http.HttpClientHandler.MaxResponseHeadersLength?displayProperty=nameWithType> property is measured in kilobytes, not bytes. |
+| [CA2263: Prefer generic overload when type is known](../../../fundamentals/code-analysis/quality-rules/ca2263.md) | Usage | Generic overloads are preferable to overloads that accept an argument of type <xref:System.Type?displayProperty=fullName> when the type is known at compile time. |
+| [CA2264: Do not pass a non-nullable value to 'ArgumentNullException.ThrowIfNull'](../../../fundamentals/code-analysis/quality-rules/ca2264.md) | Usage | Certain constructs like non-nullable structs (except for <xref:System.Nullable`1>), 'nameof()' expressions, and 'new' expressions are known to never be null, so `ArgumentNullException.ThrowIfNull` will never throw. |
+| [CA2265: Do not compare `Span<T>` to null or default](../../../fundamentals/code-analysis/quality-rules/ca2265.md) | Usage | Comparing a span to `null` or `default` might not do what you intended. `default` and the `null` literal are implicitly converted to <xref:System.Span`1.Empty?displayProperty=nameWithType>. Remove the redundant comparison or make the code more explicit by using `IsEmpty`. |

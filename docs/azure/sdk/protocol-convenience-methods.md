@@ -1,9 +1,9 @@
 ---
 title: Understand Azure SDK client library method types
 description: Learn about the key differences between protocol and convenience methods in the Azure SDK client libraries for .NET.
-ms.topic: conceptual
+ms.topic: concept-article
 ms.custom: devx-track-dotnet, engagement-fy23, devx-track-arm-template
-ms.date: 08/30/2024
+ms.date: 04/25/2025
 ---
 
 # Azure SDK for .NET protocol and convenience methods overview
@@ -34,7 +34,7 @@ The following table compares some of the request and response types used by prot
 | Request body                  | <xref:Azure.Core.RequestContent> | <xref:System.ClientModel.BinaryContent>               |
 | Advanced request options      | <xref:Azure.RequestContext>      | <xref:System.ClientModel.Primitives.RequestOptions>   |
 | Raw HTTP response             | <xref:Azure.Response>            | <xref:System.ClientModel.Primitives.PipelineResponse> |
-| Return type with output model | <xref:Azure.Response%601>        | <xref:System.ClientModel.ClientResult%601>            |
+| Return type with output model | <xref:Azure.Response`1>        | <xref:System.ClientModel.ClientResult`1>            |
 
 The sections ahead provide implementation examples of these concepts.
 
@@ -69,7 +69,7 @@ The preceding code demonstrates the following `Azure.Core` protocol method patte
 1. **Invoke the protocol method**, using a `RequestContext` object to configure request options.
 1. **Handle the response** by reading:
     - The HTTP status code from the `Response` object to determine success or failure.
-    - Data from the `Response` object's content into a [dynamic](../../csharp/advanced-topics/interop/using-type-dynamic.md) type using <xref:Azure.AzureCoreExtensions.ToDynamicFromJson%2A>. For more information, see [Announcing dynamic JSON in the Azure Core library for .NET](https://devblogs.microsoft.com/azure-sdk/dynamic-json-in-azure-core/).
+    - Data from the `Response` object's content into a [dynamic](../../csharp/advanced-topics/interop/using-type-dynamic.md) type using <xref:Azure.AzureCoreExtensions.ToDynamicFromJson*>. For more information, see [Announcing dynamic JSON in the Azure Core library for .NET](https://devblogs.microsoft.com/azure-sdk/dynamic-json-in-azure-core/).
 
 > [!NOTE]
 > The preceding code configures the [ErrorOptions.NoThrow](/dotnet/api/azure.erroroptions) behavior. This option prevents non-success service responses status codes from throwing an exception, which means the app code should manually handle the response status code checks.
@@ -95,7 +95,7 @@ The preceding code demonstrates the following `System.ClientModel` convenience m
 
 The following code uses a `ChatClient` to call the `CompleteChat` protocol method:
 
-:::code source="snippets/protocol-convenience-methods/SCM/Protocol/Program.cs" highlight="26-31":::
+:::code source="snippets/protocol-convenience-methods/SCM/Protocol/Program.cs" highlight="31-34":::
 
 The preceding code demonstrates the following `System.ClientModel` protocol method patterns:
 
@@ -126,6 +126,20 @@ PipelineResponse response = result.GetRawResponse();
 + var message = output.Choices[0].Message;
 + Console.WriteLine($"[{message.Role}]: {message.Content}");
 ```
+
+---
+
+## Handle exceptions
+
+When a service call fails, the service client throws an exception that exposes the HTTP status code and the details of the service response, if available. A `System.ClientModel`-dependent library throws a <xref:System.ClientModel.ClientResultException>, while an `Azure.Core`-dependent library throws a <xref:Azure.RequestFailedException>.
+
+# [System.ClientModel exceptions](#tab/system-clientmodel)
+
+:::code source="snippets/protocol-convenience-methods/AzureCore/ExceptionHandling/Program.cs" highlight="21-24":::
+
+# [Azure.Core exceptions](#tab/azure-core)
+
+:::code source="snippets/protocol-convenience-methods/SCM/ExceptionHandling/Program.cs" highlight="17-20":::
 
 ---
 

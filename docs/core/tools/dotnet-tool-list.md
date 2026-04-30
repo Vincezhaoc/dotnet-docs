@@ -1,11 +1,11 @@
 ---
 title: dotnet tool list command
 description: The dotnet tool list command lists the .NET tools that are installed on your machine.
-ms.date: 02/14/2020
+ms.date: 10/28/2025
 ---
 # dotnet tool list
 
-**This article applies to:** ✔️ .NET Core 3.1 SDK and later versions
+**This article applies to:** ✔️ .NET 6 SDK and later versions
 
 ## Name
 
@@ -48,7 +48,7 @@ The `dotnet tool list` command provides a way for you to list .NET global, tool-
 
   Lists user-wide global tools. Can't be combined with the `--tool-path` option. Omitting both `--global` and `--tool-path` lists local tools.
 
-[!INCLUDE [help](../../../includes/cli-help.md)]
+- [!INCLUDE [help](includes/cli-help.md)]
 
 - **`--local`**
 
@@ -78,11 +78,11 @@ The `dotnet tool list` command provides a way for you to list .NET global, tool-
 
 - **`dotnet tool list -g dotnetsay`**
 
-  Lists the global tool with the package id [dotnetsay](https://www.nuget.org/packages/dotnetsay/)
+  Lists the global tool with the package ID [dotnetsay](https://www.nuget.org/packages/dotnetsay/)
 
 - **`dotnet tool list dotnetsay`**
 
-  Lists the local tool with the package id [dotnetsay](https://www.nuget.org/packages/dotnetsay/)
+  Lists the local tool with the package ID [dotnetsay](https://www.nuget.org/packages/dotnetsay/)
 
 ## See also
 

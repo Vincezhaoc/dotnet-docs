@@ -12,7 +12,7 @@ Grains (virtual actors) are the base building blocks of an Orleans-based applica
 
 ## Suitable apps
 
-Orleans should be considered when:
+Consider Orleans when:
 
 - Significant number (hundreds, millions, billions, and even trillions) of loosely coupled entities. To put the number in perspective, Orleans can easily create a grain for every person on Earth in a small cluster, so long as a subset of that total number is active at any point in time.
   - Examples: user profiles, purchase orders, application/game sessions, stocks.
@@ -49,7 +49,7 @@ Orleans is not the best fit when:
   - Direct memory use is significantly less expensive than message passing.
   - Highly chatty grains may be better combined as a single grain.
   - Complexity/Size of arguments and serialization needs to be considered.
-    - Deserializing twice may be more expensive than resending a binary message.
+  - Deserializing twice may be more expensive than resending a binary message.
 - Avoid bottleneck grains.
   - Single coordinator/Registry/Monitor.
   - Do staged aggregation if required.
@@ -60,10 +60,10 @@ Orleans is not the best fit when:
 - [await](/dotnet/csharp/programming-guide/concepts/async/) is the best syntax to use when composing async operations.
 - Common Scenarios:
   - Return a concrete value:
-    - `return Task.FromResult(value);`
-  - Return a `Task` of the same type:
-    - `return foo.Bar();`
-  - `await` a `Task` and continue execution:
+  - `return Task.FromResult(value);`
+  - Return a <xref:System.Threading.Tasks.Task> of the same type:
+  - `return foo.Bar();`
+  - `await` a <xref:System.Threading.Tasks.Task> and continue execution:
 
     ```csharp
     var x = await bar.Foo();
@@ -97,10 +97,10 @@ Orleans is not the best fit when:
   - Example: Performs well with staged aggregation within local silo first.
 - Grains are non-reentrant by default.
   - Deadlock can occur due to call cycles.
-    - Examples:
-      - The grain calls itself.
-      - Grain A calls B which calls C which in turn is calling A (A -> B -> C -> A).
-      - Grain A calls Grain B as Grain B is calling Grain A (A -> B -> A).
+  - Examples:
+  - The grain calls itself.
+  - Grain A calls B which calls C which in turn is calling A (A -> B -> C -> A).
+  - Grain A calls Grain B as Grain B is calling Grain A (A -> B -> A).
   - Timeouts are used to automatically break deadlocks.
   - <xref:Orleans.Concurrency.ReentrantAttribute> can be used to allow the grain class reentrant.
   - Reentrant is still single-threaded however, it may interleave (divide processing/memory between tasks).
@@ -116,17 +116,17 @@ Orleans' grain state persistence APIs are designed to be easy-to-use and provide
 extensible storage functionality.
 
 - <xref:Orleans.IGrainState?displayProperty=nameWithType> is extended by a .NET interface that contains fields that should be included in the grain's persisted state.
-- Grains are persisted by using [IPersistentState\<TState\>](../grains/grain-persistence/index.md) is extended by the grain class that adds a strongly typed `State` property into the grain's base class.
-- The initial <xref:Orleans.Grain%601.ReadStateAsync?displayProperty=nameWithType> automatically occurs before `ActiveAsync()` has been called for a grain.
-- When the grain's state object's data is changed, then the grain should call <xref:Orleans.Grain%601.WriteStateAsync?displayProperty=nameWithType>.
+- Grains are persisted by using [IPersistentState\<TState\>](../grains/grain-persistence/index.md) is extended by the grain class that adds a strongly typed <xref:Orleans.Grain`1.State> property into the grain's base class.
+- The initial <xref:Orleans.Grain`1.ReadStateAsync?displayProperty=nameWithType> automatically occurs before `ActiveAsync()` has been called for a grain.
+- When the grain's state object's data is changed, then the grain should call <xref:Orleans.Grain`1.WriteStateAsync?displayProperty=nameWithType>.
   - Typically, grains call `State.WriteStateAsync()` at the end of grain method to return the Write promise.
   - The Storage provider *could* try to batch Writes that may increase efficiency, but behavioral contracts and configurations are orthogonal (independent) to the storage API used by the grain.
   - A **timer** is an alternative method to write updates periodically.
-    - The timer allows the application to determine the amount of "eventual consistency"/statelessness allowed.
-    - Timing (immediate/none/minutes) can also be controlled as to when to update.
+  - The timer allows the application to determine the amount of "eventual consistency"/statelessness allowed.
+  - Timing (immediate/none/minutes) can also be controlled as to when to update.
   - <xref:Orleans.Runtime.PersistentStateAttribute> decorated classes, like other grain classes, can only be associated with one storage provider.
-    - [StorageProvider(ProviderName = "name")](xref:Orleans.Providers.StorageProviderAttribute) attribute associates the grain class with a particular provider.
-    - `<StorageProvider>` will need to be added to the silo config file which should also include the corresponding "name" from `[StorageProvider(ProviderName="name")]`.
+  - [StorageProvider(ProviderName = "name")](xref:Orleans.Providers.StorageProviderAttribute) attribute associates the grain class with a particular provider.
+  - `<StorageProvider>` will need to be added to the silo config file which should also include the corresponding "name" from `[StorageProvider(ProviderName="name")]`.
 
 ## Storage providers
 
@@ -147,7 +147,7 @@ Built-in storage providers:
 - TraceOverride Verbose3 will log much more information about storage
     operations.
   - Update silo config file.
-    - LogPrefix="Storage" for all providers, or specific type using "Storage.Memory" / "Storage.Azure" / "Storage.Shard".
+  - LogPrefix="Storage" for all providers, or specific type using "Storage.Memory" / "Storage.Azure" / "Storage.Shard".
 
 How to deal with storage operation failures:
 
@@ -168,7 +168,7 @@ External changing data:
 - Grains can re-read the current state data from storage by using `State.ReadStateAsync()`.
 - A timer can also be used to re-read data from storage periodically as well.
   - The functional requirements could be based on a suitable "staleness" of the information.
-    - Example: Content cache grain.
+  - Example: Content cache grain.
 
 - Adding and removing fields.
   - The storage provider will determine the effects of adding and removing additional fields from their persisted state.
@@ -177,7 +177,7 @@ External changing data:
 Writing custom providers:
 
 - Storage providers are simple to write which is also a significant extension element for Orleans.
-- The API <xref:Orleans.GrainState> API contract drives the storage API contract (`Write`, `Clear`, `ReadStateAsync`).
+- The API <xref:Orleans.GrainState> API contract drives the storage API contract (`Write`, `Clear`, <xref:Orleans.Grain`1.ReadStateAsync*>).
 - The storage behavior is typically configurable (Batch writing, Hard or Soft Deletions, and so on) and defined by the storage provider.
 
 ## Cluster management
@@ -191,7 +191,7 @@ Writing custom providers:
   - Grains can timeout. A retry solution such as Polly can assist with retries.
   - Orleans provides a message delivery guarantee where each message is delivered at-most-once.
   - It is the responsibility of the caller to [retry](https://github.com/App-vNext/Polly/wiki/Retry) any failed calls if needed.
-    - Common practice is to retry from end-to-end from the client/front end.
+  - Common practice is to retry from end-to-end from the client/front end.
 
 ## Deployment and production management
 

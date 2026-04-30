@@ -2,15 +2,13 @@
 title: What's new in .NET 6
 description: Learn about the new features introduced in .NET 6.
 ms.date: 11/08/2021
-ms.topic: whats-new
-ms.author: gewarren
-author: gewarren
+ms.update-cycle: 3650-days
 ---
 # What's new in .NET 6
 
 .NET 6 delivers the final parts of the .NET unification plan that started with [.NET 5](dotnet-5.md). .NET 6 unifies the SDK, base libraries, and runtime across mobile, desktop, IoT, and cloud apps. In addition to this unification, the .NET 6 ecosystem offers:
 
-- **Simplified development**: Getting started is easy. New language features in [C# 10](../../csharp/whats-new/csharp-10.md) reduce the amount of code you need to write. And investments in the web stack and minimal APIs make it easy to quickly write smaller, faster microservices.
+- **Simplified development**: Getting started is easy. New language features in [C# 10](../../csharp/whats-new/csharp-version-history.md#c-version-10) reduce the amount of code you need to write. And investments in the web stack and minimal APIs make it easy to quickly write smaller, faster microservices.
 
 - **Better performance**: .NET 6 is the fastest full stack web framework, which lowers compute costs if you're running in the cloud.
 
@@ -20,7 +18,7 @@ author: gewarren
 
 *Preview* features are disabled by default. They are also not supported for use in production and may be removed in a future version. The new <xref:System.Runtime.Versioning.RequiresPreviewFeaturesAttribute> is used to annotate preview APIs, and a corresponding analyzer alerts you if you're using these preview APIs.
 
-.NET 6 is supported by Visual Studio 2022 and Visual Studio 2022 for Mac (and later versions).
+.NET 6 is supported by Visual Studio 2022 and later versions.
 
 This article does not cover all of the new features of .NET 6. To see all of the new features, and for further information about the features listed in this article, see the [Announcing .NET 6](https://devblogs.microsoft.com/dotnet/announcing-net-6) blog post.
 
@@ -54,7 +52,7 @@ The .NET 6 release includes support for macOS Arm64 (or "Apple Silicon") and Win
 
 ## C# 10 and templates
 
-C# 10 includes innovations such as `global using` directives, file-scoped namespace declarations, and record structs. For more information, see [What's new in C# 10](../../csharp/whats-new/csharp-10.md).
+C# 10 includes innovations such as `global using` directives, file-scoped namespace declarations, and record structs. For more information, see [C# Language version history](../../csharp/whats-new/csharp-version-history.md#c-version-10).
 
 In concert with that work, the .NET SDK project templates for C# have been modernized to use some of the new language features:
 
@@ -94,7 +92,7 @@ Many improvements have been made in <xref:System.Text.Json?displayProperty=fullN
 
 ### Source generator
 
-.NET 6 adds a new [source generator](../../csharp/roslyn-sdk/source-generators-overview.md) for <xref:System.Text.Json?displayProperty=fullName>. Source generation works with <xref:System.Text.Json.JsonSerializer> and can be configured in multiple ways. It can improve performance, reduce memory usage, and facilitate assembly trimming. For more information, see [How to choose reflection or source generation in System.Text.Json](../../standard/serialization/system-text-json/source-generation-modes.md) and [How to use source generation in System.Text.Json](../../standard/serialization/system-text-json/source-generation.md).
+.NET 6 adds a new [source generator](../../csharp/roslyn-sdk/index.md#source-generators) for <xref:System.Text.Json?displayProperty=fullName>. Source generation works with <xref:System.Text.Json.JsonSerializer> and can be configured in multiple ways. It can improve performance, reduce memory usage, and facilitate assembly trimming. For more information, see [How to choose reflection or source generation in System.Text.Json](../../standard/serialization/system-text-json/source-generation-modes.md) and [How to use source generation in System.Text.Json](../../standard/serialization/system-text-json/source-generation.md).
 
 ### Writeable DOM
 
@@ -109,7 +107,7 @@ For more information, see [JSON DOM choices](../../standard/serialization/system
 
 ### IAsyncEnumerable serialization
 
-<xref:System.Text.Json?displayProperty=fullName> now supports serialization and deserialization with <xref:System.Collections.Generic.IAsyncEnumerable%601> instances. Asynchronous serialization methods enumerate any <xref:System.Collections.Generic.IAsyncEnumerable%601> instances in an object graph and then serialize them as JSON arrays. For deserialization, the new method <xref:System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable%60%601(System.IO.Stream,System.Text.Json.JsonSerializerOptions,System.Threading.CancellationToken)?displayProperty=nameWithType> was added. For more information, see [IAsyncEnumerable serialization](../compatibility/serialization/6.0/iasyncenumerable-serialization.md).
+<xref:System.Text.Json?displayProperty=fullName> now supports serialization and deserialization with <xref:System.Collections.Generic.IAsyncEnumerable`1> instances. Asynchronous serialization methods enumerate any <xref:System.Collections.Generic.IAsyncEnumerable`1> instances in an object graph and then serialize them as JSON arrays. For deserialization, the new method <xref:System.Text.Json.JsonSerializer.DeserializeAsyncEnumerable``1(System.IO.Stream,System.Text.Json.JsonSerializerOptions,System.Threading.CancellationToken)?displayProperty=nameWithType> was added. For more information, see [IAsyncEnumerable serialization](../compatibility/serialization/6.0/iasyncenumerable-serialization.md).
 
 ### Other new APIs
 
@@ -130,7 +128,7 @@ New property ordering attribute:
 
 New method to write "raw" JSON:
 
-- <xref:System.Text.Json.Utf8JsonWriter.WriteRawValue%2A?displayProperty=nameWithType>
+- <xref:System.Text.Json.Utf8JsonWriter.WriteRawValue*?displayProperty=nameWithType>
 
   For more information, see [Write Raw JSON](../../standard/serialization/system-text-json/use-utf8jsonwriter.md#write-raw-json).
 
@@ -138,12 +136,12 @@ Synchronous serialization and deserialization to a stream:
 
 - <xref:System.Text.Json.JsonSerializer.Deserialize(System.IO.Stream,System.Type,System.Text.Json.JsonSerializerOptions)?displayProperty=nameWithType>
 - <xref:System.Text.Json.JsonSerializer.Deserialize(System.IO.Stream,System.Type,System.Text.Json.Serialization.JsonSerializerContext)?displayProperty=nameWithType>
-- <xref:System.Text.Json.JsonSerializer.Deserialize%60%601(System.IO.Stream,System.Text.Json.JsonSerializerOptions)?displayProperty=nameWithType>
-- <xref:System.Text.Json.JsonSerializer.Deserialize%60%601(System.IO.Stream,System.Text.Json.Serialization.Metadata.JsonTypeInfo{%60%600})?displayProperty=nameWithType>
+- <xref:System.Text.Json.JsonSerializer.Deserialize``1(System.IO.Stream,System.Text.Json.JsonSerializerOptions)?displayProperty=nameWithType>
+- <xref:System.Text.Json.JsonSerializer.Deserialize``1(System.IO.Stream,System.Text.Json.Serialization.Metadata.JsonTypeInfo{``0})?displayProperty=nameWithType>
 - <xref:System.Text.Json.JsonSerializer.Serialize(System.IO.Stream,System.Object,System.Type,System.Text.Json.JsonSerializerOptions)?displayProperty=nameWithType>
 - <xref:System.Text.Json.JsonSerializer.Serialize(System.IO.Stream,System.Object,System.Type,System.Text.Json.Serialization.JsonSerializerContext)?displayProperty=nameWithType>
-- <xref:System.Text.Json.JsonSerializer.Serialize%60%601(System.IO.Stream,%60%600,System.Text.Json.JsonSerializerOptions)?displayProperty=nameWithType>
-- <xref:System.Text.Json.JsonSerializer.Serialize%60%601(System.IO.Stream,%60%600,System.Text.Json.Serialization.Metadata.JsonTypeInfo{%60%600})?displayProperty=nameWithType>
+- <xref:System.Text.Json.JsonSerializer.Serialize``1(System.IO.Stream,``0,System.Text.Json.JsonSerializerOptions)?displayProperty=nameWithType>
+- <xref:System.Text.Json.JsonSerializer.Serialize``1(System.IO.Stream,``0,System.Text.Json.Serialization.Metadata.JsonTypeInfo{``0})?displayProperty=nameWithType>
 
 New option to ignore an object when a reference cycle is detected during serialization:
 
@@ -165,10 +163,10 @@ ASP.NET Core includes improvements in minimal APIs, ahead-of-time (AOT) compilat
 
 .NET 6 brings improved support for [OpenTelemetry](https://opentelemetry.io/), which is a collection of tools, APIs, and SDKs that help you analyze your software's performance and behavior. APIs in the <xref:System.Diagnostics.Metrics?displayProperty=fullName> namespace implement the [OpenTelemetry Metrics API specification](https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/api.md). For example, there are four instrument classes to support different metrics scenarios. The instrument classes are:
 
-- <xref:System.Diagnostics.Metrics.Counter%601>
-- <xref:System.Diagnostics.Metrics.Histogram%601>
-- <xref:System.Diagnostics.Metrics.ObservableCounter%601>
-- <xref:System.Diagnostics.Metrics.ObservableGauge%601>
+- <xref:System.Diagnostics.Metrics.Counter`1>
+- <xref:System.Diagnostics.Metrics.Histogram`1>
+- <xref:System.Diagnostics.Metrics.ObservableCounter`1>
+- <xref:System.Diagnostics.Metrics.ObservableGauge`1>
 
 ## Security
 
@@ -180,7 +178,7 @@ W^X is available all operating systems with .NET 6 but only enabled by default o
 
 ## IL trimming
 
-Trimming of self-contained deployments is improved. In .NET 5, only unused assemblies were trimmed. .NET 6 adds trimming of unused types and members too. In addition, trim warnings, which alert you to places where trimming may remove code that's used at run time, are now *enabled* by default. For more information, see [Trim self-contained deployments and executables](../deploying/trimming/trim-self-contained.md).
+Trimming of self-contained deployments is improved. In .NET 5, only unused assemblies were trimmed. .NET 6 adds trimming of unused types and members too. In addition, trim warnings, which alert you to places where trimming may remove code that's used at runtime, are now *enabled* by default. For more information, see [Trim self-contained deployments and executables](../deploying/trimming/trim-self-contained.md).
 
 ## Code analysis
 
@@ -207,7 +205,7 @@ The *source tarball*, which contains all the source for the .NET SDK, is now a p
 
 ## Target framework monikers
 
-Additional OS-specific target framework monikers (TFMs) have been added for .NET 6, for example, `net6.0-android`, `net6.0-ios`, and `net6.0-macos`. For more information, see [.NET 5+ OS-specific TFMs](../../standard/frameworks.md#net-5-os-specific-tfms).
+Additional OS-specific target framework monikers (TFMs) have been added for .NET 6, for example, `net6.0-android`, `net6.0-ios`, and `net6.0-macos`. For more information, see [OS-specific TFMs](../../standard/frameworks.md#os-specific-tfms).
 
 ## Generic math
 
@@ -239,9 +237,9 @@ Several extensions namespaces have improvements in .NET 6, as the following tabl
 
 | Namespace | Improvements |
 | - | - |
-| <xref:Microsoft.Extensions.DependencyInjection?displayProperty=fullName> | <xref:Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.CreateAsyncScope%2A> lets you safely use a `using` statement for a service provider that registers an <xref:System.IAsyncDisposable> service. |
-| <xref:Microsoft.Extensions.Hosting?displayProperty=fullName> | New <xref:Microsoft.Extensions.Hosting.HostingHostBuilderExtensions.ConfigureHostOptions%2A> methods simplify application setup. |
-| <xref:Microsoft.Extensions.Logging?displayProperty=fullName> | <xref:Microsoft.Extensions.Logging?displayProperty=fullName> has a new source generator for performant logging APIs. The source generator is triggered if you add the new <xref:Microsoft.Extensions.Logging.LoggerMessageAttribute> to a `partial` logging method. At compile time, the generator generates the implementation of the `partial` method, which is typically faster at run time than existing logging solutions. For more information, see [Compile-time logging source generation](../extensions/logger-message-generator.md). |
+| <xref:Microsoft.Extensions.DependencyInjection?displayProperty=fullName> | <xref:Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.CreateAsyncScope*> lets you safely use a `using` statement for a service provider that registers an <xref:System.IAsyncDisposable> service. |
+| <xref:Microsoft.Extensions.Hosting?displayProperty=fullName> | New <xref:Microsoft.Extensions.Hosting.HostingHostBuilderExtensions.ConfigureHostOptions*> methods simplify application setup. |
+| <xref:Microsoft.Extensions.Logging?displayProperty=fullName> | <xref:Microsoft.Extensions.Logging?displayProperty=fullName> has a new source generator for performant logging APIs. The source generator is triggered if you add the new <xref:Microsoft.Extensions.Logging.LoggerMessageAttribute> to a `partial` logging method. At compile time, the generator generates the implementation of the `partial` method, which is typically faster at runtime than existing logging solutions. For more information, see [Compile-time logging source generation](../extensions/logging/source-generation.md). |
 
 ## New LINQ APIs
 
@@ -249,31 +247,30 @@ Numerous LINQ methods have been added in .NET 6. Most of the new methods listed 
 
 | Method | Description |
 | - | - |
-| <xref:System.Linq.Enumerable.TryGetNonEnumeratedCount%60%601(System.Collections.Generic.IEnumerable{%60%600},System.Int32@)?displayProperty=nameWithType> | Attempts to determine the number of elements in a sequence without forcing an enumeration. |
-| <xref:System.Linq.Enumerable.Chunk%60%601(System.Collections.Generic.IEnumerable{%60%600},System.Int32)?displayProperty=nameWithType> | Splits the elements of a sequence into chunks of a specified size. |
-| <xref:System.Linq.Enumerable.MaxBy%2A?displayProperty=nameWithType> and <xref:System.Linq.Enumerable.MinBy%2A?displayProperty=nameWithType> | Finds maximal or minimal elements using a key selector. |
-| <xref:System.Linq.Enumerable.DistinctBy%2A?displayProperty=nameWithType>, <xref:System.Linq.Enumerable.ExceptBy%2A?displayProperty=nameWithType>, <xref:System.Linq.Enumerable.IntersectBy%2A?displayProperty=nameWithType>, and <xref:System.Linq.Enumerable.UnionBy%2A?displayProperty=nameWithType> | These new variations of methods that perform set-based operations let you specify equality using a key selector function. |
-| <xref:System.Linq.Enumerable.ElementAt%60%601(System.Collections.Generic.IEnumerable{%60%600},System.Index)?displayProperty=nameWithType> and <xref:System.Linq.Enumerable.ElementAtOrDefault%60%601(System.Collections.Generic.IEnumerable{%60%600},System.Index)?displayProperty=nameWithType> | Accepts indexes counted from the beginning or end of the sequence&mdash;for example, `Enumerable.Range(1, 10).ElementAt(^2)` returns `9`. |
-| <xref:System.Linq.Enumerable.FirstOrDefault%60%601(System.Collections.Generic.IEnumerable{%60%600},%60%600)?displayProperty=nameWithType> and <xref:System.Linq.Enumerable.FirstOrDefault%60%601(System.Collections.Generic.IEnumerable{%60%600},System.Func{%60%600,System.Boolean},%60%600)?displayProperty=nameWithType><br/><xref:System.Linq.Enumerable.LastOrDefault%60%601(System.Collections.Generic.IEnumerable{%60%600},%60%600)?displayProperty=nameWithType> and <xref:System.Linq.Enumerable.LastOrDefault%60%601(System.Collections.Generic.IEnumerable{%60%600},System.Func{%60%600,System.Boolean},%60%600)?displayProperty=nameWithType><br/><xref:System.Linq.Enumerable.SingleOrDefault%60%601(System.Collections.Generic.IEnumerable{%60%600},%60%600)?displayProperty=nameWithType> and <xref:System.Linq.Enumerable.SingleOrDefault%60%601(System.Collections.Generic.IEnumerable{%60%600},System.Func{%60%600,System.Boolean},%60%600)?displayProperty=nameWithType> | New overloads let you specify a default value to use if the sequence is empty. |
-| <xref:System.Linq.Enumerable.Max%60%601(System.Collections.Generic.IEnumerable{%60%600},System.Collections.Generic.IComparer{%60%600})?displayProperty=nameWithType> and <xref:System.Linq.Enumerable.Min%60%601(System.Collections.Generic.IEnumerable{%60%600},System.Collections.Generic.IComparer{%60%600})?displayProperty=nameWithType> | New overloads let you specify a comparer. |
-| <xref:System.Linq.Enumerable.Take%60%601(System.Collections.Generic.IEnumerable{%60%600},System.Range)?displayProperty=nameWithType> | Accepts a <xref:System.Range> argument to simplify taking a slice of a sequence&mdash;for example, you can use `source.Take(2..7)` instead of `source.Take(7).Skip(2)`. |
-| <xref:System.Linq.Enumerable.Zip%60%603(System.Collections.Generic.IEnumerable{%60%600},System.Collections.Generic.IEnumerable{%60%601},System.Collections.Generic.IEnumerable{%60%602})?displayProperty=nameWithType> | Produces a sequence of tuples with elements from *three* specified sequences. |
+| <xref:System.Linq.Enumerable.TryGetNonEnumeratedCount``1(System.Collections.Generic.IEnumerable{``0},System.Int32@)?displayProperty=nameWithType> | Attempts to determine the number of elements in a sequence without forcing an enumeration. |
+| <xref:System.Linq.Enumerable.Chunk``1(System.Collections.Generic.IEnumerable{``0},System.Int32)?displayProperty=nameWithType> | Splits the elements of a sequence into chunks of a specified size. |
+| <xref:System.Linq.Enumerable.MaxBy*?displayProperty=nameWithType> and <xref:System.Linq.Enumerable.MinBy*?displayProperty=nameWithType> | Finds maximal or minimal elements using a key selector. |
+| <xref:System.Linq.Enumerable.DistinctBy*?displayProperty=nameWithType>, <xref:System.Linq.Enumerable.ExceptBy*?displayProperty=nameWithType>, <xref:System.Linq.Enumerable.IntersectBy*?displayProperty=nameWithType>, and <xref:System.Linq.Enumerable.UnionBy*?displayProperty=nameWithType> | These new variations of methods that perform set-based operations let you specify equality using a key selector function. |
+| <xref:System.Linq.Enumerable.ElementAt``1(System.Collections.Generic.IEnumerable{``0},System.Index)?displayProperty=nameWithType> and <xref:System.Linq.Enumerable.ElementAtOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Index)?displayProperty=nameWithType> | Accepts indexes counted from the beginning or end of the sequence&mdash;for example, `Enumerable.Range(1, 10).ElementAt(^2)` returns `9`. |
+| <xref:System.Linq.Enumerable.FirstOrDefault``1(System.Collections.Generic.IEnumerable{``0},``0)?displayProperty=nameWithType> and <xref:System.Linq.Enumerable.FirstOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean},``0)?displayProperty=nameWithType><br/><xref:System.Linq.Enumerable.LastOrDefault``1(System.Collections.Generic.IEnumerable{``0},``0)?displayProperty=nameWithType> and <xref:System.Linq.Enumerable.LastOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean},``0)?displayProperty=nameWithType><br/><xref:System.Linq.Enumerable.SingleOrDefault``1(System.Collections.Generic.IEnumerable{``0},``0)?displayProperty=nameWithType> and <xref:System.Linq.Enumerable.SingleOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean},``0)?displayProperty=nameWithType> | New overloads let you specify a default value to use if the sequence is empty. |
+| <xref:System.Linq.Enumerable.Max``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IComparer{``0})?displayProperty=nameWithType> and <xref:System.Linq.Enumerable.Min``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IComparer{``0})?displayProperty=nameWithType> | New overloads let you specify a comparer. |
+| <xref:System.Linq.Enumerable.Take``1(System.Collections.Generic.IEnumerable{``0},System.Range)?displayProperty=nameWithType> | Accepts a <xref:System.Range> argument to simplify taking a slice of a sequence&mdash;for example, you can use `source.Take(2..7)` instead of `source.Take(7).Skip(2)`. |
+| <xref:System.Linq.Enumerable.Zip``3(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2})?displayProperty=nameWithType> | Produces a sequence of tuples with elements from *three* specified sequences. |
 
 ## Date, time, and time zone improvements
 
 The following two structs were added in .NET 6: <xref:System.DateOnly?displayProperty=fullName> and <xref:System.TimeOnly?displayProperty=fullName>. These represent the date part and the time part of a <xref:System.DateTime>, respectively. <xref:System.DateOnly> is useful for birthdays and anniversaries, and <xref:System.TimeOnly> is useful for daily alarms and weekly business hours.
 
-You can now use either Internet Assigned Numbers Authority (IANA) or Windows time zone IDs on any operating system that has time zone data installed. The <xref:System.TimeZoneInfo.FindSystemTimeZoneById(System.String)?displayProperty=nameWithType> method has been updated to automatically convert its input from a Windows time zone to an IANA time zone (or vice versa) if the requested time zone is not found on the system. In addition, the new methods <xref:System.TimeZoneInfo.TryConvertIanaIdToWindowsId(System.String,System.String@)> and <xref:System.TimeZoneInfo.TryConvertWindowsIdToIanaId%2A> have been added for scenarios when you still need to manually convert from one time zone format to another.
+You can now use either Internet Assigned Numbers Authority (IANA) or Windows time zone IDs on any operating system that has time zone data installed. The <xref:System.TimeZoneInfo.FindSystemTimeZoneById(System.String)?displayProperty=nameWithType> method has been updated to automatically convert its input from a Windows time zone to an IANA time zone (or vice versa) if the requested time zone is not found on the system. In addition, the new methods <xref:System.TimeZoneInfo.TryConvertIanaIdToWindowsId(System.String,System.String@)> and <xref:System.TimeZoneInfo.TryConvertWindowsIdToIanaId*> have been added for scenarios when you still need to manually convert from one time zone format to another.
 
 There are a few other time zone improvements as well. For more information, see [Date, Time, and Time Zone Enhancements in .NET 6](https://devblogs.microsoft.com/dotnet/date-time-and-time-zone-enhancements-in-net-6/).
 
 ## PriorityQueue class
 
-The new <xref:System.Collections.Generic.PriorityQueue%602> class represents a collection of items that have both a value and a priority. Items are dequeued in increasing priority order&mdash;that is, the item with the lowest priority value is dequeued first. This class implements a [min heap](https://en.wikipedia.org/wiki/Heap_(data_structure)) data structure.
+The new <xref:System.Collections.Generic.PriorityQueue`2> class represents a collection of items that have both a value and a priority. Items are dequeued in increasing priority order&mdash;that is, the item with the lowest priority value is dequeued first. This class implements a [min heap](https://en.wikipedia.org/wiki/Heap_(data_structure)) data structure.
 
 ## See also
 
-- [What's new in C# 10](../../csharp/whats-new/csharp-10.md)
 - [What's new in F# 6](../../fsharp/whats-new/fsharp-6.md)
 - [What's new in EF Core 6](/ef/core/what-is-new/ef-core-6.0/whatsnew)
 - [What's new in ASP.NET Core 6](/aspnet/core/release-notes/aspnetcore-6.0)

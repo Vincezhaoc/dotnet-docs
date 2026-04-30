@@ -49,6 +49,8 @@ You can also create `struct` tuples.  These also interoperate fully with C#7/Vis
 
 [!code-fsharp[Tuples](~/samples/snippets/fsharp/tour.fs#L205-L218)]
 
+The preceding sample demonstrates using pattern matching to deconstruct tuples in function parameters, such as `(struct(a, b))`, which extracts the individual elements. For more information about pattern matching and deconstructing tuples, see [Tuples](language-reference/tuples.md).
+
 It's important to note that because `struct` tuples are value types, they cannot be implicitly converted to reference tuples, or vice versa.  You must explicitly convert between a reference and struct tuple.
 
 ## Pipelines
@@ -120,7 +122,7 @@ Because DUs allow you to represent the recursive structure of the tree in the da
 
 [!code-fsharp[PatternMatching](~/samples/snippets/fsharp/tour.fs#L717-L743)]
 
-Something you may have noticed is the use of the `_` pattern.  This is known as the [Wildcard Pattern](language-reference/pattern-matching.md#wildcard-pattern), which is a way of saying "I don't care what something is".  Although convenient, you can accidentally bypass Exhaustive Pattern Matching and no longer benefit from compile-time enforcements if you aren't careful in using `_`.  It is best used when you don't care about certain pieces of a decomposed type when pattern matching, or the final clause when you have enumerated all meaningful cases in a pattern matching expression.
+The following sample introduces the `_` pattern, which you might have noticed before. This is known as the [Wildcard Pattern](language-reference/pattern-matching.md#wildcard-pattern), which is a way of saying "I don't care what something is". Although convenient, you can accidentally bypass Exhaustive Pattern Matching and no longer benefit from compile-time enforcements if you aren't careful in using `_`. It is best used when you don't care about certain pieces of a decomposed type when pattern matching, or the final clause when you have enumerated all meaningful cases in a pattern matching expression.
 
 In the following example, the `_` case is used when a parse operation fails.
 

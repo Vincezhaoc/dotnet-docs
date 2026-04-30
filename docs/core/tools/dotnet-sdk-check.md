@@ -5,7 +5,7 @@ ms.date: 06/30/2021
 ---
 # dotnet sdk check
 
-**This article applies to:** ✔️ .NET 6 and later versions
+**This article applies to:** ✔️ .NET 6 SDK and later versions
 
 ## Name
 
@@ -54,7 +54,7 @@ The latest versions of .NET can be installed from https://aka.ms/dotnet-core-dow
 
 ## Options
 
-[!INCLUDE [help](../../../includes/cli-help.md)]
+- [!INCLUDE [help](includes/cli-help.md)]
 
 ## Examples
 

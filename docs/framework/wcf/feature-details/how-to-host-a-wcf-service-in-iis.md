@@ -17,7 +17,7 @@ This topic outlines the basic steps required to create a Windows Communication F
 
 ### To create a service hosted by IIS
 
-1. Confirm that IIS is installed and running on your computer. For more information about installing and configuring IIS see [Installing and Configuring IIS 7.0](/iis/install/installing-iis-7/installing-necessary-iis-components-on-windows-vista)
+1. Confirm that IIS is installed and running on your computer. For more information about installing and configuring IIS see [Installing and Configuring IIS 7.0](/iis/install/installing-iis-7/installing-necessary-iis-components-on-windows-vista).
 
 2. Create a new folder for your application files called "IISHostedCalcService", ensure that ASP.NET has access to the contents of the folder, and use the IIS management tool to create a new IIS application that is physically located in this application directory. When creating an alias for the application directory use "IISHostedCalc".
 
@@ -56,7 +56,7 @@ This topic outlines the basic steps required to create a Windows Communication F
      [!code-csharp[c_HowTo_HostInIIS#12](../../../../samples/snippets/csharp/VS_Snippets_CFX/c_howto_hostiniis/cs/source.cs#12)]
      [!code-vb[c_HowTo_HostInIIS#12](../../../../samples/snippets/visualbasic/VS_Snippets_CFX/c_howto_hostiniis/vb/source.vb#12)]
 
-10. Create a file named "Web.config" in the application directory and add the following configuration code into the file. At run time, the WCF infrastructure uses the information to construct an endpoint that client applications can communicate with.
+10. Create a file named "Web.config" in the application directory and add the following configuration code into the file. At runtime, the WCF infrastructure uses the information to construct an endpoint that client applications can communicate with.
 
      [!code-xml[c_HowTo_HostInIIS#100](../../../../samples/snippets/csharp/VS_Snippets_CFX/c_howto_hostiniis/common/web.config#100)]
 

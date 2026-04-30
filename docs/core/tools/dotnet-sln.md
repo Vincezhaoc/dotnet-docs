@@ -1,15 +1,15 @@
 ---
 title: dotnet sln command
 description: The dotnet-sln command provides a convenient option to add, remove, and list projects in a solution file.
-ms.date: 05/18/2022
+ms.date: 10/28/2025
 ---
 # dotnet sln
 
-**This article applies to:** ✔️ .NET Core 3.1 SDK and later versions
+**This article applies to:** ✔️ .NET 6 SDK and later versions
 
 ## Name
 
-`dotnet sln` - Lists or modifies the projects in a .NET solution file.
+`dotnet sln` - Lists or modifies the projects in a .NET solution file, or migrates the file to an *.slnx* file.
 
 ## Synopsis
 
@@ -27,35 +27,47 @@ The `dotnet sln` command provides a convenient way to list and modify projects i
 
 To use the `dotnet sln` command, the solution file must already exist. If you need to create one, use the [dotnet new](dotnet-new.md) command with the `sln` template name.
 
-The following example creates a *.sln* file in the current folder, with the same name as the folder:
+The following example creates an *.slnx* file in the current folder, with the same name as the folder:
 
 ```dotnetcli
 dotnet new sln
 ```
 
-The following example creates a *.sln* file in the current folder, with the specified file name:
+The following example creates an *.slnx* file in the current folder, with the specified file name:
 
 ```dotnetcli
 dotnet new sln --name MySolution
 ```
 
-The following example creates a *.sln* file in the specified folder, with the same name as the folder:
+The following example creates an *.slnx* file in the specified folder, with the same name as the folder:
 
 ```dotnetcli
 dotnet new sln --output MySolution
 ```
 
+> [!NOTE]
+> In .NET 9 and earlier versions, `dotnet new sln` creates an *.sln* file instead of an *.slnx* file.
+
 ## Arguments
 
 - **`SOLUTION_FILE`**
 
-  The solution file to use. If this argument is omitted, the command searches the current directory for one. If it finds no solution file or multiple solution files, the command fails.
+  The solution file to use (either an *.sln* or *.slnx* file).
+
+  If unspecified, the command searches the current directory for an *.sln* or *.slnx* file and, if it finds exactly one, uses that file. If multiple solution files are found, the user is prompted to specify a file explicitly. If none are found, the command fails.
 
 ## Options
 
-[!INCLUDE [help](../../../includes/cli-help.md)]
+- [!INCLUDE [help](includes/cli-help.md)]
 
 ## Commands
+
+The following commands are available:
+
+- [`list`](#list)
+- [`add`](#add)
+- [`remove`](#remove)
+- [`migrate`](#migrate)
 
 ### `list`
 
@@ -71,11 +83,15 @@ dotnet sln list [-h|--help]
 
 - **`SOLUTION_FILE`**
 
-  The solution file to use. If this argument is omitted, the command searches the current directory for one. If it finds no solution file or multiple solution files, the command fails.
+  The solution file (*.sln* or *.slnx* file) or [solution filter](/visualstudio/msbuild/solution-filters) (*.slnf* file) to use.
+
+  If unspecified, the command searches the current directory for an *.sln*, *.slnx*, or *.slnf* file and, if it finds exactly one, uses that file. If multiple solution files or filters are found, the user is prompted to specify a file explicitly. If none are found, the command fails.
+
+  (Support for *.slnf* files was added in .NET SDK 9.0.3xx.)
 
 #### Options
 
-[!INCLUDE [help](../../../includes/cli-help.md)]
+- [!INCLUDE [help](includes/cli-help.md)]
 
 ### `add`
 
@@ -92,7 +108,9 @@ dotnet sln add [-h|--help]
 
 - **`SOLUTION_FILE`**
 
-  The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.
+  The solution file to use (either an *.sln* or *.slnx* file).
+
+  If unspecified, the command searches the current directory for an *.sln* or *.slnx* file and, if it finds exactly one, uses that file. If multiple solution files are found, the user is prompted to specify a file explicitly. If none are found, the command fails.
 
 - **`PROJECT_PATH`**
 
@@ -110,7 +128,7 @@ dotnet sln add [-h|--help]
 
 #### Options
 
-[!INCLUDE [help](../../../includes/cli-help.md)]
+- [!INCLUDE [help](includes/cli-help.md)]
 
 - **`--in-root`**
 
@@ -127,7 +145,7 @@ Removes a project or multiple projects from the solution file.
 #### Synopsis
 
 ```dotnetcli
-dotnet sln [<SOLUTION_FILE>] remove <PROJECT_PATH> [<PROJECT_PATH>...]
+dotnet sln [<SOLUTION_FILE>] remove <PROJECT_PATH|PROJECT_NAME> [<PROJECT_PATH|PROJECT_NAME>...]
 dotnet sln [<SOLUTION_FILE>] remove [-h|--help]
 ```
 
@@ -135,22 +153,51 @@ dotnet sln [<SOLUTION_FILE>] remove [-h|--help]
 
 - **`SOLUTION_FILE`**
 
-  The solution file to use. If it is unspecified, the command searches the current directory for one and fails if there are multiple solution files.
+  The solution file to use (either an *.sln* or *.slnx* file).
 
-- **`PROJECT_PATH`**
+  If unspecified, the command searches the current directory for an *.sln* or *.slnx* file and, if it finds exactly one, uses that file. If multiple solution files are found, the user is prompted to specify a file explicitly. If none are found, the command fails.
 
-  The path to the project or projects to remove from the solution. Unix/Linux shell [globbing pattern](https://en.wikipedia.org/wiki/Glob_(programming)) expansions are processed correctly by the `dotnet sln` command.
+- **`PROJECT_PATH` or `PROJECT_NAME`**
+
+  The path to, or name of, the project or projects to remove from the solution. Unix/Linux shell [globbing pattern](https://en.wikipedia.org/wiki/Glob_(programming)) expansions are processed correctly by the `dotnet sln` command.
+
+  If a project name is provided instead of a path, the project in the solution that matches the name, regardless of its path, is removed. If more than one matching project is found in the solution, the command errors out. Omit the project file extension in the name. (Support for removing projects by name was added in .NET 10.)
 
 #### Options
 
-[!INCLUDE [help](../../../includes/cli-help.md)]
+- [!INCLUDE [help](includes/cli-help.md)]
+
+### `migrate`
+
+Generates an *.slnx* solution file from an *.sln* file.
+
+#### Synopsis
+
+```dotnetcli
+dotnet sln [<SOLUTION_FILE>] migrate
+dotnet sln [<SOLUTION_FILE>] migrate [-h|--help]
+```
+
+#### Arguments
+
+- **`SOLUTION_FILE`**
+
+  The *.sln* solution file to migrate.
+
+  If unspecified, the command searches the current directory for an *.sln* file and, if it finds exactly one, uses that file. If multiple *.sln* files are found, the user is prompted to specify a file explicitly. If none are found, the command fails.
+
+  If you specify an *.slnx* file instead of an *.sln* file, or if an *.slnx* file with the same file name (minus the *.sln* extension) already exists in the directory, the command fails.
+
+#### Options
+
+- [!INCLUDE [help](includes/cli-help.md)]
 
 ## Examples
 
 - List the projects in a solution:
 
   ```dotnetcli
-  dotnet sln todo.sln list
+  dotnet sln todo.slnx list
   ```
 
 - Add a C# project to a solution:
@@ -168,43 +215,49 @@ dotnet sln [<SOLUTION_FILE>] remove [-h|--help]
 - Add multiple C# projects to the root of a solution:
 
   ```dotnetcli
-  dotnet sln todo.sln add todo-app/todo-app.csproj back-end/back-end.csproj --in-root
+  dotnet sln todo.slnx add todo-app/todo-app.csproj back-end/back-end.csproj --in-root
   ```
 
 - Add multiple C# projects to a solution:
 
   ```dotnetcli
-  dotnet sln todo.sln add todo-app/todo-app.csproj back-end/back-end.csproj
+  dotnet sln todo.slnx add todo-app/todo-app.csproj back-end/back-end.csproj
   ```
 
 - Remove multiple C# projects from a solution:
 
   ```dotnetcli
-  dotnet sln todo.sln remove todo-app/todo-app.csproj back-end/back-end.csproj
+  dotnet sln todo.slnx remove todo-app/todo-app.csproj back-end/back-end.csproj
   ```
 
 - Add multiple C# projects to a solution using a globbing pattern (Unix/Linux only):
 
   ```dotnetcli
-  dotnet sln todo.sln add **/*.csproj
+  dotnet sln todo.slnx add **/*.csproj
   ```
 
 - Add multiple C# projects to a solution using a globbing pattern (Windows PowerShell only):
 
   ```dotnetcli
-  dotnet sln todo.sln add (ls -r **/*.csproj)
+  dotnet sln todo.slnx add (ls -r **/*.csproj)
   ```
 
 - Remove multiple C# projects from a solution using a globbing pattern (Unix/Linux only):
 
   ```dotnetcli
-  dotnet sln todo.sln remove **/*.csproj
+  dotnet sln todo.slnx remove **/*.csproj
   ```
 
 - Remove multiple C# projects from a solution using a globbing pattern (Windows PowerShell only):
 
   ```dotnetcli
-  dotnet sln todo.sln remove (ls -r **/*.csproj)
+  dotnet sln todo.slnx remove (ls -r **/*.csproj)
+  ```
+
+- Generate an *.slnx* file from a *.sln* file:
+
+  ```dotnetcli
+  dotnet sln todo.sln migrate
   ```
 
 - Create a solution, a console app, and two class libraries. Add the projects to the solution, and use the `--solution-folder` option of `dotnet sln` to organize the class libraries into a solution folder.
@@ -214,9 +267,9 @@ dotnet sln [<SOLUTION_FILE>] remove [-h|--help]
   dotnet new console -o myapp
   dotnet new classlib -o mylib1
   dotnet new classlib -o mylib2
-  dotnet sln mysolution.sln add myapp\myapp.csproj
-  dotnet sln mysolution.sln add mylib1\mylib1.csproj --solution-folder mylibs
-  dotnet sln mysolution.sln add mylib2\mylib2.csproj --solution-folder mylibs
+  dotnet sln mysolution.slnx add myapp\myapp.csproj
+  dotnet sln mysolution.slnx add mylib1\mylib1.csproj --solution-folder mylibs
+  dotnet sln mysolution.slnx add mylib2\mylib2.csproj --solution-folder mylibs
   ```
 
   The following screenshot shows the result in Visual Studio 2019 **Solution Explorer**:

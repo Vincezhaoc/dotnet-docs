@@ -1,7 +1,8 @@
 ---
 title: Strong naming and .NET libraries
 description: Best practice recommendations for strong naming .NET libraries.
-ms.date: 10/16/2018
+ms.date: 03/23/2026
+ai-usage: ai-assisted
 ---
 # Strong naming
 
@@ -22,7 +23,7 @@ The downside to strong naming is that .NET Framework on Windows enables strict l
 </configuration>
 ```
 
-When .NET developers complain about strong naming, what they're usually complaining about is strict assembly loading. Fortunately, this issue is isolated to .NET Framework. .NET 5+, .NET Core, Xamarin, UWP, and most other .NET implementations don't have strict assembly loading, which is the main downside of strong naming.
+When .NET developers complain about strong naming, what they're usually complaining about is strict assembly loading. Fortunately, this issue is isolated to .NET Framework. .NET 5+, .NET Core, UWP, and most other .NET implementations don't have strict assembly loading, which is the main downside of strong naming.
 
 One important aspect of strong naming on .NET Framework is that it's viral: a strong-named assembly can only reference other strong-named assemblies. If your library isn't strong named, then .NET Framework apps and libraries that need strong naming can't use it.
 
@@ -34,20 +35,26 @@ The benefits of strong naming on .NET Framework are:
 
 Strong naming has no benefits on .NET Core/5+. C# compiler produces CS8002 warning for strong-named assemblies referencing non-strong named assemblies. It is fine to suppress this warning for libraries that target .NET Core/5+ only.
 
-## Create strong named .NET libraries
+## When to strong name .NET libraries
 
-You should strong name your open-source .NET libraries if their targets include .NET Framework or .NET Standard. Strong naming is not required for libraries that target .NET Core/5+ only.
+Strong naming is not required for libraries that target .NET Core/5+ only. You should strong name your open-source .NET libraries if their targets include .NET Framework or .NET Standard.
 
 > [!NOTE]
 > This guidance is specific to publicly distributed .NET libraries, such as .NET libraries published on NuGet.org. Strong naming is not required by most .NET applications and should not be done by default.
 
-✔️ CONSIDER strong naming your library's assemblies.
+✔️ CONSIDER strong naming your library's assemblies if you only target .NET Framework or .NET Standard.
 
-✔️ CONSIDER adding the strong naming key to your source control system.
+> Strong naming has no impact on modern .NET runtimes. If your library only targets modern .NET, then you don't need to strong name your assemblies.
 
-> A publicly available key lets developers modify and recompile your library source code with the same key.
+> If you multi-target across .NET Framework/.NET Standard _and_ modern .NET, then you should strong name across all of your Target Frameworks.
+
+✔️ CONSIDER adding the strong naming key pair (public + private) to your source control system.
+
+> A publicly available key pair lets developers modify and recompile your library source code with the same key.
 >
-> You shouldn't make the strong naming key public if it has been used in the past to give special permissions in [partial-trust scenarios](/previous-versions/dotnet/framework/code-access-security/using-libraries-from-partially-trusted-code). Otherwise, you might compromise existing environments.
+> You shouldn't make the strong naming key pair public if it has been used in the past to give special permissions in [partial-trust scenarios](/previous-versions/dotnet/framework/code-access-security/using-libraries-from-partially-trusted-code). Otherwise, you might compromise existing environments.
+>
+> If you can't check in the public + private key pair, then check in the public key and use [public signing](../../csharp/language-reference/compiler-options/security.md#publicsign) for regular builds. Public signing still allows developers to recompile and use your library in most scenarios.
 
 > [!IMPORTANT]
 > When the identity of the publisher of the code is desired, [Authenticode](/windows-hardware/drivers/install/authenticode) and [NuGet Package Signing](/nuget/create-packages/sign-a-package) are recommended. Code Access Security (CAS) should not be used as a security mitigation.
@@ -63,6 +70,16 @@ You should strong name your open-source .NET libraries if their targets include 
 ❌ DO NOT publish strong-named and non-strong-named versions of your library. For example, `Contoso.Api` and `Contoso.Api.StrongNamed`.
 
 > Publishing two packages forks your developer eco-system. Also, if an application ends up depending on both packages the developer can encounter type name conflicts. As far as .NET is concerned they are different types in different assemblies.
+
+## Strong naming examples
+
+The following popular open-source .NET libraries use strong naming and have the key pair checked into source control. They can serve as references when you set up strong naming for your library:
+
+- [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) (MIT license) is strong-named and checks its key pair into source control.
+- [AutoMapper](https://github.com/AutoMapper/AutoMapper) (MIT license) is strong-named and checks its key pair into source control.
+- [NodaTime](https://github.com/nodatime/nodatime) (Apache 2.0 license) is strong-named and checks its key pair into source control.
+
+For more information about how the .NET team itself approaches strong naming across the runtime and core libraries, see [Strong Name Signing](https://github.com/dotnet/runtime/blob/main/docs/project/strong-name-signing.md) in the dotnet/runtime repository.
 
 >[!div class="step-by-step"]
 >[Previous](cross-platform-targeting.md)

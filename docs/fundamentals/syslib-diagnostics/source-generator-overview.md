@@ -1,7 +1,7 @@
 ---
 title: Analyzer diagnostics in .NET 6+
 description: Learn about analyzer diagnostics created by source generators in .NET 6 and later versions that produce SYSLIB compiler warnings.
-ms.date: 10/27/2023
+ms.date: 11/07/2025
 ---
 
 # Source-generator diagnostics in .NET 6+
@@ -30,7 +30,7 @@ The following table provides an index to the `SYSLIB1XXX` diagnostics in .NET 6 
 | [SYSLIB1008][1008] | One of the arguments to a logging method must implement the `Microsoft.Extensions.Logging.ILogger` interface |
 | [SYSLIB1009][1009] | Logging methods must be `static`                                                                             |
 | [SYSLIB1010][1010] | Logging methods must be `partial`                                                                            |
-| [SYSLIB1011][1011] | Logging methods cannot be generic                                                                            |
+| [SYSLIB1011][1011] | Logging methods cannot use the `allows ref struct` constraint                                                |
 | [SYSLIB1012][1012] | Redundant qualifier in logging message                                                                       |
 | [SYSLIB1013][1013] | Don't include exception parameters as templates in the logging message                                       |
 | [SYSLIB1014][1014] | Logging template has no corresponding method argument                                                        |
@@ -43,12 +43,12 @@ The following table provides an index to the `SYSLIB1XXX` diagnostics in .NET 6 
 | [SYSLIB1021][1021] | Multiple message-template item names differ only by case |
 | [SYSLIB1022][1022] | Can't have malformed format strings (for example, dangling curly braces) |
 | [SYSLIB1023][1023] | Generating more than six arguments is not supported |
-| SYSLIB1024 | Logging method argument uses unsupported `out` parameter modifier |
-| SYSLIB1025 | Multiple logging methods cannot use the same event name within a class |
-| SYSLIB1026 | C# language version not supported by the logging source generator. |
-| SYSLIB1027 | Primary constructor parameter of type Microsoft.Extensions.Logging.ILogger is hidden by a field |
-| SYSLIB1028 | (Reserved for logging.) |
-| SYSLIB1029 | (Reserved for logging.) |
+| [SYSLIB1024][1024] | Logging method argument uses unsupported `out` parameter modifier |
+| [SYSLIB1025][1025] | Multiple logging methods cannot use the same event name within a class |
+| [SYSLIB1026][1026] | C# language version not supported by the logging source generator. |
+| [SYSLIB1027][1027] | Primary constructor parameter of type `Microsoft.Extensions.Logging.ILogger` is hidden by a field |
+| [SYSLIB1028][1028] | Logging method argument uses unsupported `params` or `scoped` parameter modifier |
+| [SYSLIB1029][1029] | Logging method parameter is a `ref struct` |
 | [SYSLIB1030][1030] | The `System.Text.Json` source generator did not generate serialization metadata for type |
 | [SYSLIB1031][1031] | The `System.Text.Json` source generator encountered a duplicate `JsonTypeInfo` property name |
 | [SYSLIB1032][1032] | The `System.Text.Json` source generator encountered a context class that is not partial |
@@ -118,7 +118,7 @@ The following table provides an index to the `SYSLIB1XXX` diagnostics in .NET 6 
 | [SYSLIB1096][1096] | Use `GeneratedComInterfaceAttribute` instead of `ComImportAttribute` to generate COM marshalling code at compile time. |
 | [SYSLIB1097][1097] | This type implements at least one type with the `GeneratedComInterfaceAttribute` attribute. Add the `GeneratedComClassAttribute` to enable passing this type to COM and exposing the COM interfaces for the types with the `GeneratedComInterfaceAttribute` from objects of this type. |
 | [SYSLIB1098][1098] | .NET COM hosting with `EnableComHosting` only supports built-in COM interop. It does not support source-generated COM interop with `GeneratedComInterfaceAttribute`. |
-| [SYSLIB1099][1099] | COM Interop APIs on `System.Runtime.InteropServices.Marshal` do not support source-generated COM and will fail at run time. |
+| [SYSLIB1099][1099] | COM Interop APIs on `System.Runtime.InteropServices.Marshal` do not support source-generated COM and will fail at runtime. |
 | [SYSLIB1100][1100] | Configuration binding generator: Type is not supported. |
 | [SYSLIB1101][1101] | Configuration binding generator: Property on type is not supported. |
 | [SYSLIB1102][1102] | Configuration binding generator: Project's language version must be at least C# 12. |
@@ -167,6 +167,7 @@ The following table provides an index to the `SYSLIB1XXX` diagnostics in .NET 6 
 | [SYSLIB1227][1227] | (Reserved for System.Text.Json.SourceGeneration.) |
 | [SYSLIB1228][1228] | (Reserved for System.Text.Json.SourceGeneration.) |
 | [SYSLIB1229][1229] | (Reserved for System.Text.Json.SourceGeneration.) |
+| [SYSLIB1230][1230] | Deriving from a `GeneratedComInterface`-attributed interface defined in another assembly is not supported. |
 
 <!-- Include adds ## Suppress warnings (H2 heading) -->
 [!INCLUDE [suppress-source-generator-diagnostics](includes/suppress-source-generator-diagnostics.md)]
@@ -193,6 +194,12 @@ The following table provides an index to the `SYSLIB1XXX` diagnostics in .NET 6 
 [1021]: syslib1021.md
 [1022]: syslib1022.md
 [1023]: syslib1023.md
+[1024]: syslib1024.md
+[1025]: syslib1025.md
+[1026]: syslib1026.md
+[1027]: syslib1027.md
+[1028]: syslib1028.md
+[1029]: syslib1029.md
 [1030]: syslib1030.md
 [1031]: syslib1031.md
 [1032]: syslib1032.md
@@ -253,16 +260,16 @@ The following table provides an index to the `SYSLIB1XXX` diagnostics in .NET 6 
 [1087]: syslib1070-1089.md
 [1088]: syslib1070-1089.md
 [1089]: syslib1070-1089.md
-[1090]: syslib1090-1099.md
-[1091]: syslib1090-1099.md
-[1092]: syslib1090-1099.md
-[1093]: syslib1090-1099.md
-[1094]: syslib1090-1099.md
-[1095]: syslib1090-1099.md
-[1096]: syslib1090-1099.md
-[1097]: syslib1090-1099.md
-[1098]: syslib1090-1099.md
-[1099]: syslib1090-1099.md
+[1090]: syslib-cominterfacegenerator.md
+[1091]: syslib-cominterfacegenerator.md
+[1092]: syslib-cominterfacegenerator.md
+[1093]: syslib-cominterfacegenerator.md
+[1094]: syslib-cominterfacegenerator.md
+[1095]: syslib-cominterfacegenerator.md
+[1096]: syslib-cominterfacegenerator.md
+[1097]: syslib-cominterfacegenerator.md
+[1098]: syslib-cominterfacegenerator.md
+[1099]: syslib-cominterfacegenerator.md
 [1100]: syslib1100-1118.md
 [1101]: syslib1100-1118.md
 [1102]: syslib1100-1118.md
@@ -311,3 +318,4 @@ The following table provides an index to the `SYSLIB1XXX` diagnostics in .NET 6 
 [1227]: syslib1220-1229.md
 [1228]: syslib1220-1229.md
 [1229]: syslib1220-1229.md
+[1230]: syslib1230.md

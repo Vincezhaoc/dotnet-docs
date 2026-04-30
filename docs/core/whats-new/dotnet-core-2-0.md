@@ -2,6 +2,7 @@
 title: What's new in .NET Core 2.0
 description: Learn about the new features found in .NET Core.
 ms.date: 08/13/2017
+ms.update-cycle: 3650-days
 ---
 # What's new in .NET Core 2.0
 
@@ -118,7 +119,7 @@ And with the [Windows Compatibility Pack](../porting/windows-compat-pack.md) por
 
 ## Visual Studio integration
 
-Visual Studio 2017 version 15.3 and in some cases Visual Studio for Mac offer a number of significant enhancements for .NET Core developers.
+Visual Studio 2017 version 15.3 offers a number of significant enhancements for .NET Core developers.
 
 ### Retargeting .NET Core apps and .NET Standard libraries
 
@@ -150,7 +151,6 @@ You can now install the .NET Core SDK independently of Visual Studio. This makes
 
 - [Microservices and Docker containers](../../architecture/microservices/index.md)
 - [Web applications with ASP.NET](../../architecture/modern-web-apps-azure/index.md)
-- [Mobile applications with Xamarin](/xamarin/xamarin-forms/enterprise-application-patterns/index)
 - [Applications that are deployed to the Cloud with Azure](/azure/architecture/reference-architectures/index)
 
 ## See also

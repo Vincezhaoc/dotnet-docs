@@ -15,6 +15,10 @@ process, which then makes several queries to a database. Using distributed traci
 engineers to distinguish if any of those steps failed, how long each step took, and potentially
 logging messages produced by each step as it ran.
 
+> [!NOTE]
+> The term 'tracing' can have multiple meanings in older .NET APIs. This document focuses on distributed tracing. For information
+> on logging and older tracing APIs, see [Logging and tracing](./logging-tracing.md).
+
 ## Getting started for .NET app developers
 
 Key .NET libraries are instrumented to produce distributed tracing information automatically. However, this information needs to be collected and stored so that it will be available for review later.
@@ -34,6 +38,10 @@ For more information, see [Understand distributed tracing concepts](distributed-
 - [Adding custom distributed trace instrumentation](distributed-tracing-instrumentation-walkthroughs.md)
 
 For third-party telemetry collection services, follow the setup instructions provided by the vendor.
+
+## Built-in activities emitted by .NET
+
+For a comprehensive list of activities built into .NET see [Built-in activities in .NET](distributed-tracing-builtin-activities.md).
 
 ## Getting started for .NET library developers
 

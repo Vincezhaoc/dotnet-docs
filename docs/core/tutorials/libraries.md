@@ -2,11 +2,12 @@
 title: Develop libraries with the .NET CLI
 description: Learn how to create .NET libraries using the .NET CLI. You'll create a library that supports multiple frameworks.
 ms.topic: how-to
-ms.date: 11/23/2021
+ms.date: 10/23/2025
+ai-usage: ai-assisted
 ---
 # Develop libraries with the .NET CLI
 
-This article covers how to write libraries for .NET using the .NET CLI. The CLI provides an efficient and low-level experience that works across any supported OS. You can still build libraries with Visual Studio, and if that is your preferred experience [refer to the Visual Studio guide](library-with-visual-studio.md).
+This article covers how to write libraries for .NET using the .NET CLI. The CLI provides an efficient and low-level experience that works across any supported OS. You can still build libraries with Visual Studio, and if that's your preferred experience [refer to the Visual Studio guide](create-class-library.md).
 
 ## Prerequisites
 
@@ -28,7 +29,7 @@ Additionally, if you wish to support older .NET Framework targets, you need to i
 
 ## How to target .NET 5+ or .NET Standard
 
-You control your project's target framework by adding it to your project file (*.csproj* or *.fsproj*). For guidance on how to choose between targeting .NET 5+ or .NET Standard see [.NET 5+ and .NET Standard](../../standard/net-standard.md#net-5-and-net-standard).
+You control your project's target framework by adding it to your project file (*.csproj* or *.fsproj*). For guidance on how to choose between targeting .NET 5+ or .NET Standard, see [.NET 5+ and .NET Standard](../../standard/net-standard.md#net-5-and-net-standard).
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -231,7 +232,7 @@ It's important to be able to test across platforms. You can use either [xUnit](h
 
    ```dotnetcli
    cd MyProject.Test
-   dotnet add reference ../MyProject/MyProject.csproj
+   dotnet reference add ../MyProject/MyProject.csproj
    ```
 
 1. Restore packages and build projects:
@@ -307,7 +308,7 @@ This will add the three projects above and a solution file that links them toget
 The best way to reference a project is to use the .NET CLI to add a project reference. From the **AwesomeLibrary.CSharp** and **AwesomeLibrary.FSharp** project directories, you can run the following command:
 
 ```dotnetcli
-dotnet add reference ../AwesomeLibrary.Core/AwesomeLibrary.Core.csproj
+dotnet reference add ../AwesomeLibrary.Core/AwesomeLibrary.Core.csproj
 ```
 
 The project files for both **AwesomeLibrary.CSharp** and **AwesomeLibrary.FSharp** will now reference **AwesomeLibrary.Core** as a `ProjectReference` target.  You can verify this by inspecting the project files and seeing the following in them:

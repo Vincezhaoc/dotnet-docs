@@ -1,7 +1,8 @@
 ---
 title: Interpolated strings
 description: Learn about interpolated strings, a special form of string that allows you to embed F# expressions directly inside them.
-ms.date: 11/12/2020
+ms.date: 10/01/2025
+ai-usage: ai-assisted
 ---
 
 # Interpolated strings
@@ -13,6 +14,8 @@ Interpolated strings are [strings](strings.md) that allow you to embed F# expres
 ```fsharp
 $"string-text {expr}"
 $"string-text %format-specifier{expr}"
+$@"string-text {expr}"
+@$"string-text {expr}"
 $"""string-text {"embedded string literal"}"""
 $$"""string-text %%format-specifier{{expr}}"""
 ```
@@ -31,6 +34,9 @@ printfn $"I think {3.0 + 0.14} is close to {System.Math.PI}!"
 
 The contents in between each `{}` brace pair can be any F# expression.
 
+For non-typed interpolated strings (without format specifiers), the expression is converted to a string using the `ToString()` method. If the expression evaluates to `null`, an empty string is used.
+
+For typed interpolated strings with format specifiers (such as `%s{expr}` or `%d{expr}`), the conversion follows the rules defined for that specific format specifier.
 To escape a `{}` brace pair, write two of them like so:
 
 ```fsharp
@@ -56,7 +62,29 @@ In the previous example, the code mistakenly passes the `age` value where `name`
 
 ## Verbatim interpolated strings
 
-F# supports verbatim interpolated strings with triple quotes so that you can embed string literals.
+F# supports verbatim interpolated strings in two ways:
+
+### Using `$@` or `@$` prefix
+
+You can combine the interpolation prefix `$` with the verbatim string prefix `@` in any order. Verbatim strings ignore escape sequences (except for `""` to represent a quotation mark) and can span multiple lines. This is especially useful when working with file paths or strings containing backslashes and quotes.
+
+```fsharp
+let name = "Alice"
+let path = @"C:\Users\Alice\Documents"
+
+// Using $@ prefix
+printfn $@"User {name} has files in: {path}"
+
+// Using @$ prefix (also valid)
+printfn @$"User {name} has files in: {path}"
+
+// Embedding quotes - use "" to represent a single "
+let message = $@"He said ""{name}"" is here"
+```
+
+### Using triple quotes
+
+F# also supports verbatim interpolated strings with triple quotes so that you can embed string literals without escaping.
 
 ```fsharp
 let age = 30
@@ -80,17 +108,17 @@ let data = [0..4]
 let output = $"The data is %A{data}"  // "The data is [0; 1; 2; 3; 4]"
 ```
 
-.NET-style specifiers are those usable with <xref:System.String.Format%2A?displayProperty=nameWithType>, placed after a `:` within the braces. For example:
+.NET-style specifiers are those usable with <xref:System.String.Format*?displayProperty=nameWithType>, placed after a `:` within the braces. For example:
 
 ```fsharp
 let pi = $"{System.Math.PI:N4}"  // "3.1416"
-let now = $"{System.DateTime.UtcNow:``yyyyMMdd``}" // e.g. "20220210"
+let now = $"{System.DateTime.UtcNow:``yyyyMMdd``}" // for example, "20220210"
 ```
 
 If a .NET-style specifier contains an unusual character, then it can be escaped using double-backticks:
 
 ```fsharp
-let nowDashes = $"{System.DateTime.UtcNow:``yyyy-MM-dd``}" // e.g. "2022-02-10"
+let nowDashes = $"{System.DateTime.UtcNow:``yyyy-MM-dd``}" // for example, "2022-02-10"
 ```
 
 ## Aligning expressions in interpolated strings

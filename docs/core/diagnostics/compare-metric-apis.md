@@ -30,8 +30,7 @@ Although this API was designed to work well with OpenTelemetry and its growing e
 ### PerformanceCounter
 
 <xref:System.Diagnostics.PerformanceCounter?displayProperty=nameWithType> APIs are the oldest .NET metric APIs. They're only supported on Windows and provide
-a managed wrapper for Windows OS [Performance Counter](/windows/win32/perfctrs/performance-counters-portal)
-technology. They are available in all supported versions of .NET.
+a managed wrapper for Windows OS [Performance Counter](/windows/win32/perfctrs/performance-counters-portal) technology. They are available in all supported versions of .NET.
 
 These APIs are provided primarily for compatibility; the .NET team
 considers this a stable area that's unlikely to receive further improvement aside from bug fixes. These APIs are not suggested
@@ -59,5 +58,5 @@ Most application performance monitoring (APM) vendors such as [AppDynamics](http
 [Application Insights](/azure/azure-monitor/app/app-insights-overview),
 [DataDog](https://www.datadoghq.com/), [DynaTrace](https://www.dynatrace.com/), and
 [NewRelic](https://newrelic.com/) include metrics APIs as part of their instrumentation libraries.
-[Prometheus](https://github.com/prometheus-net/prometheus-net) and [AppMetrics](https://www.app-metrics.io/) are also popular .NET OSS projects.
+[Prometheus](https://github.com/prometheus-net/prometheus-net) and [AppMetrics](https://github.com/AppMetrics/AppMetrics) are also popular .NET OSS projects.
 To learn more about these projects, check the various project websites.

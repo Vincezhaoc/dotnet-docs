@@ -1,92 +1,99 @@
 ---
-title: "Agents and Copilots Bring Automation and Interactive Assistance to Your App"
-description: "Learn how agents and copilots intelligently extend the functionality of LLMs to automatically meet user goals in .NET."
-author: catbutler
-ms.topic: concept-article #Don't change.
-ms.date: 04/15/2024
-
-#customer intent: As a .NET developer, I want to understand how agents and copilots extend the functionality of LLMs, so that my apps can handle any type of content and automatically meet user goals.
-
+title: Agents
+description: Introduction to agents
+author: luisquintanilla
+ms.author: luquinta
+ms.date: 12/10/2025
+ms.topic: concept-article
 ---
 
-# How agents and copilots work with LLMs
+# Agents
 
-Agents and copilots both extend an LLM's capabilities by intelligently invoking external functionality, such as sending an email.
+This article introduces the core concepts behind agents, why they matter, and how they fit into workflows, setting you up to get started building agents in .NET.
 
-- An *agent* is an artificial intelligence that can answer questions and automate processes for users. Agents can determine which functions will meet a user's goal, and then call those functions on the user's behalf.
-- A *copilot* is a type of agent that works side-by-side with a user. Unlike an agent, a copilot isn't fully automated&mdash;it relies on user interaction. A copilot can help a user complete a task by providing suggestions and recommendations.
+## What are agents?
 
-For example, suppose you're building an email chat helper app. Along with the LLM, you'll also need a plugin to perform email-related actions, as well as plugins for searching, summarizing, determining intent, and the like. You can use [native functions](/semantic-kernel/agents/plugins/using-the-kernelfunction-decorator?tabs=Csharp#creating-your-native-functions), [out-of-the-box plugins](/semantic-kernel/agents/plugins/out-of-the-box-plugins?tabs=Csharp), and your own [custom plugins](/semantic-kernel/agents/plugins/?tabs=Csharp#adding-functions-to-plugins).
+**Agents are systems that accomplish objectives.**
 
-Creating the plugins is only half the battle: you still need to invoke the right functions at the right time, a process that can be error-prone and inefficient. An agent can handle it better.
+![Components of an agent](../media/agents/agent-components.png)
 
-An agent automatically decides what sequence of functions an LLM can use to reach a user goal. For example, suppose you have a chat app that reviews new inbox items and determines what action each item requires. If you set up an agent, it can orchestrate the necessary plugin functions and perform the steps automatically.
+Agents become more capable when equipped with the following:
 
-## Components of an agent
+- **Reasoning and decision-making**: Powered by LLMs, search algorithms, or planning and decision-making systems.
+- **Tool usage**: Access to Model Context Protocol (MCP) servers, code execution, and external APIs.
+- **Context awareness**: Informed by chat history, threads, vector stores, enterprise data, or knowledge graphs.
 
-Each agent has three core building blocks: a persona, plugins, and planners.
+These capabilities allow agents to operate more autonomously, adaptively, and intelligently.
 
-- [Personas](#personas) determine the manner in which agents respond to users or perform actions.
-- [Plugins](#plugins) let agents retrieve information from the user or other systems. You can use pre-built plugins and your own custom plugins.
-- [Planners](/semantic-kernel/agents/planners/?tabs=Csharp) let agents plan how to use available plugins.
+## What are workflows?
 
-### Personas
+As objectives grow in complexity, they need to be broken down into manageable steps. That's where workflows come in.
 
-An agent's persona is its identity: any plugins and planners that the agent uses are tools, but the persona determines how it uses those tools. You use [instructions](prompt-engineering-dotnet.md#use-instructions-to-improve-the-completion) in a prompt to establish an agent's persona.
+**Workflows define the sequence of steps required to achieve an objective.**
 
-For example, you can use instructions to tell an agent that it is helping people manage emails, and to explain its decisions as it makes them. Your prompt might look something like this:
+Imagine you're launching a new feature on your business website. If it's a simple update, you might go from idea to production in a few hours. But for more complex initiatives, the process might include:
 
-```csharp
-prompt = $"""
-    <message role="system">
-    You are a friendly assistant helping people with emails.
-    When you decide to perform an action, explain your decision and then perform the action.
-    </message>
-"""
-```
+- Requirement gathering
+- Design and architecture
+- Implementation
+- Testing
+- Deployment
 
-### Plugins
+A few important observations:
 
-You use [plugins](/semantic-kernel/agents/plugins/?tabs=Csharp) to do things an LLM can't do alone, such as retrieving data from external data sources or completing tasks in the real world.
+- Each step might contain subtasks.
+- Different specialists might own different phases.
+- Progress isn’t always linear. Bugs found during testing might send you back to implementation.
+- Success depends on planning, orchestration, and communication across stakeholders.
 
-For example, an LLM can't send an email, so to add that function to a chat app, you'd need to create a plugin. To process text from the emails, you could use [core plugins](/semantic-kernel/agents/plugins/out-of-the-box-plugins?tabs=Csharp#core-plugins), such as the <xref:Microsoft.SemanticKernel.Plugins.Core.ConversationSummaryPlugin>.
+### Agents + workflows = agentic workflows
 
-Make sure you clearly document the functions in your plugins&mdash;planners use this information to determine what functions are available.
+Workflows don't require agents, but agents can supercharge them.
 
-### Planners
+When agents are equipped with reasoning, tools, and context, they can optimize workflows.
 
-A [planner](/semantic-kernel/agents/planners/?tabs=Csharp) can analyze available functions and come up with alternate ways to reach the goal.
+This is the foundation of multi-agent systems, where agents collaborate within workflows to achieve complex goals.
 
-Calling plugin functions isn't always efficient. For example, say you want to sum the numbers between 1 and 100. You could call a math plugin, but the LLM would need to make a separate call for each number.
+### Workflow orchestration
 
-Moreover, the best sequence and combination of functions to reach a goal depends on the details. For example, suppose you're building an email chat helper app, so you include a plugin to enable sending emails. However, some emails might need a different action, such as a meeting request without RSVP&mdash;sending a reply isn't necessary, but adding a calendar item is. A planner looks at all available functions and comes up with efficient ways to reach goals.
+Agentic workflows can be orchestrated in a variety of ways. The following are a few of the most common:
 
-## Copilots add user interaction
+- [Sequential](#sequential)
+- [Concurrent](#concurrent)
+- [Handoff](#handoff)
+- [Group chat](#group-chat)
+- [Magentic](#magentic)
 
-Process automation has many benefits, but sometimes the user needs to make decisions along the way. An agent can't automate user actions. That's where copilots come in.
+#### Sequential
 
-An agent in your email chat app might produce the following plan for sending an email:
+Agents process tasks one after another, passing results forward.
 
-1. Get the user's email address and name
-1. Get the email address of the recipient
-1. Get the topic of the email
-1. Generate the subject and body of the email
-1. Send the email
+![Sequential agent orchestration: Task Input → Agent A → Agent B → Agent C → Final Output](../media/agents/sequential-workflow.png)
 
-Very handy, but what if the user doesn't like the email body? A copilot adds a user interaction step to the plan:
+#### Concurrent
 
-1. Get the user's email address and name
-1. Get the email address of the recipient
-1. Get the topic of the email
-1. Generate the subject and body of the email
-1. **Review the email with the user and make adjustments**
-1. Send the email
+Agents work in parallel, each handling different aspects of the task.
 
-### Semantic Kernel Chat Copilot app
+![Concurrent agent orchestration: Task Input → Agents A, B, C → Aggregate Results → Final Output](../media/agents/concurrent-workflow.png)
 
-To get started with copilots, try the [Semantic Kernel Chat Copilot](/semantic-kernel/chat-copilot/), a reference application for building a chat experience with an AI agent.
+#### Handoff
 
-## Related content
+Responsibility shifts from one agent to another based on conditions or outcomes.
 
-- [Develop AI agents using Azure OpenAI and the Semantic Kernel SDK](/training/paths/develop-ai-agents-azure-open-ai-semantic-kernel-sdk/)
-<!-- Add link to openai-functions.md -->
+![Handoff orchestration: Task Input → Agent A Decision → Agent B or Agent A → Agent B Decision → Agent C or Agent B → Final Output](../media/agents/handoff-workflow.png)
+
+#### Group chat
+
+Agents collaborate in a shared conversation, exchanging insights in real-time.
+
+![Group chat orchestration: User and Agents A, B, C collaborate via GroupChat to produce final output](../media/agents/groupchat-workflow.png)
+
+#### Magentic
+
+A lead agent directs other agents.
+
+## How can I get started building agents in .NET?
+
+The building blocks in <xref:Microsoft.Extensions.AI> and <xref:Microsoft.Extensions.VectorData> supply the foundations for agents by providing modular components for AI models, tools, and data.
+
+These components serve as the foundation for Microsoft Agent Framework. For more information, see [Microsoft Agent Framework](/agent-framework/overview/agent-framework-overview).

@@ -18,7 +18,7 @@ The `BinaryFormatter` event source has the well-known name `System.Runtime.Seria
 
 ### SerializationStart event (id = `10`)
 
-Raised when <xref:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter.Serialize%2A?displayProperty=nameWithType> has been called and has started the serialization process. This event is paired with the `SerializationEnd` event. The `SerializationStart` event can be called recursively if an object calls `BinaryFormatter.Serialize` within its own serialization routine.
+Raised when <xref:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter.Serialize*?displayProperty=nameWithType> has been called and has started the serialization process. This event is paired with the `SerializationEnd` event. The `SerializationStart` event can be called recursively if an object calls `BinaryFormatter.Serialize` within its own serialization routine.
 
 This event doesn't contain a payload.
 
@@ -40,7 +40,7 @@ This event contains a payload with one argument:
 
 ### DeserializationStart event (id = `20`)
 
-Raised when <xref:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter.Deserialize%2A?displayProperty=nameWithType> has been called and has started the deserialization process. This event is paired with the `DeserializationEnd` event. The `DeserializationStart` event can be called recursively if an object calls `BinaryFormatter.Deserialize` within its own deserialization routine.
+Raised when <xref:System.Runtime.Serialization.Formatters.Binary.BinaryFormatter.Deserialize*?displayProperty=nameWithType> has been called and has started the deserialization process. This event is paired with the `DeserializationEnd` event. The `DeserializationStart` event can be called recursively if an object calls `BinaryFormatter.Deserialize` within its own deserialization routine.
 
 This event doesn't contain a payload.
 
@@ -60,9 +60,9 @@ This event contains a payload with one argument.
 
 * `typeName` (`string`): The assembly-qualified name (see <xref:System.Type.AssemblyQualifiedName?displayProperty=nameWithType>) of the type being deserialized.
 
-### \[Advanced\] Subscribing to a subset of notifications
+### \[Advanced\] Subscribe to a subset of notifications
 
-Listeners who wish to subscribe to only a subset of notifications can choose which keywords to enable.
+Listeners that want to subscribe to only a subset of notifications can choose which keywords to enable.
 
 * `Serialization` = `(EventKeywords)1`: Raises the `SerializationStart`, `SerializationEnd`, and `SerializingObject` events.
 * `Deserialization` = `(EventKeywords)2`: Raises the `DeserializationStart`, `DeserializationEnd`, and `DeserializingObject` events.
@@ -75,10 +75,10 @@ For more information, see <xref:System.Diagnostics.Tracing.EventKeywords?display
 
 The following code:
 
-* creates an `EventListener`-derived type that writes to `System.Console`,
-* subscribes that listener to `BinaryFormatter`-produced notifications,
-* serializes and deserializes a simple object graph using `BinaryFormatter`, and
-* analyzes the events that have been raised.
+* Creates an `EventListener`-derived type that writes to `System.Console`.
+* Subscribes that listener to `BinaryFormatter`-produced notifications.
+* Serializes and deserializes a simple object graph using `BinaryFormatter`.
+* Analyzes the events that have been raised.
 
 :::code language="csharp" source="snippets/binaryformatter-event-source/csharp/Program.cs":::
 

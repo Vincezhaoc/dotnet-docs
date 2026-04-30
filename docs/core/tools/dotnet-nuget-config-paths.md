@@ -10,7 +10,7 @@ ms.date: 05/14/2024
 
 ## Name
 
-`dotnet nuget config paths` - Lists nuget configuration files currently being appplied to a directory.
+`dotnet nuget config paths` - Lists nuget configuration files currently being applied to a directory.
 
 ## Synopsis
 
@@ -30,7 +30,7 @@ The `dotnet nuget config paths` Lists the paths to all NuGet configuration files
 
   Specifies the directory to start from when listing configuration files. If not specified, the current directory is used.
 
-[!INCLUDE [help](../../../includes/cli-help.md)]
+- [!INCLUDE [help](includes/cli-help.md)]
 
 ## Examples
 

@@ -1,8 +1,8 @@
-﻿// <Snippet12>
 using System;
 
 public class Example3
 {
+    // <Snippet12>
     public static void Main()
     {
         float one1 = .1f * 10;
@@ -10,10 +10,16 @@ public class Example3
         for (int ctr = 1; ctr <= 10; ctr++)
             one2 += .1f;
 
-        Console.WriteLine("{0:R} = {1:R}: {2}", one1, one2, one1.Equals(one2));
-        Console.WriteLine("{0:R} is approximately equal to {1:R}: {2}",
-                          one1, one2,
-                          IsApproximatelyEqual(one1, one2, .000001f));
+        Console.WriteLine($"{one1:R} = {one2:R}: {one1.Equals(one2)}");
+        Console.WriteLine($"{one1:R} is approximately equal to {one2:R}: " +
+            $"{IsApproximatelyEqual(one1, one2, .000001f)}");
+
+        float negativeOne1 = -1 * one1;
+        float negativeOne2 = -1 * one2;
+
+        Console.WriteLine($"{negativeOne1:R} = {negativeOne2:R}: {negativeOne1.Equals(negativeOne2)}");
+        Console.WriteLine($"{negativeOne1:R} is approximately equal to {negativeOne2:R}: " +
+            $"{IsApproximatelyEqual(negativeOne1, negativeOne2, .000001f)}");
     }
 
     static bool IsApproximatelyEqual(float value1, float value2, float epsilon)
@@ -28,15 +34,18 @@ public class Example3
         else if (Double.IsInfinity(value2) | Double.IsNaN(value2))
             return value1.Equals(value2);
 
-        // Handle zero to avoid division by zero
+        // Handle zero to avoid division by zero.
         double divisor = Math.Max(value1, value2);
         if (divisor.Equals(0))
             divisor = Math.Min(value1, value2);
 
-        return Math.Abs(value1 - value2) / divisor <= epsilon;
+        return Math.Abs((value1 - value2) / divisor) <= epsilon;
     }
+
+    // The example displays the following output on .NET:
+    //       1 = 1.0000001: False
+    //       1 is approximately equal to 1.0000001: True
+    //       -1 = -1.0000001: False
+    //       -1 is approximately equal to -1.0000001: True
+    // </Snippet12>
 }
-// The example displays the following output:
-//       1 = 1.00000012: False
-//       1 is approximately equal to 1.00000012: True
-// </Snippet12>
